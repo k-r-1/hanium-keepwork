@@ -10,6 +10,7 @@
     <string name="wanted_url">http://openapi.work.go.kr/opi/opi/opia/wantedApi.do?authKey=WNLJYZLM2VZXTT2TZA9XR2VR1HK&amp;callTp=L&amp;returnType=XML&amp;startPage=1&amp;display=10</string>
     <string name="region_url">http://openapi.work.go.kr/opi/commonCode/commonCode.do?returnType=XML&amp;target=CMCD&amp;authKey=WNLJYZLM2VZXTT2TZA9XR2VR1HK&amp;dtlGb=1</string>
     <string name="jobs_url">http://openapi.work.go.kr/opi/commonCode/commonCode.do?returnType=XML&amp;target=CMCD&amp;authKey=WNLJYZLM2VZXTT2TZA9XR2VR1HK&amp;dtlGb=2</string>
+    <string name="title_activity_resume_check">ResumeCheckActivity</string>
 
     <!-- 검색 필터링 조건 = 직종, 지역, 학력, 경력 -->
     <!-- 다중검색 가능 요청 parameter = region(지역), occupation(직종) -->

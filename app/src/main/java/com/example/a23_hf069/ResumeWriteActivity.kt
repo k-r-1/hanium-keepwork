@@ -19,7 +19,9 @@ class ResumeWriteActivity : AppCompatActivity() {
     private lateinit var editTextCertificate: EditText
     private lateinit var editTextEducation: EditText
     private lateinit var editTextDesire: EditText
-    private lateinit var buttonSubmit: Button
+    private var resume_complete: Int = 0
+    private lateinit var buttonSubmit1: Button
+    private lateinit var buttonSubmit2: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,9 +39,10 @@ class ResumeWriteActivity : AppCompatActivity() {
         editTextCertificate = findViewById(R.id.edtCertificate)
         editTextEducation = findViewById(R.id.edtEducation)
         editTextDesire = findViewById(R.id.edtDesire)
-        buttonSubmit = findViewById(R.id.buttonSubmit)
+        buttonSubmit1 = findViewById(R.id.buttonSubmit1)
+        buttonSubmit2 = findViewById(R.id.buttonSubmit2)
 
-        buttonSubmit.setOnClickListener {
+        buttonSubmit1.setOnClickListener {
             val personal_id = userId
             val resume_academic = editTextAcademic.text.toString()
             val resume_career = editTextCareer.text.toString()
@@ -47,6 +50,7 @@ class ResumeWriteActivity : AppCompatActivity() {
             val resume_certificate = editTextCertificate.text.toString()
             val resume_learning = editTextEducation.text.toString()
             val resume_desire = editTextDesire.text.toString()
+            val resume_complete = 0
 
             sendResumeData(
                 personal_id,
@@ -55,7 +59,30 @@ class ResumeWriteActivity : AppCompatActivity() {
                 resume_introduction,
                 resume_certificate,
                 resume_learning,
-                resume_desire
+                resume_desire,
+                resume_complete
+            )
+        }
+
+        buttonSubmit2.setOnClickListener {
+            val personal_id = userId
+            val resume_academic = editTextAcademic.text.toString()
+            val resume_career = editTextCareer.text.toString()
+            val resume_introduction = editTextIntroduction.text.toString()
+            val resume_certificate = editTextCertificate.text.toString()
+            val resume_learning = editTextEducation.text.toString()
+            val resume_desire = editTextDesire.text.toString()
+            val resume_complete = 1
+
+            sendResumeData(
+                personal_id,
+                resume_academic,
+                resume_career,
+                resume_introduction,
+                resume_certificate,
+                resume_learning,
+                resume_desire,
+                resume_complete
             )
         }
     }
@@ -81,6 +108,7 @@ class ResumeWriteActivity : AppCompatActivity() {
             .add("resume_certificate", resume_certificate) // Certification
             .add("resume_learning", resume_learning) // Education history
             .add("resume_desire", resume_desire) // Desired job position
+            .add("resume_complete", resume_complete)
             .build()
 
         val request = Request.Builder()

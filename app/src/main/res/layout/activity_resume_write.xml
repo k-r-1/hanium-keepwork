@@ -64,7 +64,13 @@
         android:hint="희망 근무 직군" />
 
     <Button
-        android:id="@+id/buttonSubmit"
+        android:id="@+id/buttonSubmit1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Submit" />
+
+    <Button
+        android:id="@+id/buttonSubmit2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Submit" />

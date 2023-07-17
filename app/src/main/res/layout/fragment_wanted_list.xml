@@ -55,7 +55,6 @@
                 android:backgroundTint="#35B891"
                 android:drawableRight="@drawable/ic_baseline_search2_24"
                 android:ems="10"
-                android:focusable="true"
                 android:hint="어떤 일자리를 찾으세요?"
                 android:imeOptions="actionSearch"
                 android:inputType="text"
@@ -63,6 +62,7 @@
                 android:textColor="#35B891"
                 android:textColorHint="#9E9E9E"
                 android:textSize="15sp" />
+
 
             <View
                 android:layout_width="16dp"

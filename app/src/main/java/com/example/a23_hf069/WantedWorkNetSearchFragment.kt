@@ -7,10 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.ListView
+import android.widget.*
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserFactory
 import java.io.InputStream
@@ -48,7 +45,6 @@ class WantedWorkNetSearchFragment : Fragment() {
         closeButton.setOnClickListener {
             requireActivity().onBackPressed()
         }
-
 
         prevButton.visibility = View.GONE
         nextButton.visibility = View.GONE
@@ -180,22 +176,37 @@ class WantedWorkNetSearchFragment : Fragment() {
         }
 
         override fun onPostExecute(result: List<Job>) {
-            jobList = result
-            showJobList()
+            if (currentPage > 1 && result.isEmpty()) {
+                // nextButton을 누른 후에 빈 리스트가 반환된 경우, "마지막 페이지입니다" 토스트 메시지를 표시합니다.
+                Toast.makeText(requireContext(), "마지막 페이지입니다", Toast.LENGTH_SHORT).show()
+                currentPage -= 1 // 이전 페이지로 돌아갑니다.
+                nextButton.isEnabled = false // nextButton을 비활성화합니다.
+            } else {
+                jobList = result
+                showJobList()
+
+                if (searchContent.text.toString().trim().isEmpty()) {
+                    // EditText에 입력값이 없을 때
+                    prevButton.visibility = View.GONE
+                    nextButton.visibility = View.GONE
+                } else {
+                    // EditText에 입력값이 있을 때
+                    if (currentPage > 1 || jobList.size >= 10) {
+                        prevButton.visibility = View.VISIBLE
+                    } else {
+                        prevButton.visibility = View.GONE
+                    }
+                    nextButton.visibility = View.VISIBLE
+                }
+
+                nextButton.isEnabled = true // nextButton을 활성화합니다.
+            }
         }
     }
 
     private fun showJobList() {
         val adapter = CustomAdapter(this, jobList)
         searchListView.adapter = adapter
-
-        if (jobList.isNotEmpty()) {
-            prevButton.visibility = View.VISIBLE
-            nextButton.visibility = View.VISIBLE
-        } else {
-            prevButton.visibility = View.GONE
-            nextButton.visibility = View.GONE
-        }
 
         searchListView.setOnItemClickListener { _, _, position, _ ->
             val job = jobList[position]

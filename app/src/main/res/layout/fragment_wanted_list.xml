@@ -73,7 +73,7 @@
 
     </androidx.appcompat.widget.Toolbar>
 
-    <TextView
+    <!--<TextView
         android:id="@+id/leftTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -85,7 +85,7 @@
         app:layout_constraintBottom_toBottomOf="@id/conditionButton"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <!--검색건수 num 값-->
+    &lt;!&ndash;검색건수 num 값&ndash;&gt;
 
     <TextView
         android:id="@+id/countTextNum"
@@ -108,7 +108,7 @@
         android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="@id/leftTextView"
         app:layout_constraintStart_toEndOf="@id/countTextNum"
-        app:layout_constraintTop_toTopOf="@id/leftTextView" />
+        app:layout_constraintTop_toTopOf="@id/leftTextView" />-->
 
     <!--조건검색 버튼-->
 

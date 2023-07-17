@@ -13,60 +13,23 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
         <TextView
-            android:id="@+id/tvID"
+            android:id="@+id/tvID1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="20dp"
             android:text="아이디" />
 
         <TextView
-            android:id="@+id/tvResume"
+            android:id="@+id/tvResume1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="20dp"
             android:text="님의 이력서" />
     </LinearLayout>
 
-    <EditText
-        android:id="@+id/edtAcademic"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="학력" />
-
-    <EditText
-        android:id="@+id/edtCareer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="경력" />
-
-    <EditText
-        android:id="@+id/edtIntroduction"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="자기소개" />
-
-    <EditText
-        android:id="@+id/edtCertificate"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="자격사항" />
-
-    <EditText
-        android:id="@+id/edtEducation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="교육사항" />
-
-    <EditText
-        android:id="@+id/edtDesire"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="희망 근무 직군" />
-
     <Button
         android:id="@+id/buttonSubmit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Submit" />
-
 </LinearLayout>

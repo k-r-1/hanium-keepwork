@@ -45,20 +45,4 @@ class WantedListFragment : Fragment() {
         }
     }
 
-  /*  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        filter = view.findViewById<Button>(R.id.conditionButton)
-        filter.setOnClickListener() {
-             //조건검색 버튼을 클릭하면 fragment_wanted_list로 전환
-//            val filteringFragment = WantedFilteringFragment()
-//            requireActivity().supportFragmentManager.beginTransaction() // 프래그먼트 간 전환 수행
-//                .replace(R.id.fl_container, filteringFragment) // 프래그먼트 교체
-//                .addToBackStack(null) // 이전 프래그먼트로 돌아가기
-//                .commit()
-            //test
-            val intent = Intent(getActivity(), WantedTest::class.java)
-            startActivity(intent)
-        }
-    }*/
 }

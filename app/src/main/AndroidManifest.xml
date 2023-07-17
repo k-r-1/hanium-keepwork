@@ -19,9 +19,7 @@
         android:usesCleartextTraffic="true"
         >
 
-        <activity
-            android:name=".WantedTest"
-            android:exported="false" />
+
         <activity
             android:name=".CorporateSignUpActivity"
             android:exported="false" />

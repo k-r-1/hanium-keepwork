@@ -75,7 +75,7 @@ class WantedListFragment : Fragment(), TabLayout.OnTabSelectedListener {
         if (currentTab == 1) {
             searchContent.hint = "워크넷 채용공고 검색"
         } else if (currentTab == 0) {
-            searchContent.hint = "즉시지원 가능한 일자리를 검색"
+            searchContent.hint = "즉시지원 가능한 일자리 검색"
         }
     }
 

@@ -41,7 +41,7 @@ class ResumeWriteActivity : AppCompatActivity() {
         buttonSubmit1 = findViewById(R.id.buttonSubmit1)
         buttonSubmit2 = findViewById(R.id.buttonSubmit2)
 
-        buttonSubmit1.setOnClickListener {
+        buttonSubmit1.setOnClickListener { // 임시 저장
             val personal_id = userId
             val resume_academic = editTextAcademic.text.toString()
             val resume_career = editTextCareer.text.toString()
@@ -63,7 +63,7 @@ class ResumeWriteActivity : AppCompatActivity() {
             )
         }
 
-        buttonSubmit2.setOnClickListener {
+        buttonSubmit2.setOnClickListener { // 작성완료
             val personal_id = userId
             val resume_academic = editTextAcademic.text.toString()
             val resume_career = editTextCareer.text.toString()

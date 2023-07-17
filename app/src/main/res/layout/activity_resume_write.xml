@@ -67,12 +67,12 @@
         android:id="@+id/buttonSubmit1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Submit" />
+        android:text="임시저장" />
 
     <Button
         android:id="@+id/buttonSubmit2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Submit" />
+        android:text="작성완료" />
 
 </LinearLayout>

@@ -43,6 +43,10 @@ class HomeActivity : AppCompatActivity() {
                 }
                 R.id.resumeMenu -> { // 이력서
                     val resumeFragment = ResumeFragment()
+                    // 사용자 아이디를 Bundle에 추가해서 전달
+                    val bundle = Bundle()
+                    bundle.putString("userId", userId)
+                    resumeFragment.arguments = bundle
                     supportFragmentManager.beginTransaction().replace(R.id.fl_container, resumeFragment).commit()
                 }
                 R.id.communityMenu -> { // 커뮤니티
@@ -50,14 +54,8 @@ class HomeActivity : AppCompatActivity() {
                     supportFragmentManager.beginTransaction().replace(R.id.fl_container, communityFragment).commit()
                 }
                 R.id.mypageMenu -> { // 마이페이지
-                    // val mypageFragment = MypageFragment()
-                    // supportFragmentManager.beginTransaction().replace(R.id.fl_container, mypageFragment).commit()
-                    val resumeFragment = ResumeFragment()
-                    // 사용자 아이디를 Bundle에 추가해서 전달
-                    val bundle = Bundle()
-                    bundle.putString("userId", userId)
-                    resumeFragment.arguments = bundle
-                    supportFragmentManager.beginTransaction().replace(R.id.fl_container, resumeFragment).commit()
+                    val mypageFragment = MypageFragment()
+                    supportFragmentManager.beginTransaction().replace(R.id.fl_container, mypageFragment).commit()
                 }
             }
             true

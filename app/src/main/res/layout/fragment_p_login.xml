@@ -57,11 +57,11 @@
         android:id="@+id/signUp_btn"
         android:layout_width="100dp"
         android:layout_height="50dp"
+        android:layout_marginLeft="270dp"
         android:layout_marginTop="250dp"
         android:backgroundTint="#00FFFFFF"
         android:outlineProvider="none"
         android:text="회원가입"
-        android:layout_marginLeft="220dp"
         android:textColor="@color/black" />
 
     <TextView

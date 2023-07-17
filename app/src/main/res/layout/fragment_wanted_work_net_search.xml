@@ -72,7 +72,7 @@
                         android:drawableRight="@drawable/ic_baseline_search2_24"
                         android:ems="10"
                         android:focusable="true"
-                        android:hint="어떤 일자리를 찾으세요?"
+                        android:hint="회사명, 채용제목, 근무지역 등 검색"
                         android:imeOptions="actionSearch"
                         android:imeActionLabel="검색"
                         android:inputType="text"

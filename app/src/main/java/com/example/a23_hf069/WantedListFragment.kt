@@ -62,7 +62,7 @@ class WantedListFragment : Fragment(), TabLayout.OnTabSelectedListener {
                     .replace(R.id.fl_container, wantedRequestingSearchFragment)
                     .addToBackStack(null)
                     .commit()
-                searchContent.hint = "즉시지원 가능한 일자리를 검색"
+                searchContent.hint = "즉시지원 가능한 일자리 검색"
             }
             true
         }

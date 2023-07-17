@@ -8,10 +8,10 @@
     tools:context=".MainActivity">
 
     <LinearLayout
-        android:id="@+id/linear_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginBottom="16dp">
         <TextView
             android:id="@+id/tvID"
             android:layout_width="match_parent"
@@ -27,41 +27,121 @@
             android:text="님의 이력서" />
     </LinearLayout>
 
-    <EditText
-        android:id="@+id/edtAcademic"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="학력" />
+        android:orientation="horizontal"
+        android:layout_marginBottom="16dp">
+        <TextView
+            android:id="@+id/tv1"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:text="학력"
+            android:textSize="20dp" />
 
-    <EditText
-        android:id="@+id/edtCareer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="경력" />
+        <EditText
+            android:id="@+id/edtAcademic"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/intro" />
+    </LinearLayout>
 
-    <EditText
-        android:id="@+id/edtIntroduction"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="자기소개" />
+        android:orientation="horizontal"
+        android:layout_marginBottom="16dp">
+        <TextView
+            android:id="@+id/tv2"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:text="경력"
+            android:textSize="20dp" />
 
-    <EditText
-        android:id="@+id/edtCertificate"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="자격사항" />
+        <EditText
+            android:id="@+id/edtCareer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/intro"/>
+    </LinearLayout>
 
-    <EditText
-        android:id="@+id/edtEducation"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="교육사항" />
+        android:orientation="horizontal"
+        android:layout_marginBottom="16dp">
+        <TextView
+            android:id="@+id/tv3"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:text="자기\n소개"
+            android:textSize="20dp" />
 
-    <EditText
-        android:id="@+id/edtDesire"
+        <EditText
+            android:id="@+id/edtIntroduction"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/intro" />
+    </LinearLayout>
+
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="희망 근무 직군" />
+        android:orientation="horizontal"
+        android:layout_marginBottom="16dp">
+        <TextView
+            android:id="@+id/tv4"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:text="자격\n사항"
+            android:textSize="20dp" />
+
+        <EditText
+            android:id="@+id/edtCertificate"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/intro" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="16dp">
+        <TextView
+            android:id="@+id/tv5"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:text="교육\n사항"
+            android:textSize="20dp" />
+
+        <EditText
+            android:id="@+id/edtEducation"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/intro" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="16dp">
+        <TextView
+            android:id="@+id/tv6"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:text="희망\n근무\n직군"
+            android:textSize="20dp" />
+
+        <EditText
+            android:id="@+id/edtDesire"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/intro" />
+    </LinearLayout>
+
 
     <Button
         android:id="@+id/buttonSubmit1"

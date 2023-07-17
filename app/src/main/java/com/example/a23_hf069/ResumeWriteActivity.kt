@@ -19,7 +19,6 @@ class ResumeWriteActivity : AppCompatActivity() {
     private lateinit var editTextCertificate: EditText
     private lateinit var editTextEducation: EditText
     private lateinit var editTextDesire: EditText
-    private var resume_complete: Int = 0
     private lateinit var buttonSubmit1: Button
     private lateinit var buttonSubmit2: Button
 
@@ -50,7 +49,7 @@ class ResumeWriteActivity : AppCompatActivity() {
             val resume_certificate = editTextCertificate.text.toString()
             val resume_learning = editTextEducation.text.toString()
             val resume_desire = editTextDesire.text.toString()
-            resume_complete = 0
+            val resume_complete = "0"
 
             sendResumeData(
                 personal_id,
@@ -72,7 +71,7 @@ class ResumeWriteActivity : AppCompatActivity() {
             val resume_certificate = editTextCertificate.text.toString()
             val resume_learning = editTextEducation.text.toString()
             val resume_desire = editTextDesire.text.toString()
-            resume_complete = 1
+            val resume_complete = "1"
 
             sendResumeData(
                 personal_id,
@@ -95,7 +94,7 @@ class ResumeWriteActivity : AppCompatActivity() {
         resume_certificate: String,
         resume_learning: String,
         resume_desire: String,
-        resume_complete: Int
+        resume_complete: String
     ) {
         val url = "http://$IP_ADDRESS/android_resume_php.php" // URL of the hosting server with PHP script
 

@@ -41,9 +41,9 @@ class WantedListFragment : Fragment() {
 
         filter = view.findViewById<Button>(R.id.conditionButton)
         filter.setOnClickListener() {
-            val wantedWorkNetFragment = WantedWorkNetFragment()
+            val fragment1 = WantedFilteringFragment()
             requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.fl_container, wantedWorkNetFragment)
+                .replace(R.id.fl_container, fragment1)
                 .addToBackStack(null)
                 .commit()
         }

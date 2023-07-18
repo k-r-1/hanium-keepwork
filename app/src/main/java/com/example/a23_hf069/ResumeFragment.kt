@@ -14,7 +14,7 @@ import okhttp3.*
 import java.io.IOException
 
 class ResumeFragment : Fragment() {
-    private var IP_ADDRESS = "3.34.190.0" // 본인 IP주소를 넣으세요.
+    private var IP_ADDRESS = "13.125.179.180" // 본인 IP주소를 넣으세요.
     private lateinit var userId: String // 사용자 아이디
 
     private lateinit var buttonSubmit: Button
@@ -32,7 +32,7 @@ class ResumeFragment : Fragment() {
 
         buttonSubmit = view.findViewById<Button>(R.id.buttonSubmit)
         buttonSubmit.setOnClickListener {
-            val intent = Intent(activity, ResumeWriteActivity::class.java)
+            val intent = Intent(requireContext(), ResumeWriteActivity::class.java)
             intent.putExtra("userId", userId)
             startActivity(intent)
         }

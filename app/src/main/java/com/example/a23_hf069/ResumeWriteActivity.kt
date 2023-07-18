@@ -96,7 +96,7 @@ class ResumeWriteActivity : AppCompatActivity() {
         resume_desire: String,
         resume_complete: String
     ) {
-        val url = "http://$IP_ADDRESS/android_resume_php.php" // URL of the hosting server with PHP script
+        val url = "http://$IP_ADDRESS/android_resume_write_php.php" // URL of the hosting server with PHP script
 
         val client = OkHttpClient()
 

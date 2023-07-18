@@ -26,7 +26,7 @@ class ResumeWriteActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_resume_write)
 
-        // Get user ID
+// Get user ID
         userId = intent.getStringExtra("userId") ?: ""
 
         val textID = findViewById<TextView>(R.id.tvID)
@@ -118,12 +118,12 @@ class ResumeWriteActivity : AppCompatActivity() {
 
         client.newCall(request).enqueue(object : okhttp3.Callback {
             override fun onFailure(call: Call, e: IOException) {
-                // Handle request failure
+// Handle request failure
                 e.printStackTrace()
             }
 
             override fun onResponse(call: Call, response: Response) {
-                // Handle request success
+// Handle request success
                 val responseData = response.body?.string()
             }
         })

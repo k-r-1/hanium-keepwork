@@ -15,8 +15,11 @@ import android.widget.ListView
 import android.widget.TextView
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
-import kotlinx.android.synthetic.main.activity_job_detail.*
+import com.example.a23_hf069.databinding.FragmentWantedWorkNetBinding
+import com.example.a23_hf069.databinding.ActivityJobDetailBinding
+import com.example.a23_hf069.databinding.JobItemBinding
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserFactory
 import java.io.InputStream
@@ -25,8 +28,9 @@ import java.net.URL
 
 class WantedWorkNetFragment : Fragment() {
 
-    private lateinit var jobListView: ListView
+    private lateinit var binding: FragmentWantedWorkNetBinding
     private lateinit var jobList: List<Job>
+    private lateinit var jobListView: ListView  // jobListView 변수 선언
     private lateinit var prevButton: Button
     private lateinit var nextButton: Button
     private var currentPage = 1
@@ -35,12 +39,13 @@ class WantedWorkNetFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_wanted_work_net, container, false)
+        binding = FragmentWantedWorkNetBinding.inflate(inflater, container, false)
+        val view = binding.root
 
         // UI 요소 초기화
-        jobListView = view.findViewById(R.id.jobListView)
-        prevButton = view.findViewById(R.id.prevButton)
-        nextButton = view.findViewById(R.id.nextButton)
+        jobListView = binding.jobListView  // jobListView 초기화
+        prevButton = binding.prevButton
+        nextButton = binding.nextButton
 
         // 이전 페이지 버튼 클릭 이벤트 처리
         prevButton.setOnClickListener {
@@ -61,6 +66,7 @@ class WantedWorkNetFragment : Fragment() {
 
         return view
     }
+
 
     private fun fetchJobData() {
         val url =
@@ -170,10 +176,10 @@ class WantedWorkNetFragment : Fragment() {
     }
 
     private fun showJobList() {
-        val adapter = CustomAdapter(this@WantedWorkNetFragment, jobList)
-        jobListView.adapter = adapter
+        val adapter = CustomAdapter(jobList, requireContext())
+        binding.jobListView.adapter = adapter
 
-        jobListView.setOnItemClickListener { _, _, position, _ ->
+        binding.jobListView.setOnItemClickListener { _, _, position, _ ->
             val job = jobList[position]
             val intent = JobDetailActivity.newIntent(requireContext(), job)
             startActivity(intent)
@@ -181,40 +187,27 @@ class WantedWorkNetFragment : Fragment() {
     }
 }
 
-class CustomAdapter(private val fragment: Fragment, private val jobList: List<Job>) :
-    ArrayAdapter<Job>(fragment.requireActivity(), R.layout.job_item, jobList) {
+class CustomAdapter(private val jobList: List<Job>, private val fragmentContext: Context) :
+    ArrayAdapter<Job>(fragmentContext, R.layout.job_item, jobList) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val view =
-            convertView ?: LayoutInflater.from(context).inflate(R.layout.job_item, parent, false)
+        val binding = convertView?.let { JobItemBinding.bind(it) }
+            ?: JobItemBinding.inflate(LayoutInflater.from(fragmentContext), parent, false)
 
         val job = jobList[position]
 
-        val titleTextView: TextView = view.findViewById(R.id.titleTextView)
-        val companyTextView: TextView = view.findViewById(R.id.companyTextView)
-        val regionContTextView: TextView = view.findViewById(R.id.regionContTextView)
+        binding.titleTextView.text = job.title
+        binding.companyTextView.text = job.company
+        binding.regionContTextView.text = job.region
 
-        titleTextView.text = job.title
-        companyTextView.text = job.company
-        regionContTextView.text = job.region
-
-        return view
+        return binding.root
     }
 }
 
+
 class JobDetailActivity : AppCompatActivity() {
 
-    private lateinit var company: TextView // 회사명
-    private lateinit var title: TextView // 제목
-    private lateinit var salTpNm: TextView // 임금형태
-    private lateinit var sal: TextView // 급여
-    private lateinit var region: TextView // 근무지역
-    private lateinit var holidayTpNm: TextView // 근무형태
-    private lateinit var minEdubg: TextView // 최소학력
-    private lateinit var career: TextView // 경력
-    private lateinit var closeDt: TextView // 마감일자
-    private lateinit var wantedMobileInfoUrl: TextView // 워크넷 모바일 채용정보 URL
-    private lateinit var jobsCd: TextView // 직종코드
+    private lateinit var binding: ActivityJobDetailBinding
 
     companion object {
         private const val JOB_EXTRA = "job"
@@ -228,41 +221,28 @@ class JobDetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_job_detail)
+        binding = ActivityJobDetailBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
         // 기본 툴바 숨기기
-        val actionBar: ActionBar? = supportActionBar
-        if (actionBar != null) {
-            actionBar.hide()
-        }
-
-        company = findViewById(R.id.company)
-        title = findViewById(R.id.title)
-        salTpNm = findViewById(R.id.salTpNm)
-        sal = findViewById(R.id.sal)
-        region = findViewById(R.id.region)
-        holidayTpNm = findViewById(R.id.holidayTpNm)
-        minEdubg = findViewById(R.id.minEdubg)
-        career = findViewById(R.id.career)
-        closeDt = findViewById(R.id.closeDt)
-        wantedMobileInfoUrl = findViewById(R.id.wantedMobileInfoUrl)
-        jobsCd = findViewById(R.id.jobsCd)
+        supportActionBar?.hide()
 
         val job = intent.getParcelableExtra<Job>(JOB_EXTRA)
 
-        company.text = job?.company
-        title.text = job?.title
-        salTpNm.text = job?.salTpNm
-        sal.text = job?.sal
-        region.text = job?.region
-        holidayTpNm.text = job?.holidayTpNm
-        minEdubg.text = job?.minEdubg
-        career.text = job?.career
-        closeDt.text = job?.closeDt
-        wantedMobileInfoUrl.text = job?.wantedMobileInfoUrl
-        jobsCd.text = job?.jobsCd
+        binding.company.text = job?.company
+        binding.title.text = job?.title
+        binding.salTpNm.text = job?.salTpNm
+        binding.sal.text = job?.sal
+        binding.region.text = job?.region
+        binding.holidayTpNm.text = job?.holidayTpNm
+        binding.minEdubg.text = job?.minEdubg
+        binding.career.text = job?.career
+        binding.closeDt.text = job?.closeDt
+        binding.wantedMobileInfoUrl.text = job?.wantedMobileInfoUrl
+        binding.jobsCd.text = job?.jobsCd
 
-        backButton.setOnClickListener {
+        binding.backButton.setOnClickListener {
             onBackPressed()
         }
     }
@@ -284,15 +264,15 @@ data class Job(
     constructor(parcel: Parcel) : this(
         parcel.readString() ?: "",
         parcel.readString() ?: "",
-        parcel.readString() ?: "",
-        parcel.readString() ?: "",
-        parcel.readString() ?: "",
-        parcel.readString() ?: "",
-        parcel.readString() ?: "",
-        parcel.readString() ?: "",
-        parcel.readString() ?: "",
-        parcel.readString() ?: "",
-        parcel.readString() ?: ""
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString()
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {

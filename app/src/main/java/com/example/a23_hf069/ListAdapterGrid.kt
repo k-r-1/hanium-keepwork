@@ -5,26 +5,28 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.list_grid_item.view.*
+import com.example.a23_hf069.databinding.ListGridItemBinding
 
 class ListAdapterGrid(var list: ArrayList<String>): RecyclerView.Adapter<ListAdapterGrid.GridAdapter>() {
 
     // 기본 생성자 추가
     constructor() : this(ArrayList())
 
-    class GridAdapter(val layout: View): RecyclerView.ViewHolder(layout)
+    class GridAdapter(internal val binding: ListGridItemBinding): RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GridAdapter {
-        var view = LayoutInflater.from(parent.context).inflate(R.layout.list_grid_item, parent, false)
+        val inflater = LayoutInflater.from(parent.context)
+        val binding = ListGridItemBinding.inflate(inflater, parent, false)
 
-        return GridAdapter(view)
+        return GridAdapter(binding)
     }
 
     override fun onBindViewHolder(holder: GridAdapter, position: Int) {
-        holder.layout.textListTitle.text = list[position]
+        val item = list[position]
+        holder.binding.textListTitle.text = item
 
-        holder.layout.layoutListItem.setOnClickListener {
-            Toast.makeText(holder.layout.context, "${list[position]} Click!", Toast.LENGTH_SHORT).show()
+        holder.binding.layoutListItem.setOnClickListener {
+            Toast.makeText(holder.itemView.context, "$item Click!", Toast.LENGTH_SHORT).show()
         }
     }
 

@@ -5,36 +5,25 @@ import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentActivity
-import kotlinx.android.synthetic.main.activity_login.*
+import com.example.a23_hf069.databinding.ActivityLoginBinding
 
-
-class MainActivity : AppCompatActivity(){
-    lateinit var login : Button
+class MainActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityLoginBinding
+    private lateinit var loginButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+        binding = ActivityLoginBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         // 기본 툴바 숨기기
-        val actionBar: ActionBar? = supportActionBar
-        if (actionBar != null) {
-            actionBar.hide()
-        }
+        supportActionBar?.hide()
 
         val adapter = PagerAdapter(supportFragmentManager)
         adapter.addFragment(P_loginFragment(), "개인회원")
         adapter.addFragment(C_loginFragment(), "기업회원")
 
-
-        viewpager01.adapter = adapter
-        tablayout01.setupWithViewPager(viewpager01)
-
-
+        binding.viewpager01.adapter = adapter
+        binding.tablayout01.setupWithViewPager(binding.viewpager01)
     }
-
-
-
-
-
 }

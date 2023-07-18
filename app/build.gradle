@@ -24,7 +24,7 @@ android {
     }
     buildFeatures {
         // 뷰 바인딩 활성화
-        viewBinding true
+        viewBinding = true
         dataBinding = true
     }
     compileOptions {
@@ -63,10 +63,11 @@ dependencies {
 
     implementation 'com.squareup.okhttp3:okhttp:4.9.1'
 
+
     /*채용공고필요추가*/
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
 }
 
 // Kotlin Android Extensions 플러그인 적용
-apply plugin: 'kotlin-android-extensions'
+//apply plugin: 'kotlin-android-extensions'

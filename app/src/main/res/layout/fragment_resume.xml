@@ -117,10 +117,6 @@
             android:layout_height="wrap_content"
             android:text="이력서 추가" />
 
-        <androidx.viewpager2.widget.ViewPager2
-            android:layout_width="376dp"
-            android:layout_height="603dp" />
-
     </LinearLayout>
 
 </LinearLayout>

@@ -64,6 +64,8 @@ dependencies {
     /*채용공고필요추가*/
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    //필터링
+    implementation 'com.github.kittinunf.fuel:fuel:2.3.1'
 }
 
 // Kotlin Android Extensions 플러그인 적용

@@ -12,7 +12,7 @@ import java.io.IOException
 class ResumeWriteActivity : AppCompatActivity() {
     private var IP_ADDRESS = "13.125.179.180" // Replace with your IP address.
     private var userId: String = "" // User ID
-
+    private lateinit var editResumeTitle: EditText
     private lateinit var editTextAcademic: EditText
     private lateinit var editTextCareer: EditText
     private lateinit var editTextIntroduction: EditText
@@ -33,6 +33,7 @@ class ResumeWriteActivity : AppCompatActivity() {
         textID.text = userId
 
         editTextAcademic = findViewById(R.id.edtAcademic)
+        editResumeTitle = findViewById(R.id.edtTitle)
         editTextCareer = findViewById(R.id.edtCareer)
         editTextIntroduction = findViewById(R.id.edtIntroduction)
         editTextCertificate = findViewById(R.id.edtCertificate)
@@ -43,6 +44,7 @@ class ResumeWriteActivity : AppCompatActivity() {
 
         buttonSubmit1.setOnClickListener { // 임시 저장
             val personal_id = userId
+            val resume_title = editResumeTitle.text.toString()
             val resume_academic = editTextAcademic.text.toString()
             val resume_career = editTextCareer.text.toString()
             val resume_introduction = editTextIntroduction.text.toString()
@@ -53,6 +55,7 @@ class ResumeWriteActivity : AppCompatActivity() {
 
             sendResumeData(
                 personal_id,
+                resume_title,
                 resume_academic,
                 resume_career,
                 resume_introduction,
@@ -65,6 +68,7 @@ class ResumeWriteActivity : AppCompatActivity() {
 
         buttonSubmit2.setOnClickListener { // 작성완료
             val personal_id = userId
+            val resume_title = editResumeTitle.text.toString()
             val resume_academic = editTextAcademic.text.toString()
             val resume_career = editTextCareer.text.toString()
             val resume_introduction = editTextIntroduction.text.toString()
@@ -75,6 +79,7 @@ class ResumeWriteActivity : AppCompatActivity() {
 
             sendResumeData(
                 personal_id,
+                resume_title,
                 resume_academic,
                 resume_career,
                 resume_introduction,
@@ -88,6 +93,7 @@ class ResumeWriteActivity : AppCompatActivity() {
 
     private fun sendResumeData(
         personal_id: String,
+        resume_title: String,
         resume_academic: String,
         resume_career: String,
         resume_introduction: String,
@@ -102,6 +108,7 @@ class ResumeWriteActivity : AppCompatActivity() {
 
         val formBody = FormBody.Builder()
             .add("personal_id", personal_id) // ID
+            .add("resume_title", resume_title) // Title
             .add("resume_academic", resume_academic) // Education
             .add("resume_career", resume_career) // Career
             .add("resume_introduction", resume_introduction) // Introduction

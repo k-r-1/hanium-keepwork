@@ -80,14 +80,14 @@ class WantedFilteringFragment : Fragment()  {
         closeDt_btn6 = view.findViewById<Button>(R.id.cb_d_6)
 
 
-       /* region_btn.setOnClickListener {
-            val regionFragment = RegionFragment()
+       region_btn.setOnClickListener {
+            val regionFragment = RegionFragment1()
             requireActivity().supportFragmentManager.beginTransaction()
                 .replace(R.id.fl_container, regionFragment)
                 .addToBackStack(null)
                 .commit()
         }
-*/
+
         // 학력 버튼 클릭 리스너
         edu_btn1.setOnClickListener { SelectedEducation(0) }  // 전체
         edu_btn2.setOnClickListener { SelectedEducation(1) }  // 초등학교

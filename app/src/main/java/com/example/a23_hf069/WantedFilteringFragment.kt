@@ -213,7 +213,7 @@ class WantedFilteringFragment : Fragment() {
     val convertedCloseDateList = filteredCloseDateList.map { value ->
         val today = LocalDate.now()
         val deadlineDate = when (value) {
-           // 0 ->
+           // 0 ->      //전체
             1 -> today // 오늘
             2 -> today.plusDays(1) // 내일
             3 -> today.plusDays(7) // 1주 이내
@@ -225,19 +225,6 @@ class WantedFilteringFragment : Fragment() {
         //xml파일의 <closeDt>마감일날짜 정보에서 오늘 날짜를 뺀 값
     }
 }
-
-        //각각의 리스트에서 추출된 값을 파싱된 xml파일과 대조 -> 리스트에 담기 -> 중복 건 찾기
-
-
-
-        // 세 리스트에서 중복되는 값들을 찾습니다.
-        //val intersectedItems = filteredEducationList.intersect(filteredCareerList).intersect(filteredCloseDateList)
-
-        /*for (item in intersectedItems) {
-            println(item)
-            // 필요한 처리를 수행합니다.
-        }*/
-
 
     //워크넷 api 채용목록 xml파일 parsing하는 코드
     private inner class FetchJobData : AsyncTask<String, Void, List<Job>>() {
@@ -335,6 +322,7 @@ class WantedFilteringFragment : Fragment() {
             return jobList
         }
 
+        //각각의 리스트에서 추출된 값을 파싱된 xml파일과 대조 -> 중복 건 찾기
         @RequiresApi(Build.VERSION_CODES.O)
         private fun isJobMatched(job: Job): Boolean {
             val convertedEducationList = listOf(

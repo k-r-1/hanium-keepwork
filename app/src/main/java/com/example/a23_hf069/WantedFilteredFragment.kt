@@ -50,7 +50,12 @@ class WantedFilteredFragment : Fragment() {
         }
 
         // WantedFilteringFragment.kt에서 argument를 넘겨받아 필터링된 데이터 출력
-        //fetchJobData()
+        val args = arguments
+        val filteredJobList = args?.getParcelableArrayList<Job>("filteredJobList")
+        filteredJobList?.let {
+            jobList = it
+            showJobList()
+        }
 
         return view
     }

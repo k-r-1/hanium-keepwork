@@ -338,7 +338,7 @@
                     android:includeFontPadding="false"
                     android:text="워크넷 URL"
                     android:textColor="#423A3A"
-                    android:textSize="16sp"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <TextView

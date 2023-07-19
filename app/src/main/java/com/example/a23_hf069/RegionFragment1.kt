@@ -26,14 +26,9 @@ class RegionFragment1 : Fragment() {
     private lateinit var oneDepthTextView : TextView
     private lateinit var twoDepthTextView : TextView
 
-    // API 인증키
-    val apiKey = "WNLJYZLM2VZXTT2TZA9XR2VR1HK"
-    val regionUrl = "http://openapi.work.go.kr/opi/commonCode/commonCode.do?returnType=XML&target=CMCD&authKey=WNLJYZLM2VZXTT2TZA9XR2VR1HK&dtlGb=1"
-
-    // 지역 대분류 리스트 (시/도)
-    private var superRegionList = mutableListOf<String>()
     // 지역 중분류 리스트 (시/군/구)
     private var middleRegionList = mutableListOf<String>()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -48,10 +43,14 @@ class RegionFragment1 : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         apitest()
-        // 지역 정보 리스트에 담기
-        //fetchSRegionNames()
-        //fetchMRegionNames()
 
+        // oneDepthTextView 클릭 이벤트 리스너 설정
+        oneDepthTextView.setOnClickListener {
+            val selectedRegion = oneDepthTextView.text.toString().trim()
+            val twoDepthNames = middleRegionList.filter { it.startsWith(selectedRegion) }
+            // twoDepthNames에 해당 지역 대분류에 해당하는 지역 중분류 목록이 담겨 있으므로 twoDepthTextView에 표시
+            twoDepthTextView.text = "\n${twoDepthNames.joinToString("\n")}"
+        }
     }
 
     data class TwoDepth(
@@ -137,6 +136,7 @@ class RegionFragment1 : Fragment() {
                             "regionNm" -> {
                                 var regionNm = parser.nextText()
                                 currentOneDepth?.regionNm = regionNm
+                                middleRegionList.add(regionNm) // 지역 중분류를 middleRegionList에 추가
                             }
                             "superCd" -> {
                                 var superCd = parser.nextText()
@@ -177,99 +177,5 @@ class RegionFragment1 : Fragment() {
         val regionNm = parser.getAttributeValue(null, "regionNm") ?: ""
         return OneDepth(regionCd, regionNm)
     }
-
-
-//    private fun fetchSRegionNames() {
-//        val params = listOf("returnType" to "XML", "target" to "CMCD", "authKey" to apiKey, "dtlGb" to "1")
-//
-//        val request = Request.Builder()
-//            .url("$regionUrl?${params.joinToString("&")}")
-//            .get()
-//            .header("Authorization", "Bearer $apiKey")
-//            .build()
-//
-//        val client = OkHttpClient()
-//        client.newCall(request).enqueue(object : Callback {
-//            override fun onFailure(call: Call, e: IOException) {
-//                println(e.message)
-//            }
-//
-//            override fun onResponse(call: Call, response: Response) {
-//                val responseData = response.body?.string()
-//                if (response.isSuccessful && responseData != null) {
-//                    println("API 응답 데이터: $responseData")
-//                    try {
-//                        val superRegionList = parseXmlResponse(responseData)
-//                        // superRegionList에 모든 근로청소재지 소재지(시/도)명 정보가 담김
-//                        // TODO: 원하는 작업 수행
-//                        // UI 업데이트를 위해 사용할 경우, UI 스레드에서 처리
-//                        requireActivity().runOnUiThread {
-//                            updateUIWithRegionData(superRegionList)
-//                        }
-//                    } catch (e: XmlPullParserException) {
-//                        println(e.message)
-//                    }
-//                } else {
-//                    println("서버 응답 실패: ${response.code}")
-//                }
-//            }
-//        })
-//    }
-//
-//    private fun parseXmlResponse(xmlData: String): List<String> {
-//        superRegionList = mutableListOf<String>()
-//        try {
-//            val parser = Xml.newPullParser()
-//            parser.setInput(StringReader(xmlData))
-//
-//            var eventType = parser.eventType
-//            var currentRegionName: String? = null
-//
-//            while (eventType != XmlPullParser.END_DOCUMENT) {
-//                when (eventType) {
-//                    XmlPullParser.START_TAG -> {
-//                        val tagName = parser.name
-//
-//                        if (tagName == "regionNm") {
-//                            currentRegionName = parser.nextText()
-//                        }
-//                    }
-//                    XmlPullParser.END_TAG -> {
-//                        val tagName = parser.name
-//
-//                        if (tagName == "regionNm" && currentRegionName != null) {
-//                            superRegionList.add(currentRegionName)
-//                            currentRegionName = null
-//                        }
-//                    }
-//                }
-//
-//                eventType = parser.next()
-//            }
-//        } catch (e: XmlPullParserException) {
-//            println("${e.message}")
-//        } catch (e: IOException) {
-//            println("${e.message}")
-//        }
-//
-//        return superRegionList
-//    }
-//
-//
-//    private fun updateUIWithRegionData(superRegionList: List<String>) {
-//        val listView1: ListView = requireView().findViewById(R.id.lv_superRegion)
-//        val adapter1 = ArrayAdapter(requireContext(), R.layout.filtering_list_item, superRegionList)
-//        listView1.adapter = adapter1
-//
-//        // 시/도 버튼 클릭 시 이벤트 처리
-//        listView1.setOnItemClickListener { _, _, position, _ ->
-//            val item = superRegionList[position]
-//            // TODO: 버튼 클릭 시 해당 지역 코드를 사용하여 채용공고 필터링 로직 추가
-//        }
-//    }
-
-//    private fun fetchMRegionNames() {
-//    }
-
 
 }

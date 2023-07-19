@@ -1,0 +1,9 @@
+<Button xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/lv_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:backgroundTint="@color/white"
+    android:textColor="@color/black"
+    android:textSize="18sp"
+    android:outlineProvider="none"
+    android:gravity="start|center_vertical" />

@@ -14,7 +14,7 @@ import okhttp3.*
 import java.io.IOException
 
 class ResumeFragment : Fragment() {
-    private var IP_ADDRESS = "13.125.179.180" // 본인 IP주소를 넣으세요.
+    private var IP_ADDRESS = "54.180.82.123" // 본인 IP주소를 넣으세요.
     private lateinit var userId: String // 사용자 아이디
 
     private lateinit var buttonSubmit: Button

@@ -117,6 +117,11 @@
             android:layout_height="wrap_content"
             android:text="이력서 추가" />
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:listitem="@layout/resume_item"/>
+
     </LinearLayout>
 
 </LinearLayout>

@@ -33,6 +33,8 @@ class WantedFilteringFragment : Fragment() {
     private lateinit var jobListView: ListView
 
     lateinit var region_btn: Button
+    lateinit var jobcl_btn: Button
+    lateinit var tv_jobcl_selected: TextView
 
     lateinit var edu_btn1: Button
     lateinit var edu_btn2: Button
@@ -75,6 +77,25 @@ class WantedFilteringFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        //직종 선택
+        jobcl_btn = view.findViewById<Button>(R.id.jobcl_btn)
+
+        jobcl_btn.setOnClickListener {
+            val jobSelectionFragment = JobSelectionFragment()
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.fl_container, jobSelectionFragment)
+                .addToBackStack(null)
+                .commit()
+        }
+
+        // 선택된 직종 정보를 나타낼 TextView 초기화
+        tv_jobcl_selected = view.findViewById(R.id.tv_jobcl_selected)
+
+        // JobSelectionFragment에서 선택된 직종 정보를 가져와서 tv_jobcl_selected에 설정
+        val selectedJob = arguments?.getString("selectedJob")
+        tv_jobcl_selected.text = selectedJob
+
         //지역
         region_btn = view.findViewById<Button>(R.id.region_btn)
 

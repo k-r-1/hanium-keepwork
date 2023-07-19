@@ -12,7 +12,7 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
-import kotlinx.android.synthetic.main.fragment_wanted_work_net_search.*
+
 
 class WantedListFragment : Fragment(), TabLayout.OnTabSelectedListener {
     private lateinit var filter: Button

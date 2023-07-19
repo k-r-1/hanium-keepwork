@@ -9,9 +9,7 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
-import kotlinx.android.synthetic.main.activity_job_detail.*
-import kotlinx.android.synthetic.main.fragment_wanted_filtering.*
-import kotlinx.android.synthetic.main.fragment_wanted_filtering.view.*
+
 
 
 class WantedFilteringFragment : Fragment()  {

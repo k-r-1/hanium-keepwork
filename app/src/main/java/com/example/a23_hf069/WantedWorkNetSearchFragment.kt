@@ -205,7 +205,7 @@ class WantedWorkNetSearchFragment : Fragment() {
     }
 
     private fun showJobList() {
-        val adapter = CustomAdapter(this, jobList)
+        val adapter = CustomAdapter(jobList, requireContext())
         searchListView.adapter = adapter
 
         searchListView.setOnItemClickListener { _, _, position, _ ->

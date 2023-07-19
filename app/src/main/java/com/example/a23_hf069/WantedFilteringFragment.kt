@@ -111,13 +111,13 @@ class WantedFilteringFragment : Fragment()  {
 
     //완료버튼 누르면 필터링된 공고를 WantedFilteredFragment로 전환
         complete_btn1 = view.findViewById<Button>(R.id.complete_btn1)
-        complete_btn1.setOnClickListener {
-            val wantedFilteredFragment = WantedFilteredFragment()
-            requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.fl_container, wantedFilteredFragment)
-                .addToBackStack(null)
-                .commit()
-        } //만약 조건선택이 완료되지 않은 채 완료버튼을 눌렀다면? ->
+//        complete_btn1.setOnClickListener {
+//            val wantedFilteredFragment = WantedFilteredFragment()
+//            requireActivity().supportFragmentManager.beginTransaction()
+//                .replace(R.id.fl_container, wantedFilteredFragment)
+//                .addToBackStack(null)
+//                .commit()
+//        } //만약 조건선택이 완료되지 않은 채 완료버튼을 눌렀다면? ->
     }
 
     private fun SelectedEducation(selected: Int) {

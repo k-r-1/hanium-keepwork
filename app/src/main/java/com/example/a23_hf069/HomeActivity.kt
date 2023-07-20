@@ -1,6 +1,7 @@
 package com.example.a23_hf069
 
 import HomeFragment
+import ResumeFragment
 import android.os.Bundle
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity

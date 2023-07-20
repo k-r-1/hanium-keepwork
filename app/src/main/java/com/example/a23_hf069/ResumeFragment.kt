@@ -1,33 +1,38 @@
-package com.example.a23_hf069
-
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.a23_hf069.R
+import com.example.a23_hf069.ResumeWriteActivity
+import com.google.gson.Gson
 import okhttp3.*
-import org.json.JSONArray
 import org.json.JSONException
+import org.json.JSONObject
 import java.io.IOException
 
 class ResumeFragment : Fragment() {
-    private var IP_ADDRESS = "54.180.82.123" // 본인 IP주소를 넣으세요.
-    private lateinit var userId: String // 사용자 아이디
+    private var IP_ADDRESS = "43.200.164.251"
+    private lateinit var userId: String
 
     private lateinit var buttonSubmit: Button
     private lateinit var recyclerView: RecyclerView
     private lateinit var dataAdapter: DataAdapter
-    private val dataList: MutableList<Data> = mutableListOf()  // DB에서 가져온 데이터 리스트
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val view = inflater.inflate(R.layout.fragment_resume, container, false)
 
-        // 사용자 아이디 받아오기
         if (arguments != null) {
             userId = arguments?.getString("userId", "") ?: ""
         }
@@ -35,27 +40,55 @@ class ResumeFragment : Fragment() {
         val textID = view.findViewById<TextView>(R.id.tvID1)
         textID.text = userId
 
-        // RecyclerView 초기화
         recyclerView = view.findViewById(R.id.recyclerviewResume)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        dataAdapter = DataAdapter(dataList)
+
+        // RecyclerView 초기화 후 빈 어댑터 설정
+        dataAdapter = DataAdapter(emptyList())
         recyclerView.adapter = dataAdapter
 
-        // PHP 파일 URL
+        // 서버로 사용자 아이디를 전송하여 이력서 데이터를 가져오도록 요청
         val phpUrl = "http://$IP_ADDRESS/android_resume_php.php"
-
-        // HTTP 요청 보내기
+        val requestBody = FormBody.Builder()
+            .add("personal_id", userId)
+            .build()
         val request = Request.Builder()
             .url(phpUrl)
+            .post(requestBody)
             .build()
 
         val client = OkHttpClient()
         client.newCall(request).enqueue(object : Callback {
             override fun onResponse(call: Call, response: Response) {
                 val responseData = response.body?.string()
+                Log.d("ServerResponse", responseData ?: "No response data")
                 if (responseData != null) {
-                    // 응답 데이터 처리
-                    handleResponseData(responseData)
+                    try {
+                        val jsonObject = JSONObject(responseData)
+                        // JSON 파싱 성공한 경우
+                        // 응답 데이터 처리
+                        val gson = Gson()
+                        val dataListContainer = gson.fromJson(responseData, DataListContainer::class.java)
+
+                        // UI 업데이트는 메인 스레드에서 실행되어야 함
+                        requireActivity().runOnUiThread {
+                            val dataList = dataListContainer?.resumeList
+                            if (dataList != null) {
+                                // RecyclerView에 어댑터 설정
+                                dataAdapter.setData(dataList)
+                            } else {
+                                // dataList가 null인 경우에 대한 처리를 여기에 추가
+                                Toast.makeText(view?.context, "서버로부터 이력서 데이터를 가져오지 못했습니다.", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    } catch (e: JSONException) {
+                        // JSON 파싱 오류 발생한 경우
+                        Log.e("JSONParsingError", "Invalid JSON format: $responseData")
+                    }
+                } else {
+                    // responseData가 null인 경우에 대한 처리를 여기에 추가
+                    Log.e("ServerResponse", "Response data is null")
+                    Toast.makeText(view?.context, "서버로부터 응답이 없습니다.", Toast.LENGTH_SHORT).show()
                 }
             }
 
@@ -75,49 +108,37 @@ class ResumeFragment : Fragment() {
         return view
     }
 
-    private fun handleResponseData(responseData: String) {
-        try {
-            // JSON 데이터 파싱
-            val jsonArray = JSONArray(responseData)
-            for (i in 0 until jsonArray.length()) {
-                val jsonObject = jsonArray.getJSONObject(i)
-                val resumeTitle = jsonObject.getString("resumeTitle")
-                val writeStatus = jsonObject.getString("writeStatus")
-                val data = Data(resumeTitle, writeStatus)
-                dataList.add(data)
-            }
+    data class ResumeData(val resumeTitle: String, val writeStatus: String)
 
-            // RecyclerView 갱신
-            dataAdapter.notifyDataSetChanged()
-        } catch (e: JSONException) {
-            e.printStackTrace()
+    data class DataListContainer(val resumeList: List<ResumeData> = emptyList())
+
+    class DataAdapter(private var dataList: List<ResumeData>) : RecyclerView.Adapter<DataAdapter.ViewHolder>() {
+
+        inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+            val textViewTitle: TextView = itemView.findViewById(R.id.tvResumeTitle)
+            val textViewStatus: TextView = itemView.findViewById(R.id.tvWriteStatus)
         }
-    }
-}
 
-data class Data(val resumeTitle: String, val writeStatus: String)
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+            val view = LayoutInflater.from(parent.context)
+                .inflate(R.layout.resume_item, parent, false)
+            return ViewHolder(view)
+        }
 
-class DataAdapter(private val dataList: List<Data>) :
-    RecyclerView.Adapter<DataAdapter.ViewHolder>() {
+        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+            val data = dataList[position]
+            holder.textViewTitle.text = data.resumeTitle
+            holder.textViewStatus.text = data.writeStatus
+        }
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val textViewTitle: TextView = itemView.findViewById(R.id.tvResumeTitle)
-        val textViewStatus: TextView = itemView.findViewById(R.id.tvWriteStatus)
-    }
+        override fun getItemCount(): Int {
+            return dataList.size
+        }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.resume_item, parent, false)
-        return ViewHolder(view)
-    }
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val data = dataList[position]
-        holder.textViewTitle.text = data.resumeTitle
-        holder.textViewStatus.text = data.writeStatus
-    }
-
-    override fun getItemCount(): Int {
-        return dataList.size
+        // 외부에서 데이터를 설정할 수 있도록 setData() 함수 추가
+        fun setData(newDataList: List<ResumeData>) {
+            dataList = newDataList
+            notifyDataSetChanged()
+        }
     }
 }

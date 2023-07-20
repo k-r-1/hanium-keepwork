@@ -10,7 +10,7 @@ import okhttp3.*
 import java.io.IOException
 
 class ResumeWriteActivity : AppCompatActivity() {
-    private var IP_ADDRESS = "54.180.82.123" // Replace with your IP address.
+    private var IP_ADDRESS = "43.200.164.251" // Replace with your IP address.
     private var userId: String = "" // User ID
     private lateinit var editResumeTitle: EditText
     private lateinit var editTextAcademic: EditText
@@ -51,7 +51,7 @@ class ResumeWriteActivity : AppCompatActivity() {
             val resume_certificate = editTextCertificate.text.toString()
             val resume_learning = editTextEducation.text.toString()
             val resume_desire = editTextDesire.text.toString()
-            val resume_complete = "0"
+            val resume_complete = "작성 중"
 
             sendResumeData(
                 personal_id,
@@ -75,7 +75,7 @@ class ResumeWriteActivity : AppCompatActivity() {
             val resume_certificate = editTextCertificate.text.toString()
             val resume_learning = editTextEducation.text.toString()
             val resume_desire = editTextDesire.text.toString()
-            val resume_complete = "1"
+            val resume_complete = "작성 완료"
 
             sendResumeData(
                 personal_id,

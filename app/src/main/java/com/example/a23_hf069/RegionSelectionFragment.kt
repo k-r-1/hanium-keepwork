@@ -29,6 +29,7 @@ class RegionSelectionFragment : Fragment() {
     private lateinit var regionAdapter2: ArrayAdapter<String>
     private val regionList1: MutableList<String> = mutableListOf()
     private val regionList2: MutableList<String> = mutableListOf()
+    private val wholeRegionList: MutableList<String> = mutableListOf("전체", "서울 전체", "부산 전체", "대구 전체","인천 전체", "광주 전체", "대전 전체", "울산 전체", "세종 전체", "경기 전체", "충북 전체", "충남 전체", "전북 전체", "전남 전체", "경북 전체", "경남 전체", "제주 전체", "강원 전체" )
     private var selectedOneDepthRegion: String? = null// 선택한 oneDepth 지역명을 저장할 변수
     private lateinit var regionListView1: ListView
     private lateinit var regionListView2: ListView
@@ -55,6 +56,7 @@ class RegionSelectionFragment : Fragment() {
         regionListView1.adapter = regionAdapter1
         regionListView2.adapter = regionAdapter2
 
+
         // 지역 목록 API 호출하여 regionList1,2에 결과 담기
         fetchRegionList()
 
@@ -70,9 +72,12 @@ class RegionSelectionFragment : Fragment() {
             AdapterView.OnItemClickListener { _, _, position, _ ->
                 selectedOneDepthRegion = regionAdapter1.getItem(position) ?: ""
                 updateRegionListView2()
+
             }
-
-
+        regionListView2.onItemClickListener =
+            AdapterView.OnItemClickListener { _, _, position, _ ->
+                selectedRegionTextView.text = regionAdapter2.getItem(position) ?: ""
+            }
         // drawableRight(검색 아이콘) 클릭 시 검색 이벤트 처리
         searchEditText.setOnTouchListener { _, event ->
             val drawableRight = 2 // Index of the drawableRight icon
@@ -91,7 +96,7 @@ class RegionSelectionFragment : Fragment() {
         regionSelcetButton.setOnClickListener {
             val selectedRegion = selectedRegionTextView.text.toString()
 
-            // 선택된 직종 정보를 WantedFilteringFragment로 전달
+            // 선택된 지역 정보를 WantedFilteringFragment로 전달
             val wantedFilteringFragment = WantedFilteringFragment()
             val args = Bundle()
             args.putString("selectedRegion", selectedRegion)
@@ -199,6 +204,7 @@ class RegionSelectionFragment : Fragment() {
             }
 
             regionAdapter1.notifyDataSetChanged()
+            regionList1.set(0, "전체")
         }
     }
 
@@ -212,6 +218,13 @@ class RegionSelectionFragment : Fragment() {
             return
         }
 
+        if(selectedRegion == "전체"){
+            regionAdapter2 = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, wholeRegionList)
+            regionListView2.adapter = regionAdapter2
+        }
+        for(i in wholeRegionList){
+            println(i)
+        }
         // 선택한 oneDepth 지역명에 해당하는 twoDepth 지역명들을 필터링하여 가져오기
         val filteredTwoDepthRegions = regionList2.filter { region ->
             val regionWords = region.split(" ") // 띄어쓰기 등으로 문자열 분리

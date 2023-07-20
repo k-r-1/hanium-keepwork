@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
 import com.example.a23_hf069.databinding.FragmentJobWorkNetSelectionBinding
 import kotlinx.coroutines.Dispatchers
@@ -25,6 +26,7 @@ class JobWorkNetSelectionFragment : Fragment() {
     private lateinit var binding: FragmentJobWorkNetSelectionBinding
     private lateinit var jobAdapter: ArrayAdapter<String>
     private lateinit var jobList: MutableList<String>
+    private lateinit var selectedJobList: MutableList<String> // 여러 개의 직종을 저장할 리스트
 
     private val baseUrl =
         "http://openapi.work.go.kr/opi/commonCode/commonCode.do?returnType=XML&target=CMCD&authKey=WNLJYZLM2VZXTT2TZA9XR2VR1HK&dtlGb=2"
@@ -39,8 +41,10 @@ class JobWorkNetSelectionFragment : Fragment() {
         // View 초기화
         val searchEditText = binding.tvSelectJob
         val jobListView = binding.lvJobs
-        val selectedJobTextView = binding.tvSelectedJob
         val jobSelectButton = binding.btnJobSelectComplete
+        selectedJobList = mutableListOf()
+
+        // selectedJobTextView 대신 binding.tvSelectedJob 사용
 
         // ListView 초기화
         jobList = mutableListOf()
@@ -61,7 +65,13 @@ class JobWorkNetSelectionFragment : Fragment() {
         jobListView.onItemClickListener =
             AdapterView.OnItemClickListener { _, _, position, _ ->
                 val selectedJob = jobAdapter.getItem(position)
-                selectedJobTextView.text = selectedJob
+                if (selectedJob != null) {
+                    // 선택된 직종이 리스트에 이미 포함되어 있지 않은 경우에만 추가
+                    if (!selectedJobList.contains(selectedJob)) {
+                        selectedJobList.add(selectedJob)
+                        updateSelectedJobTextView()
+                    }
+                }
             }
 
         // drawableRight(검색 아이콘) 클릭 시 검색 이벤트 처리
@@ -80,12 +90,13 @@ class JobWorkNetSelectionFragment : Fragment() {
 
         // btn_job_select_complete 버튼 클릭 시 이벤트 처리
         jobSelectButton.setOnClickListener {
-            val selectedJob = selectedJobTextView.text.toString()
+            // 선택된 직종들을 쉼표로 구분하여 문자열로 만듦
+            val selectedJobs = selectedJobList.joinToString(", \n")
 
             // 선택된 직종 정보를 WantedFilteringFragment로 전달
             val wantedFilteringFragment = WantedFilteringFragment()
             val args = Bundle()
-            args.putString("selectedJob", selectedJob)
+            args.putString("selectedJob", selectedJobs)
             wantedFilteringFragment.arguments = args
 
             requireActivity().supportFragmentManager.beginTransaction()
@@ -95,6 +106,12 @@ class JobWorkNetSelectionFragment : Fragment() {
         }
 
         return rootView
+    }
+
+    // TextView 업데이트 함수 추가
+    private fun updateSelectedJobTextView() {
+        val selectedJobs = selectedJobList.joinToString(", \n")
+        binding.tvSelectedJob.text = selectedJobs
     }
 
     private fun fetchJobList() {

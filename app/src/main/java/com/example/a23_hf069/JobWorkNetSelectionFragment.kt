@@ -7,11 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.example.a23_hf069.databinding.FragmentJobSelectionBinding
+import com.example.a23_hf069.databinding.FragmentJobWorkNetSelectionBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -22,9 +20,9 @@ import java.io.IOException
 import java.io.StringReader
 import javax.xml.parsers.DocumentBuilderFactory
 
-class JobSelectionFragment : Fragment() {
+class JobWorkNetSelectionFragment : Fragment() {
 
-    private lateinit var binding: FragmentJobSelectionBinding
+    private lateinit var binding: FragmentJobWorkNetSelectionBinding
     private lateinit var jobAdapter: ArrayAdapter<String>
     private lateinit var jobList: MutableList<String>
 
@@ -35,7 +33,7 @@ class JobSelectionFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentJobSelectionBinding.inflate(inflater, container, false)
+        binding = FragmentJobWorkNetSelectionBinding.inflate(inflater, container, false)
         val rootView = binding.root
 
         // View 초기화

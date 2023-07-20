@@ -2,7 +2,6 @@ package com.example.a23_hf069
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.Region
 import android.os.AsyncTask
 import android.os.Build
 import android.os.Bundle
@@ -81,7 +80,7 @@ class WantedFilteringFragment : Fragment() {
         jobcl_btn = view.findViewById<Button>(R.id.jobcl_btn)
 
         jobcl_btn.setOnClickListener {
-            val jobSelectionFragment = JobSelectionFragment()
+            val jobSelectionFragment = JobWorkNetSelectionFragment()
             requireActivity().supportFragmentManager.beginTransaction()
                 .replace(R.id.fl_container, jobSelectionFragment)
                 .addToBackStack(null)

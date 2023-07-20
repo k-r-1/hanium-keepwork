@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.KeyEvent
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
@@ -39,6 +40,19 @@ class WantedWorkNetSearchFragment : Fragment() {
                 return@setOnKeyListener true
             }
             return@setOnKeyListener false
+        }
+
+        // EditText drawableRight 이미지 클릭 이벤트 처리
+        searchContent.setOnTouchListener { _, event ->
+            val DRAWABLE_RIGHT = 2
+            if (event.action == MotionEvent.ACTION_UP) {
+                if (event.rawX >= (searchContent.right - searchContent.compoundDrawables[DRAWABLE_RIGHT].bounds.width())) {
+                    // drawableRight를 클릭한 경우
+                    fetchJobDataWithSearch()
+                    return@setOnTouchListener true
+                }
+            }
+            return@setOnTouchListener false
         }
 
         val closeButton = rootView.findViewById<ImageButton>(R.id.backButton)

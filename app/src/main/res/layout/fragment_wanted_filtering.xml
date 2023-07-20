@@ -67,12 +67,23 @@
             android:textStyle="bold" />
 
         <Button
-            android:id="@+id/region_btn"
+            android:id="@+id/regioncl_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="20dp"
             android:text="지역선택 >" />
+
+        <TextView
+            android:id="@+id/tv_regioncl_selected"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="20dp"
+            android:text="지역"
+            android:textColor="#FF0000"
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
     </LinearLayout>
 

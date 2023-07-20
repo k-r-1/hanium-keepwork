@@ -2,6 +2,7 @@ package com.example.a23_hf069
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Region
 import android.os.AsyncTask
 import android.os.Build
 import android.os.Bundle
@@ -15,16 +16,12 @@ import android.widget.ListView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.setFragmentResult
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserFactory
 import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
-import java.net.URLEncoder
 import java.time.LocalDate
 
 
@@ -32,9 +29,10 @@ class WantedFilteringFragment : Fragment() {
     private lateinit var jobList: List<Job>
     private lateinit var jobListView: ListView
 
-    lateinit var region_btn: Button
+    lateinit var regioncl_btn: Button
     lateinit var jobcl_btn: Button
     lateinit var tv_jobcl_selected: TextView
+    lateinit var tv_regioncl_selected: TextView
 
     lateinit var edu_btn1: Button
     lateinit var edu_btn2: Button
@@ -77,7 +75,8 @@ class WantedFilteringFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        //지역 선택
+        regioncl_btn = view.findViewById<Button>(R.id.regioncl_btn)
         //직종 선택
         jobcl_btn = view.findViewById<Button>(R.id.jobcl_btn)
 
@@ -89,6 +88,21 @@ class WantedFilteringFragment : Fragment() {
                 .commit()
         }
 
+        regioncl_btn.setOnClickListener {
+            val regionSelectionFragment = RegionSelectionFragment()
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.fl_container, regionSelectionFragment)
+                .addToBackStack(null)
+                .commit()
+        }
+
+        // 선택된 지역 정보를 나타낼 TextView 초기화
+        tv_regioncl_selected = view.findViewById(R.id.tv_regioncl_selected)
+
+        // RegionSelectionFragment에서 선택된 직종 정보를 가져와서 tv_regioncl_selected에 설정
+        val selectedRegion = arguments?.getString("selectedRegion")
+        tv_regioncl_selected.text = selectedRegion
+
         // 선택된 직종 정보를 나타낼 TextView 초기화
         tv_jobcl_selected = view.findViewById(R.id.tv_jobcl_selected)
 
@@ -96,8 +110,9 @@ class WantedFilteringFragment : Fragment() {
         val selectedJob = arguments?.getString("selectedJob")
         tv_jobcl_selected.text = selectedJob
 
-        //지역
-        region_btn = view.findViewById<Button>(R.id.region_btn)
+
+
+
 
         //학력 체크
         edu_btn1 = view.findViewById<Button>(R.id.cb_e_1) //전체
@@ -120,16 +135,7 @@ class WantedFilteringFragment : Fragment() {
         closeDt_btn5 = view.findViewById<Button>(R.id.cb_d_5)
         closeDt_btn6 = view.findViewById<Button>(R.id.cb_d_6)
 
-
-        /* region_btn.setOnClickListener {
-            val regionFragment = RegionFragment()
-            requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.fl_container, regionFragment)
-                .addToBackStack(null)
-                .commit()
-        }
-*/
-        // 학력 버튼 클릭 리스너
+    // 학력 버튼 클릭 리스너
         edu_btn1.setOnClickListener { SelectedEducation(0) }  // 전체
         edu_btn2.setOnClickListener { SelectedEducation(1) }  // 초등학교
         edu_btn3.setOnClickListener { SelectedEducation(2) }  // 중학교

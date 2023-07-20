@@ -1,3 +1,4 @@
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -19,13 +20,16 @@ import org.json.JSONObject
 import java.io.IOException
 
 class ResumeFragment : Fragment() {
-    private var IP_ADDRESS = "43.200.164.251"
+    private var IP_ADDRESS = "15.164.49.206"
     private lateinit var userId: String
 
-    private lateinit var buttonSubmit: Button
+    private lateinit var tvResume_temporary_count: TextView
+    private lateinit var tvResume_complete_count:TextView
+    private lateinit var buttonAddResume: Button
     private lateinit var recyclerView: RecyclerView
     private lateinit var dataAdapter: DataAdapter
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -46,6 +50,9 @@ class ResumeFragment : Fragment() {
         // RecyclerView 초기화 후 빈 어댑터 설정
         dataAdapter = DataAdapter(emptyList())
         recyclerView.adapter = dataAdapter
+
+        tvResume_temporary_count = view.findViewById(R.id.tvResume_temporary_count)
+        tvResume_complete_count = view.findViewById(R.id.tvResume_complete_count)
 
         // 서버로 사용자 아이디를 전송하여 이력서 데이터를 가져오도록 요청
         val phpUrl = "http://$IP_ADDRESS/android_resume_php.php"
@@ -76,6 +83,20 @@ class ResumeFragment : Fragment() {
                             if (dataList != null) {
                                 // RecyclerView에 어댑터 설정
                                 dataAdapter.setData(dataList)
+
+                                // 이력서 개수 설정
+                                val cnt1 = dataListContainer.cnt1
+                                val cnt2 = dataListContainer.cnt2
+
+                                // cnt1, cnt2가 null인지 여부를 확인하여 설정
+                                if (cnt1 != null && cnt2 != null) {
+                                    tvResume_temporary_count.text = cnt1.toString()
+                                    tvResume_complete_count.text = cnt2.toString()
+                                } else {
+                                    // cnt1 또는 cnt2가 null인 경우에 대한 처리를 여기에 추가
+                                    Toast.makeText(view?.context, "이력서 개수를 가져오지 못했습니다.", Toast.LENGTH_SHORT).show()
+                                }
+
                             } else {
                                 // dataList가 null인 경우에 대한 처리를 여기에 추가
                                 Toast.makeText(view?.context, "서버로부터 이력서 데이터를 가져오지 못했습니다.", Toast.LENGTH_SHORT).show()
@@ -98,8 +119,8 @@ class ResumeFragment : Fragment() {
             }
         })
 
-        buttonSubmit = view.findViewById<Button>(R.id.buttonSubmit)
-        buttonSubmit.setOnClickListener {
+        buttonAddResume = view.findViewById<Button>(R.id.btnAddResume)
+        buttonAddResume.setOnClickListener {
             val intent = Intent(requireContext(), ResumeWriteActivity::class.java)
             intent.putExtra("userId", userId)
             startActivity(intent)
@@ -110,7 +131,11 @@ class ResumeFragment : Fragment() {
 
     data class ResumeData(val resumeTitle: String, val writeStatus: String)
 
-    data class DataListContainer(val resumeList: List<ResumeData> = emptyList())
+    data class DataListContainer(
+        val resumeList: List<ResumeData> = emptyList(),
+        val cnt1: Int = 0,
+        val cnt2: Int = 0
+    )
 
     class DataAdapter(private var dataList: List<ResumeData>) : RecyclerView.Adapter<DataAdapter.ViewHolder>() {
 

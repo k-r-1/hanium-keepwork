@@ -204,7 +204,6 @@ class CustomAdapter(private val jobList: List<Job>, private val fragmentContext:
     }
 }
 
-
 class JobDetailActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityJobDetailBinding

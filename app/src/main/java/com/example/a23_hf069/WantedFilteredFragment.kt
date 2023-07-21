@@ -4,12 +4,15 @@ import android.content.Context
 import android.content.Intent
 import android.os.AsyncTask
 import android.os.Bundle
+import android.os.Parcel
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.example.a23_hf069.databinding.ActivityJobDetailBinding
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserFactory
 import java.io.InputStream
@@ -159,6 +162,7 @@ class WantedFilteredFragment : Fragment() {
             }
 
             return jobList
+
         }
 
         override fun onPostExecute(result: List<Job>) {
@@ -200,6 +204,7 @@ class CustomAdapter2(private val context2: Context, private val jobList: List<Jo
     }
 }
 
+//채용공고 클릭하면 상세정보 출력
 class JobDetailActivity2 : AppCompatActivity() {
     private lateinit var backButton: ImageView
     private lateinit var company: TextView // 회사명
@@ -244,7 +249,7 @@ class JobDetailActivity2 : AppCompatActivity() {
         wantedMobileInfoUrl = findViewById(R.id.wantedMobileInfoUrl)
         jobsCd = findViewById(R.id.jobsCd)
 
-        val job = intent.getParcelableExtra<Job>(JOB_EXTRA)
+        val job = intent.getParcelableExtra<Job2>(JOB_EXTRA)
 
         company.text = job?.company
         title.text = job?.title
@@ -260,6 +265,62 @@ class JobDetailActivity2 : AppCompatActivity() {
 
         backButton.setOnClickListener {
             onBackPressed()
+        }
+    }
+}
+
+data class Job2(
+    val company: String,
+    val title: String,
+    val salTpNm: String?,
+    val sal: String?,
+    val region: String?,
+    val holidayTpNm: String?,
+    val minEdubg: String?,
+    val career: String?,
+    val closeDt: String?,
+    val wantedMobileInfoUrl: String?,
+    val jobsCd: String?
+) : Parcelable {
+    constructor(parcel: Parcel) : this(
+        parcel.readString() ?: "",
+        parcel.readString() ?: "",
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString()
+    )
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeString(company)
+        parcel.writeString(title)
+        parcel.writeString(salTpNm)
+        parcel.writeString(sal)
+        parcel.writeString(region)
+        parcel.writeString(holidayTpNm)
+        parcel.writeString(minEdubg)
+        parcel.writeString(career)
+        parcel.writeString(closeDt)
+        parcel.writeString(wantedMobileInfoUrl)
+        parcel.writeString(jobsCd)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<Job> {
+        override fun createFromParcel(parcel: Parcel): Job {
+            return Job(parcel)
+        }
+
+        override fun newArray(size: Int): Array<Job?> {
+            return arrayOfNulls(size)
         }
     }
 }

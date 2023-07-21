@@ -15,6 +15,8 @@ import android.widget.ListView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.Fragment
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserFactory
@@ -27,6 +29,7 @@ import java.time.LocalDate
 class WantedFilteringFragment : Fragment() {
     private lateinit var jobList: List<Job>
     private lateinit var jobListView: ListView
+    private var filteredJobListGlobal: List<Job> = emptyList() // 전역 변수로 선언
 
     lateinit var regioncl_btn: Button
     lateinit var jobcl_btn: Button
@@ -68,6 +71,7 @@ class WantedFilteringFragment : Fragment() {
         savedInstanceState: Bundle?
 
     ): View? {
+        jobList = emptyList() // 초기화 추가
         return inflater.inflate(R.layout.fragment_wanted_filtering, container, false)
     }
 
@@ -108,10 +112,6 @@ class WantedFilteringFragment : Fragment() {
         // JobSelectionFragment에서 선택된 직종 정보를 가져와서 tv_jobcl_selected에 설정
         val selectedJob = arguments?.getString("selectedJob")
         tv_jobcl_selected.text = selectedJob
-
-
-
-
 
         //학력 체크
         edu_btn1 = view.findViewById<Button>(R.id.cb_e_1) //전체
@@ -215,42 +215,29 @@ class WantedFilteringFragment : Fragment() {
         val filteredCloseDateList =
             if (selectedCloseDateList.isEmpty()) listOf(0) else selectedCloseDateList
 
-        //각각의 리스트에 담긴 Int형의 데이터들을 String 타입으로 변환
-        val convertedEducationList = filteredEducationList.map { value ->
-            when (value) {
-                0 -> "00"
-                1 -> "01"
-                2 -> "02"
-                3 -> "03"
-                4 -> "04"
-                5 -> "05"
-                else -> {}
-            }
-        }
-        val convertedCareerList = filteredCareerList.map { value ->
-            when (value) {
-                0 -> "N"
-                1 -> "E"
-                2 -> "Z"
+        // 기존의 parseXml 함수와 비슷한 방식으로 필터링된 jobList를 구성합니다.
+        val filteredJobList = jobList.filter { job ->
+            val convertedEducationList = listOf("00", "01", "02", "03", "04", "05")
+            val convertedCareerList = listOf("N", "E", "Z")
+            val convertedCloseDateList = listOf(
+                LocalDate.now().toString(), // 오늘
+                LocalDate.now().plusDays(1).toString(), // 내일
+                LocalDate.now().plusDays(7).toString(), // 1주 이내
+                LocalDate.now().plusMonths(1).toString(), // 한달 이내
+                LocalDate.now().plusMonths(1).plusDays(1).toString() // 한달 이상
+            )
 
-                else -> {}
-            }
+            convertedEducationList.contains(job.minEdubg) &&
+                    convertedCareerList.contains(job.career) &&
+                    convertedCloseDateList.contains(job.closeDt)
         }
-    val convertedCloseDateList = filteredCloseDateList.map { value ->
-        val today = LocalDate.now()
-        val deadlineDate = when (value) {
-           // 0 ->      //전체
-            1 -> today // 오늘
-            2 -> today.plusDays(1) // 내일
-            3 -> today.plusDays(7) // 1주 이내
-            4 -> today.plusMonths(1) // 한달 이내
-            else -> {today.plusMonths(1) // 한달 이상
-             }
-        }
-        deadlineDate.toString() // 날짜를 문자열로 변환하여 반환
-        //xml파일의 <closeDt>마감일날짜 정보에서 오늘 날짜를 뺀 값
+
+        // 필터링된 데이터를 전역 변수에 저장합니다.
+        filteredJobListGlobal = filteredJobList
+
+        // 필터링된 데이터로 화면을 갱신합니다.
+        showFilteredJobList()
     }
-}
 
     //워크넷 api 채용목록 xml파일 parsing하는 코드
     private inner class FetchJobData : AsyncTask<String, Void, List<Job>>() {
@@ -258,6 +245,7 @@ class WantedFilteringFragment : Fragment() {
             val urlString = urls[0]
             var result: List<Job> = emptyList()
             var connection: HttpURLConnection? = null
+            var filteredJobList: List<Job> = emptyList() // filteredJobList를 지역 변수로 선언
 
             try {
                 val url = URL(urlString)
@@ -276,8 +264,16 @@ class WantedFilteringFragment : Fragment() {
             } finally {
                 connection?.disconnect()
             }
+            return filteredJobList // 여기서 반환
+        }
 
-            return result
+        @RequiresApi(Build.VERSION_CODES.O)
+        override fun onPostExecute(result: List<Job>) {
+            super.onPostExecute(result)
+            // jobList에 데이터 할당
+            jobList = result
+            // 필터링된 데이터로 화면을 갱신합니다.
+            filterItems()
         }
 
         private fun parseXml(inputStream: InputStream): List<Job> {
@@ -362,27 +358,26 @@ class WantedFilteringFragment : Fragment() {
                 LocalDate.now().plusDays(1).toString(), // 내일
                 LocalDate.now().plusDays(7).toString(), // 1주 이내
                 LocalDate.now().plusMonths(1).toString(), // 한달 이내
-                LocalDate.now().plusMonths(1).toString() // 한달 이상
+                LocalDate.now().plusMonths(1).plusDays(1).toString() // 한달 이상
             )
 
             return convertedEducationList.contains(job.minEdubg) &&
                     convertedCareerList.contains(job.career) &&
                     convertedCloseDateList.contains(job.closeDt)
         }
-        override fun onPostExecute(result: List<Job>) {
-            jobList = result
-            showJobList()
-        }
+
     }
 
-    private fun showJobList() {
-        val adapter = CustomAdapter3(requireActivity(), jobList)
-        jobListView.adapter = adapter
+    private fun showFilteredJobList() {
+        if (::jobListView.isInitialized) {
+            val adapter = CustomAdapter3(requireActivity(), filteredJobListGlobal)
+            jobListView.adapter = adapter
 
-        jobListView.setOnItemClickListener { _, _, position, _ ->
-            val job = jobList[position]
-            val intent = JobDetailActivity3.newIntent(requireContext(), job)
-            startActivity(intent)
+            jobListView.setOnItemClickListener { _, _, position, _ ->
+                val job = filteredJobListGlobal[position]
+                val intent = JobDetailActivity3.newIntent(requireContext(), job)
+                startActivity(intent)
+            }
         }
     }
 }

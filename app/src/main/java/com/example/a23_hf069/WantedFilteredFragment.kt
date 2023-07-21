@@ -60,9 +60,6 @@ class WantedFilteredFragment : Fragment() {
             showJobList()
         }
 
-        currentPage = 1
-        fetchJobData()
-
         return view
     }
 
@@ -215,7 +212,7 @@ class JobDetailActivity2 : AppCompatActivity() {
     companion object {
         private const val JOB_EXTRA = "job"
 
-        fun newIntent(context: Context, job: Job2): Intent {
+        fun newIntent(context: Context, job: Job): Intent {
             return Intent(context, JobDetailActivity2::class.java).apply {
                 putExtra(JOB_EXTRA, job)
             }

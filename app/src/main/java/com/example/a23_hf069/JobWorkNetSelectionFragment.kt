@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import com.example.a23_hf069.databinding.FragmentJobWorkNetSelectionBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -27,6 +28,9 @@ class JobWorkNetSelectionFragment : Fragment() {
     private lateinit var jobAdapter: ArrayAdapter<String>
     private lateinit var jobList: MutableList<String> // 직업 목록을 담을 리스트
     private lateinit var selectedJobList: MutableList<String> // 여러 개의 직종을 저장할 리스트
+
+    // ViewModel 생성
+    private val sharedSelectionViewModel: SharedSelectionViewModel by activityViewModels()
 
     // 직업 목록을 불러오는 API의 기본 URL을 설정
     private val baseUrl =
@@ -86,25 +90,15 @@ class JobWorkNetSelectionFragment : Fragment() {
             }
         }
 
-        // btn_job_select_complete 버튼 클릭 시 이벤트 처리
         jobSelectButton.setOnClickListener {
-            // 선택된 직종들을 쉼표와 줄바꿈 문자로 구분하여 문자열로 만듦
             val selectedJobs = selectedJobList.joinToString(", \n")
+            sharedSelectionViewModel.selectedJob = selectedJobs // 선택된 직종 정보를 ViewModel에 저장
 
-            // 선택된 직종 정보를 WantedFilteringFragment로 전달
             val wantedFilteringFragment = WantedFilteringFragment()
-
-            // 선택된 직종 정보를 담을 Bundle을 생성하고, "selectedJob"이라는 키로 문자열을 설정하여 Bundle에 추가
-            val args = Bundle()
-            args.putString("selectedJob", selectedJobs)
-            wantedFilteringFragment.arguments = args // WantedFilteringFragment 객체에 args라는 Bundle을 설정
-
-            // 현재 프래그먼트가 속한 액티비티의 supportFragmentManager를 이용하여 프래그먼트 트랜잭션을 시작
-            // 프래그먼트 트랜잭션은 프래그먼트의 추가, 삭제, 대체 등을 수행
             requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.fl_container, wantedFilteringFragment) // WantedFilteringFragment로 프래그먼트를 대체(Replace)
-                .addToBackStack(null) // 백스택에 이 프래그먼트를 추가
-                .commit() // 트랜잭션을 커밋하여 변경사항을 적용
+                .replace(R.id.fl_container, wantedFilteringFragment)
+                .addToBackStack(null)
+                .commit()
         }
 
         return rootView

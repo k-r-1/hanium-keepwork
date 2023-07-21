@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import com.example.a23_hf069.databinding.FragmentRegionSelectionBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -34,6 +35,10 @@ class RegionSelectionFragment : Fragment() {
     private val wholeRegionList: List<String> = listOf("전체", "서울 전체", "부산 전체", "대구 전체","인천 전체", "광주 전체", "대전 전체", "울산 전체", "세종 전체", "경기 전체", "충북 전체", "충남 전체", "전북 전체", "전남 전체", "경북 전체", "경남 전체", "제주 전체", "강원 전체" )
     private var selectedOneDepthRegion: String? = null// 선택한 oneDepth 지역명을 저장할 변수
     private val selectedRegionList: MutableList<String> =  mutableListOf() // 선택된 지역들을 저장할 리스트
+
+    // ViewModel 생성
+    private val sharedSelectionViewModel: SharedSelectionViewModel by activityViewModels()
+
 
     // 지역 목록을 불러오는 API의 기본 URL을 설정
     private val baseUrl =
@@ -105,21 +110,11 @@ class RegionSelectionFragment : Fragment() {
             }
         }
 
-        // btn_region_select_complete 버튼 클릭 시 빨간 텍스트로 표출
         regionSelcetButton.setOnClickListener {
-            // 선택된 지역들을 쉼표와 줄바꿈 문자로 구분하여 문자열로 만듦
             val selectedRegions = selectedRegionList.joinToString(", \n")
+            sharedSelectionViewModel.selectedRegion = selectedRegions // 선택된 지역 정보를 ViewModel에 저장
 
-            // 선택된 지역 정보를 WantedFilteringFragment로 전달
             val wantedFilteringFragment = WantedFilteringFragment()
-
-            // 선택된 지역 정보를 담을 Bundle을 생성하고, "selectedRegions"이라는 키로 문자열을 설정하여 Bundle에 추가
-            val args = Bundle()
-            args.putString("selectedRegion", selectedRegions)
-            wantedFilteringFragment.arguments = args
-
-            // 현재 프래그먼트가 속한 액티비티의 supportFragmentManager를 이용하여 프래그먼트 트랜잭션을 시작
-            // 프래그먼트 트랜잭션은 프래그먼트의 추가, 삭제, 대체 등을 수행
             requireActivity().supportFragmentManager.beginTransaction()
                 .replace(R.id.fl_container, wantedFilteringFragment)
                 .addToBackStack(null)

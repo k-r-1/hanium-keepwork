@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserFactory
 import java.io.InputStream
@@ -30,6 +31,8 @@ class WantedFilteringFragment : Fragment() {
     private lateinit var jobList: List<Job>
     private lateinit var jobListView: ListView
     private var filteredJobListGlobal: List<Job> = emptyList() // 전역 변수로 선언
+
+    private val sharedSelectionViewModel: SharedSelectionViewModel by activityViewModels()
 
     lateinit var regioncl_btn: Button
     lateinit var jobcl_btn: Button
@@ -102,15 +105,15 @@ class WantedFilteringFragment : Fragment() {
         // 선택된 지역 정보를 나타낼 TextView 초기화
         tv_regioncl_selected = view.findViewById(R.id.tv_regioncl_selected)
 
-        // RegionSelectionFragment에서 선택된 직종 정보를 가져와서 tv_regioncl_selected에 설정
-        val selectedRegion = arguments?.getString("selectedRegion")
-        tv_regioncl_selected.text = selectedRegion
-
         // 선택된 직종 정보를 나타낼 TextView 초기화
         tv_jobcl_selected = view.findViewById(R.id.tv_jobcl_selected)
 
-        // JobSelectionFragment에서 선택된 직종 정보를 가져와서 tv_jobcl_selected에 설정
-        val selectedJob = arguments?.getString("selectedJob")
+        // ViewModel에서 선택된 지역 정보를 가져와서 TextView에 설정
+        val selectedRegion = sharedSelectionViewModel.selectedRegion
+        tv_regioncl_selected.text = selectedRegion
+
+        // ViewModel에서 선택된 직종 정보를 가져와서 TextView에 설정
+        val selectedJob = sharedSelectionViewModel.selectedJob
         tv_jobcl_selected.text = selectedJob
 
         //학력 체크

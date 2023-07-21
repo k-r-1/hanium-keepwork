@@ -60,6 +60,9 @@ class WantedFilteredFragment : Fragment() {
             showJobList()
         }
 
+        currentPage = 1
+        fetchJobData()
+
         return view
     }
 
@@ -166,7 +169,7 @@ class WantedFilteredFragment : Fragment() {
         }
 
         override fun onPostExecute(result: List<Job>) {
-            jobList = result
+            jobList += result
             showJobList()
         }
     }
@@ -206,24 +209,14 @@ class CustomAdapter2(private val context2: Context, private val jobList: List<Jo
 
 //채용공고 클릭하면 상세정보 출력
 class JobDetailActivity2 : AppCompatActivity() {
-    private lateinit var backButton: ImageView
-    private lateinit var company: TextView // 회사명
-    private lateinit var title: TextView // 제목
-    private lateinit var salTpNm: TextView // 임금형태
-    private lateinit var sal: TextView // 급여
-    private lateinit var region: TextView // 근무지역
-    private lateinit var holidayTpNm: TextView // 근무형태
-    private lateinit var minEdubg: TextView // 최소학력
-    private lateinit var career: TextView // 경력
-    private lateinit var closeDt: TextView // 마감일자
-    private lateinit var wantedMobileInfoUrl: TextView // 워크넷 모바일 채용정보 URL
-    private lateinit var jobsCd: TextView // 직종코드
+
+    private lateinit var binding: ActivityJobDetailBinding
 
     companion object {
         private const val JOB_EXTRA = "job"
 
-        fun newIntent(context2: Context, job: Job): Intent {
-            return Intent(context2, JobDetailActivity2::class.java).apply {
+        fun newIntent(context: Context, job: Job2): Intent {
+            return Intent(context, JobDetailActivity2::class.java).apply {
                 putExtra(JOB_EXTRA, job)
             }
         }
@@ -231,39 +224,28 @@ class JobDetailActivity2 : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_job_detail)
+        binding = ActivityJobDetailBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
         // 기본 툴바 숨기기
         supportActionBar?.hide()
 
-        backButton = findViewById(R.id.backButton)
-        company = findViewById(R.id.company)
-        title = findViewById(R.id.title)
-        salTpNm = findViewById(R.id.salTpNm)
-        sal = findViewById(R.id.sal)
-        region = findViewById(R.id.region)
-        holidayTpNm = findViewById(R.id.holidayTpNm)
-        minEdubg = findViewById(R.id.minEdubg)
-        career = findViewById(R.id.career)
-        closeDt = findViewById(R.id.closeDt)
-        wantedMobileInfoUrl = findViewById(R.id.wantedMobileInfoUrl)
-        jobsCd = findViewById(R.id.jobsCd)
-
         val job = intent.getParcelableExtra<Job2>(JOB_EXTRA)
 
-        company.text = job?.company
-        title.text = job?.title
-        salTpNm.text = job?.salTpNm
-        sal.text = job?.sal
-        region.text = job?.region
-        holidayTpNm.text = job?.holidayTpNm
-        minEdubg.text = job?.minEdubg
-        career.text = job?.career
-        closeDt.text = job?.closeDt
-        wantedMobileInfoUrl.text = job?.wantedMobileInfoUrl
-        jobsCd.text = job?.jobsCd
+        binding.company.text = job?.company
+        binding.title.text = job?.title
+        binding.salTpNm.text = job?.salTpNm
+        binding.sal.text = job?.sal
+        binding.region.text = job?.region
+        binding.holidayTpNm.text = job?.holidayTpNm
+        binding.minEdubg.text = job?.minEdubg
+        binding.career.text = job?.career
+        binding.closeDt.text = job?.closeDt
+        binding.wantedMobileInfoUrl.text = job?.wantedMobileInfoUrl
+        binding.jobsCd.text = job?.jobsCd
 
-        backButton.setOnClickListener {
+        binding.backButton.setOnClickListener {
             onBackPressed()
         }
     }

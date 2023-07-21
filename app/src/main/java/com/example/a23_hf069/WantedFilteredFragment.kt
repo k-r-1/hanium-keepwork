@@ -166,7 +166,7 @@ class WantedFilteredFragment : Fragment() {
         }
 
         override fun onPostExecute(result: List<Job>) {
-            jobList += result
+            jobList = result
             showJobList()
         }
     }
@@ -228,7 +228,7 @@ class JobDetailActivity2 : AppCompatActivity() {
         // 기본 툴바 숨기기
         supportActionBar?.hide()
 
-        val job = intent.getParcelableExtra<Job2>(JOB_EXTRA)
+        val job = intent.getParcelableExtra<Job>(JOB_EXTRA)
 
         binding.company.text = job?.company
         binding.title.text = job?.title
@@ -293,12 +293,12 @@ data class Job2(
         return 0
     }
 
-    companion object CREATOR : Parcelable.Creator<Job> {
-        override fun createFromParcel(parcel: Parcel): Job {
-            return Job(parcel)
+    companion object CREATOR : Parcelable.Creator<Job2> {
+        override fun createFromParcel(parcel: Parcel): Job2 {
+            return Job2(parcel)
         }
 
-        override fun newArray(size: Int): Array<Job?> {
+        override fun newArray(size: Int): Array<Job2?> {
             return arrayOfNulls(size)
         }
     }

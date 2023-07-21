@@ -179,13 +179,14 @@ class WantedFilteringFragment : Fragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun SelectedEducation(selected: Int) {
-        if (selectedEducation == 0 || selected > selectedEducation) {
+        if (selectedEducation == 0 && selected > selectedEducation) {
             selectedEducation = selected
             // 1번이나 2번이 선택되었을 때(혹은 둘다), 0번과 같은 결과를 출력(초졸, 중졸은 학력무관과 마찬가지)
-            if ((selectedEducation == 1 || selectedEducation == 2) && selectedEducation != 0) {
-                // 0번과 같은 결과
+            if (selectedEducation == 1 || selectedEducation == 2) {
                 selectedEducationList.add(0)
             }
+        }else{
+            selectedEducation=selected
         }
         filterItems()
     }

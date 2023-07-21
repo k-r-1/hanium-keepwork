@@ -29,7 +29,7 @@ class RegionSelectionFragment : Fragment() {
     private lateinit var regionAdapter2: ArrayAdapter<String>
     private val regionList1: MutableList<String> = mutableListOf()
     private val regionList2: MutableList<String> = mutableListOf()
-    private val wholeRegionList: MutableList<String> = mutableListOf("전체", "서울 전체", "부산 전체", "대구 전체","인천 전체", "광주 전체", "대전 전체", "울산 전체", "세종 전체", "경기 전체", "충북 전체", "충남 전체", "전북 전체", "전남 전체", "경북 전체", "경남 전체", "제주 전체", "강원 전체" )
+    private val wholeRegionList: List<String> = listOf("전체", "서울 전체", "부산 전체", "대구 전체","인천 전체", "광주 전체", "대전 전체", "울산 전체", "세종 전체", "경기 전체", "충북 전체", "충남 전체", "전북 전체", "전남 전체", "경북 전체", "경남 전체", "제주 전체", "강원 전체" )
     private var selectedOneDepthRegion: String? = null// 선택한 oneDepth 지역명을 저장할 변수
     private lateinit var regionListView1: ListView
     private lateinit var regionListView2: ListView
@@ -74,6 +74,7 @@ class RegionSelectionFragment : Fragment() {
                 updateRegionListView2()
 
             }
+        // 선택한 지역 키워드가 화면에 표출되도록
         regionListView2.onItemClickListener =
             AdapterView.OnItemClickListener { _, _, position, _ ->
                 selectedRegionTextView.text = regionAdapter2.getItem(position) ?: ""
@@ -133,9 +134,8 @@ class RegionSelectionFragment : Fragment() {
         })
     }
 
+    // xml에서 읽어온 지역정보를 regionList1,2에 저장
     private fun parseRegionList(xmlString: String?) {
-        // 기존 데이터를 초기화합니다.
-
         GlobalScope.launch(Dispatchers.Main) {
             withContext(Dispatchers.Default) {
                 val xmlPullParser: XmlPullParser = Xml.newPullParser()
@@ -210,20 +210,11 @@ class RegionSelectionFragment : Fragment() {
 
     private fun updateRegionListView2() {
         val selectedRegion = selectedOneDepthRegion
-
-        // regionListView1에서 아무것도 선택되지 않았을 때, regionAdapter2를 비우고 리턴합니다.
+        // regionListView1에서 아무것도 선택되지 않았을 때, regionAdapter2를 비우고 리턴합니다. -> 널체크
         if (selectedRegion == null) {
             regionAdapter2.clear()
             regionAdapter2.notifyDataSetChanged()
             return
-        }
-
-        if(selectedRegion == "전체"){
-            regionAdapter2 = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, wholeRegionList)
-            regionListView2.adapter = regionAdapter2
-        }
-        for(i in wholeRegionList){
-            println(i)
         }
         // 선택한 oneDepth 지역명에 해당하는 twoDepth 지역명들을 필터링하여 가져오기
         val filteredTwoDepthRegions = regionList2.filter { region ->
@@ -232,9 +223,17 @@ class RegionSelectionFragment : Fragment() {
             regionWords.firstOrNull() == selectedWords.firstOrNull() // 앞 단어 기준으로 포함 (ex) 경기 광주 -> 광주가 아닌 경기가 기준
         }.distinct()
 
-        // regionAdapter2를 새로운 리스트로 갱신합니다. ****filter 한 뒤에 기존 apdater를 변경하면 regionList2에 filter 내용이 적용되어 이상해짐****
-        regionAdapter2 = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, filteredTwoDepthRegions)
-        regionListView2.adapter = regionAdapter2
+        if(selectedRegion.equals("전체")){
+            regionAdapter2 = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, wholeRegionList)
+            regionListView2.adapter = regionAdapter2
+
+        }else{
+            // regionAdapter2를 새로운 리스트로 갱신합니다. ****filter 한 뒤에 clear, regionList2에 filter 내용이 적용되어 리스트가 비게됨****
+            regionAdapter2 = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, filteredTwoDepthRegions)
+            regionListView2.adapter = regionAdapter2
+        }
+
+
     }
 
     private fun filterregionList(searchText: String) {

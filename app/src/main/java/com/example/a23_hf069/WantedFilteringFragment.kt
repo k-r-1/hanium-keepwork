@@ -182,22 +182,40 @@ class WantedFilteringFragment : Fragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun SelectedEducation(selected: Int) {
-        if (selectedEducation == 0 && selected > selectedEducation) {
-            selectedEducation = selected
-            // 1번이나 2번이 선택되었을 때(혹은 둘다), 0번과 같은 결과를 출력(초졸, 중졸은 학력무관과 마찬가지)
-            if (selectedEducation == 1 || selectedEducation == 2) {
-                selectedEducationList.add(0)
-            }
-        }else{
-            selectedEducation=selected
+        //전체 체크해놓고 다른거 같이 체크했을때
+        if (selectedEducation == 0 || selected > selectedEducation) {
+            selectedEducationList.clear()
+            selectedEducationList.add(0)
+            filterItems()
         }
-        filterItems()
+        // 1번이나 2번이 선택되었을 때(혹은 1,2 둘다), 0번과 같은 결과를 출력(초졸, 중졸은 학력무관과 마찬가지)
+       else if (selectedEducation == 1 || selectedEducation == 2) {
+            selectedEducationList.clear()
+            selectedEducationList.add(0)
+            filterItems()
+       }
+        else { // 그 외의 경우 선택된 버튼 중 가장 작은 값을 선택(ex. 고졸+대졸 => 고졸)
+                val min = minOf(selectedEducation, selected)
+                selectedEducationList.clear()
+                selectedEducationList.add(min)
+                filterItems()
+            }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun SelectedCareer(selected: Int) {
+        //전체 체크된 상태로 다른도 on
         if (selectedCareer == 0 || selected > selectedCareer) {
-            selectedCareer = selected
+            selectedCareerList.clear()
+            selectedCareerList.add(0)
+            filterItems()
+        }else if(selectedCareerList.contains(1) && selectedCareerList.contains(2)){ //신입 경력 둘다눌렸을때 => 전체
+            selectedCareerList.clear()
+            selectedCareerList.add(0)
+            filterItems()
+        }else{
+            selectedCareerList.add(selected)
+            filterItems()
         }
         filterItems()
     }
@@ -221,16 +239,38 @@ class WantedFilteringFragment : Fragment() {
 
         // 기존의 parseXml 함수와 비슷한 방식으로 필터링된 jobList를 구성합니다.
         val filteredJobList = jobList.filter { job ->
-            val convertedEducationList = listOf("00", "01", "02", "03", "04", "05")
-            val convertedCareerList = listOf("N", "E", "Z")
-            val convertedCloseDateList = listOf(
-                LocalDate.now().toString(), // 오늘
-                LocalDate.now().plusDays(1).toString(), // 내일
-                LocalDate.now().plusDays(7).toString(), // 1주 이내
-                LocalDate.now().plusMonths(1).toString(), // 한달 이내
-                LocalDate.now().plusMonths(1).plusDays(1).toString() // 한달 이상
-            )
+            val convertedEducationList = filteredEducationList.map { value ->
+                when (value) {
+                    0 -> "00"
+                    1 -> "01"
+                    2 -> "02"
+                    3 -> "03"
+                    4 -> "04"
+                    5 -> "05"
+                    else -> ""
+                }
+            }
+            val convertedCareerList = filteredCareerList.map { value ->
+                when (value) {
+                    0 -> "N"
+                    1 -> "E"
+                    2 -> "Z"
+                    else -> ""
+                }
+            }
 
+            val convertedCloseDateList = filteredCloseDateList.map { value ->
+                val today = LocalDate.now()
+                val deadlineDate = when (value) {
+                    0 -> today // 오늘
+                    1 -> today.plusDays(1) // 내일
+                    2 -> today.plusDays(7) // 1주 이내
+                    3 -> today.plusMonths(1) // 한달 이내
+                    4 -> today.plusMonths(1) // 한달 이상
+                    else -> today // 기본값은 오늘로 설정
+                }
+                deadlineDate.toString() // 날짜를 문자열로 변환하여 반환
+            }
             convertedEducationList.contains(job.minEdubg) &&
                     convertedCareerList.contains(job.career) &&
                     convertedCloseDateList.contains(job.closeDt)

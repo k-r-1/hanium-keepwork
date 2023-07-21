@@ -10,7 +10,7 @@ import okhttp3.*
 import java.io.IOException
 
 class ResumeWriteActivity : AppCompatActivity() {
-    private var IP_ADDRESS = "15.164.49.206" // Replace with your IP address.
+    private var IP_ADDRESS = "3.39.231.84" // Replace with your IP address.
     private var userId: String = "" // User ID
     private lateinit var editResumeTitle: EditText
     private lateinit var editTextAcademic: EditText

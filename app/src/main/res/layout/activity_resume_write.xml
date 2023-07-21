@@ -66,7 +66,7 @@
 
                 <TextView
                     android:id="@+id/tv1"
-                    android:layout_width="40dp"
+                    android:layout_width="50dp"
                     android:layout_height="wrap_content"
                     android:text="학력"
                     android:textSize="20dp" />
@@ -86,7 +86,7 @@
 
                 <TextView
                     android:id="@+id/tv2"
-                    android:layout_width="40dp"
+                    android:layout_width="50dp"
                     android:layout_height="wrap_content"
                     android:text="경력"
                     android:textSize="20dp" />
@@ -106,7 +106,7 @@
 
                 <TextView
                     android:id="@+id/tv3"
-                    android:layout_width="40dp"
+                    android:layout_width="50dp"
                     android:layout_height="wrap_content"
                     android:text="자기\n소개"
                     android:textSize="20dp" />
@@ -126,7 +126,7 @@
 
                 <TextView
                     android:id="@+id/tv4"
-                    android:layout_width="40dp"
+                    android:layout_width="50dp"
                     android:layout_height="wrap_content"
                     android:text="자격\n사항"
                     android:textSize="20dp" />
@@ -146,7 +146,7 @@
 
                 <TextView
                     android:id="@+id/tv5"
-                    android:layout_width="40dp"
+                    android:layout_width="50dp"
                     android:layout_height="wrap_content"
                     android:text="교육\n사항"
                     android:textSize="20dp" />
@@ -166,7 +166,7 @@
 
                 <TextView
                     android:id="@+id/tv6"
-                    android:layout_width="40dp"
+                    android:layout_width="50dp"
                     android:layout_height="wrap_content"
                     android:text="희망\n근무\n직군"
                     android:textSize="20dp" />

@@ -20,7 +20,7 @@ import org.json.JSONObject
 import java.io.IOException
 
 class ResumeFragment : Fragment() {
-    private var IP_ADDRESS = "15.164.49.206"
+    private var IP_ADDRESS = "3.39.231.84"
     private lateinit var userId: String
 
     private lateinit var tvResume_temporary_count: TextView

@@ -64,6 +64,8 @@ class ResumeWriteActivity : AppCompatActivity() {
                 resume_desire,
                 resume_complete
             )
+
+            Toast.makeText(this, "이력서가 임시저장되었습니다", Toast.LENGTH_SHORT).show()
         }
 
         buttonSubmit2.setOnClickListener { // 작성완료
@@ -88,6 +90,8 @@ class ResumeWriteActivity : AppCompatActivity() {
                 resume_desire,
                 resume_complete
             )
+
+            Toast.makeText(this, "이력서가 작성완료되었습니다", Toast.LENGTH_SHORT).show()
         }
     }
 

@@ -22,7 +22,7 @@ import java.io.IOException
 
 class ResumeFragment : Fragment() {
     // 서버의 IP 주소를 저장할 변수
-    private var IP_ADDRESS = "3.39.231.84"
+    private var IP_ADDRESS = "43.200.173.221"
 
     // 사용자 ID를 저장할 변수
     private lateinit var userId: String
@@ -109,6 +109,8 @@ class ResumeFragment : Fragment() {
         // RecyclerView 초기화 후 빈 어댑터 설정
         recyclerView = view.findViewById(R.id.recyclerviewResume)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+        // 빈 어댑터 생성 및 RecyclerView에 설정
         dataAdapter = DataAdapter(emptyList())
         recyclerView.adapter = dataAdapter
 
@@ -135,12 +137,25 @@ class ResumeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // 이력서 삭제 버튼 클릭 리스너 설정
+        dataAdapter.setOnDeleteClickListener(object : DataAdapter.OnDeleteClickListener {
+            override fun onDeleteClick(resumeData: ResumeData) {
+                // 서버에서 이력서 데이터 삭제 요청
+                deleteResumeFromServer(resumeData.resumeTitle)
+            }
+        })
+
         // 사용자의 작성중 이력서 개수와 작성완료 이력서 개수를 업데이트
         fetchDataFromServer()
 
         // 일정 간격으로 서버에서 데이터를 가져오고 UI를 업데이트하는 작업 시작
         handler.postDelayed(updateDataRunnable, updateIntervalMillis)
+
+        // 이력서 삭제 버튼 클릭 리스너 설정
+        setupDeleteButtonClickListener()
     }
+
+
 
     // 서버로부터 데이터를 가져오는 메서드
     private fun fetchDataFromServer() {
@@ -210,7 +225,59 @@ class ResumeFragment : Fragment() {
         })
     }
 
-    // 나머지 코드는 이전과 동일하게 유지
+    // 이력서 삭제 버튼 클릭 리스너 설정
+    private fun setupDeleteButtonClickListener() {
+        dataAdapter.setOnDeleteClickListener(object : DataAdapter.OnDeleteClickListener {
+            override fun onDeleteClick(resumeData: ResumeData) {
+                // 서버에서 이력서 데이터 삭제 요청
+                deleteResumeFromServer(resumeData.resumeTitle)
+            }
+        })
+    }
+
+    // 서버로 이력서 삭제 요청
+    private fun deleteResumeFromServer(resumeTitle: String) {
+        val phpUrl = "http://$IP_ADDRESS/android_resume_delete.php"
+        val requestBody = FormBody.Builder()
+            .add("personal_id", userId)
+            .add("resume_title", resumeTitle)
+            .build()
+        val request = Request.Builder()
+            .url(phpUrl)
+            .post(requestBody)
+            .build()
+
+        val client = OkHttpClient()
+        client.newCall(request).enqueue(object : Callback {
+            override fun onResponse(call: Call, response: Response) {
+                // 서버로부터 응답을 받았을 때 호출되는 콜백 메서드
+                val responseData = response.body?.string()
+                Log.d("DeleteResponse", responseData ?: "No response data")
+                if (responseData != null && responseData.contains("Record deleted successfully")) {
+                    // 삭제 성공
+                    requireActivity().runOnUiThread {
+                        // RecyclerView에서 아이템 삭제
+                        dataAdapter.removeDataByTitle(resumeTitle)
+                        // 작성중 이력서 개수와 작성완료 이력서 개수 업데이트
+                        fetchDataFromServer()
+                    }
+                } else {
+                    // 삭제 실패 또는 응답 데이터 오류
+                    requireActivity().runOnUiThread {
+                        Toast.makeText(view?.context, "이력서 삭제에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call, e: IOException) {
+                // 요청 실패 처리
+                e.printStackTrace()
+                requireActivity().runOnUiThread {
+                    Toast.makeText(view?.context, "서버와 연결할 수 없습니다.", Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
+    }
 
     // 이력서 데이터 클래스
     data class ResumeData(val resumeTitle: String, val writeStatus: String)
@@ -229,6 +296,8 @@ class ResumeFragment : Fragment() {
         inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             val textViewTitle: TextView = itemView.findViewById(R.id.tvResumeTitle)
             val textViewStatus: TextView = itemView.findViewById(R.id.tvWriteStatus)
+            val buttonRemove: Button = itemView.findViewById(R.id.buttonRemove)
+
         }
 
         // 뷰홀더 생성
@@ -238,11 +307,35 @@ class ResumeFragment : Fragment() {
             return ViewHolder(view)
         }
 
+        // 삭제 버튼 클릭 리스너 인터페이스
+        interface OnDeleteClickListener {
+            fun onDeleteClick(resumeData: ResumeData)
+        }
+
+        private var deleteClickListener: OnDeleteClickListener? = null
+
+        // 삭제 버튼 클릭 리스너 설정
+        fun setOnDeleteClickListener(listener: OnDeleteClickListener) {
+            deleteClickListener = listener
+        }
+
+        // 아이템 삭제 메서드
+        fun removeDataByTitle(resumeTitle: String) {
+            val updatedList = dataList.filter { it.resumeTitle != resumeTitle }
+            dataList = updatedList
+            notifyDataSetChanged()
+        }
+
         // 뷰홀더의 뷰에 데이터를 바인딩
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val data = dataList[position]
             holder.textViewTitle.text = data.resumeTitle
             holder.textViewStatus.text = data.writeStatus
+
+            // 삭제 버튼 클릭 리스너 설정
+            holder.buttonRemove.setOnClickListener {
+                deleteClickListener?.onDeleteClick(data)
+            }
         }
 
         // 전체 아이템 개수 반환

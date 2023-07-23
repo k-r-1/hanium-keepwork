@@ -22,7 +22,7 @@ import java.io.IOException
 
 class ResumeFragment : Fragment() {
     // 서버의 IP 주소를 저장할 변수
-    private var IP_ADDRESS = "43.200.173.221"
+    private var IP_ADDRESS = "3.39.9.143"
 
     // 사용자 ID를 저장할 변수
     private lateinit var userId: String
@@ -141,7 +141,7 @@ class ResumeFragment : Fragment() {
         dataAdapter.setOnDeleteClickListener(object : DataAdapter.OnDeleteClickListener {
             override fun onDeleteClick(resumeData: ResumeData) {
                 // 서버에서 이력서 데이터 삭제 요청
-                deleteResumeFromServer(resumeData.resumeTitle)
+                deleteResumeFromServer(resumeData.resumeListNum)
             }
         })
 
@@ -160,7 +160,7 @@ class ResumeFragment : Fragment() {
     // 서버로부터 데이터를 가져오는 메서드
     private fun fetchDataFromServer() {
         // 서버로 사용자 아이디를 전송하여 이력서 데이터를 가져오도록 요청
-        val phpUrl = "http://$IP_ADDRESS/android_resume_php.php"
+        val phpUrl = "http://$IP_ADDRESS/android_resume_fragment.php"
         val requestBody = FormBody.Builder()
             .add("personal_id", userId)
             .build()
@@ -230,17 +230,26 @@ class ResumeFragment : Fragment() {
         dataAdapter.setOnDeleteClickListener(object : DataAdapter.OnDeleteClickListener {
             override fun onDeleteClick(resumeData: ResumeData) {
                 // 서버에서 이력서 데이터 삭제 요청
-                deleteResumeFromServer(resumeData.resumeTitle)
+                deleteResumeFromServer(resumeData.resumeListNum)
             }
         })
     }
 
     // 서버로 이력서 삭제 요청
-    private fun deleteResumeFromServer(resumeTitle: String) {
+    private fun deleteResumeFromServer(resumeListNum: Int?) {
+        // resumeListNum이 null인 경우에 대비하여 처리
+        if (resumeListNum == null) {
+            // null인 경우, 서버 요청을 보낼 수 없으므로 오류 처리
+            requireActivity().runOnUiThread {
+                Toast.makeText(view?.context, "잘못된 이력서 번호입니다.", Toast.LENGTH_SHORT).show()
+            }
+            return
+        }
+
         val phpUrl = "http://$IP_ADDRESS/android_resume_delete.php"
         val requestBody = FormBody.Builder()
             .add("personal_id", userId)
-            .add("resume_title", resumeTitle)
+            .add("resume_listnum", resumeListNum.toString())
             .build()
         val request = Request.Builder()
             .url(phpUrl)
@@ -257,9 +266,11 @@ class ResumeFragment : Fragment() {
                     // 삭제 성공
                     requireActivity().runOnUiThread {
                         // RecyclerView에서 아이템 삭제
-                        dataAdapter.removeDataByTitle(resumeTitle)
+                        dataAdapter.removeDataByListNum(resumeListNum)
                         // 작성중 이력서 개수와 작성완료 이력서 개수 업데이트
                         fetchDataFromServer()
+                        // 삭제 성공 메시지 출력
+                        Toast.makeText(view?.context, "이력서를 성공적으로 삭제했습니다.", Toast.LENGTH_SHORT).show()
                     }
                 } else {
                     // 삭제 실패 또는 응답 데이터 오류
@@ -280,7 +291,7 @@ class ResumeFragment : Fragment() {
     }
 
     // 이력서 데이터 클래스
-    data class ResumeData(val resumeTitle: String, val writeStatus: String)
+    data class ResumeData(val resumeListNum: Int, val resumeTitle: String, val writeStatus: String)
 
     // 이력서 데이터 리스트 컨테이너 클래스
     data class DataListContainer(
@@ -294,6 +305,7 @@ class ResumeFragment : Fragment() {
 
         // 각각의 뷰를 보유하는 뷰홀더 클래스
         inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+            val textViewListNum: TextView = itemView.findViewById(R.id.tvListNum)
             val textViewTitle: TextView = itemView.findViewById(R.id.tvResumeTitle)
             val textViewStatus: TextView = itemView.findViewById(R.id.tvWriteStatus)
             val buttonRemove: Button = itemView.findViewById(R.id.buttonRemove)
@@ -320,15 +332,21 @@ class ResumeFragment : Fragment() {
         }
 
         // 아이템 삭제 메서드
-        fun removeDataByTitle(resumeTitle: String) {
-            val updatedList = dataList.filter { it.resumeTitle != resumeTitle }
-            dataList = updatedList
-            notifyDataSetChanged()
+        fun removeDataByListNum(resumeListNum: Int) {
+            val updatedList = dataList.toMutableList()
+            val position = updatedList.indexOfFirst { it.resumeListNum == resumeListNum }
+            if (position != -1) {
+                updatedList.removeAt(position)
+                dataList = updatedList
+                notifyItemRemoved(position)
+            }
         }
+
 
         // 뷰홀더의 뷰에 데이터를 바인딩
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val data = dataList[position]
+            holder.textViewListNum.text = data.resumeListNum.toString()
             holder.textViewTitle.text = data.resumeTitle
             holder.textViewStatus.text = data.writeStatus
 

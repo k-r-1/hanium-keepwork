@@ -42,8 +42,8 @@ class ResumeFragment : Fragment() {
     // 이력서 목록을 표시하는 어댑터를 담을 변수
     private lateinit var dataAdapter: DataAdapter
 
-    // 이력서 목록을 업데이트하는 주기를 지정하는 변수 (1초로 설정)
-    private val updateIntervalMillis: Long = 1000
+    // 이력서 목록을 업데이트하는 주기를 지정하는 변수 (2초로 설정)
+    private val updateIntervalMillis: Long = 2000
 
     // 업데이트를 위해 사용할 핸들러 객체
     private val handler = Handler()

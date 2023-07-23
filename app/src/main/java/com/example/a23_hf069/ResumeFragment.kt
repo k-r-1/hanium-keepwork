@@ -305,7 +305,6 @@ class ResumeFragment : Fragment() {
 
         // 각각의 뷰를 보유하는 뷰홀더 클래스
         inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-            val textViewListNum: TextView = itemView.findViewById(R.id.tvListNum)
             val textViewTitle: TextView = itemView.findViewById(R.id.tvResumeTitle)
             val textViewStatus: TextView = itemView.findViewById(R.id.tvWriteStatus)
             val buttonRemove: Button = itemView.findViewById(R.id.buttonRemove)
@@ -346,7 +345,6 @@ class ResumeFragment : Fragment() {
         // 뷰홀더의 뷰에 데이터를 바인딩
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val data = dataList[position]
-            holder.textViewListNum.text = data.resumeListNum.toString()
             holder.textViewTitle.text = data.resumeTitle
             holder.textViewStatus.text = data.writeStatus
 

@@ -19,8 +19,8 @@ class ResumeWriteActivity : AppCompatActivity() {
     private lateinit var editTextCertificate: EditText
     private lateinit var editTextEducation: EditText
     private lateinit var editTextDesire: EditText
-    private lateinit var buttonSubmit1: Button
-    private lateinit var buttonSubmit2: Button
+    private lateinit var buttonSubmit_temporary: Button
+    private lateinit var buttonSubmit_complete: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,10 +39,10 @@ class ResumeWriteActivity : AppCompatActivity() {
         editTextCertificate = findViewById(R.id.edtCertificate)
         editTextEducation = findViewById(R.id.edtEducation)
         editTextDesire = findViewById(R.id.edtDesire)
-        buttonSubmit1 = findViewById(R.id.buttonSubmit_temporary)
-        buttonSubmit2 = findViewById(R.id.buttonSubmit_complete)
+        buttonSubmit_temporary = findViewById(R.id.buttonSubmit_temporary) // 임시 저장 버튼
+        buttonSubmit_complete = findViewById(R.id.buttonSubmit_complete) // 작성 완료 버튼
 
-        buttonSubmit1.setOnClickListener { // 임시 저장
+        buttonSubmit_temporary.setOnClickListener { // 임시 저장
             val personal_id = userId
             val resume_title = editResumeTitle.text.toString()
             val resume_academic = editTextAcademic.text.toString()
@@ -66,9 +66,11 @@ class ResumeWriteActivity : AppCompatActivity() {
             )
 
             Toast.makeText(this, "이력서가 임시저장되었습니다", Toast.LENGTH_SHORT).show()
+
+            onBackPressed()
         }
 
-        buttonSubmit2.setOnClickListener { // 작성완료
+        buttonSubmit_complete.setOnClickListener { // 작성완료
             val personal_id = userId
             val resume_title = editResumeTitle.text.toString()
             val resume_academic = editTextAcademic.text.toString()
@@ -92,8 +94,15 @@ class ResumeWriteActivity : AppCompatActivity() {
             )
 
             Toast.makeText(this, "이력서가 작성완료되었습니다", Toast.LENGTH_SHORT).show()
+
+            onBackPressed()
         }
     }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+    }
+
 
     private fun sendResumeData(
         personal_id: String,

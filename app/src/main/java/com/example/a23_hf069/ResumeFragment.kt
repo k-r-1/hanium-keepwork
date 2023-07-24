@@ -114,7 +114,7 @@ class ResumeFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         // 빈 어댑터 생성 및 RecyclerView에 설정
-        dataAdapter = DataAdapter(emptyList())
+        dataAdapter = DataAdapter(emptyList(), userId)
         recyclerView.adapter = dataAdapter
 
         // 작성중 이력서 개수와 작성완료 이력서 개수를 표시할 TextView 초기화
@@ -304,7 +304,9 @@ class ResumeFragment : Fragment() {
     )
 
     // 이력서 목록을 표시하는 어댑터 클래스
-    class DataAdapter(private var dataList: List<ResumeData>) : RecyclerView.Adapter<DataAdapter.ViewHolder>() {
+    class DataAdapter(private var dataList: List<ResumeData>,
+                      private val userId: String
+    ) : RecyclerView.Adapter<DataAdapter.ViewHolder>() {
 
         // 각각의 뷰를 보유하는 뷰홀더 클래스
         inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -354,6 +356,14 @@ class ResumeFragment : Fragment() {
             // 삭제 버튼 클릭 리스너 설정
             holder.buttonRemove.setOnClickListener {
                 deleteClickListener?.onDeleteClick(data)
+            }
+
+            // 수정 버튼 클릭 리스너 설정
+            holder.buttonChange.setOnClickListener {
+                val intent = Intent(holder.itemView.context, ResumeChangeActivity::class.java)
+                intent.putExtra("resumeListNum", data.resumeListNum)
+                intent.putExtra("userId", userId)
+                holder.itemView.context.startActivity(intent)
             }
         }
 

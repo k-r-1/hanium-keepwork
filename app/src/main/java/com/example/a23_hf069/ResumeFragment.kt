@@ -22,7 +22,7 @@ import java.io.IOException
 
 class ResumeFragment : Fragment() {
     // 서버의 IP 주소를 저장할 변수
-    private var IP_ADDRESS = "3.39.9.143"
+    private var IP_ADDRESS = "54.180.120.162"
 
     // 사용자 ID를 저장할 변수
     private lateinit var userId: String
@@ -275,7 +275,7 @@ class ResumeFragment : Fragment() {
                 } else {
                     // 삭제 실패 또는 응답 데이터 오류
                     requireActivity().runOnUiThread {
-                        Toast.makeText(view?.context, "이력서 삭제에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(view?.context, "이력서를 삭제했습니다.", Toast.LENGTH_SHORT).show()
                     }
                 }
             }

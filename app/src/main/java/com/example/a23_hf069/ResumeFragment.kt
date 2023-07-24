@@ -9,10 +9,13 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.a23_hf069.R
+import com.example.a23_hf069.ResumeChangeActivity
 import com.example.a23_hf069.ResumeWriteActivity
 import com.google.gson.Gson
 import okhttp3.*
@@ -308,7 +311,7 @@ class ResumeFragment : Fragment() {
             val textViewTitle: TextView = itemView.findViewById(R.id.tvResumeTitle)
             val textViewStatus: TextView = itemView.findViewById(R.id.tvWriteStatus)
             val buttonRemove: Button = itemView.findViewById(R.id.buttonRemove)
-
+            val buttonChange: Button = itemView.findViewById(R.id.buttonEdit)
         }
 
         // 뷰홀더 생성

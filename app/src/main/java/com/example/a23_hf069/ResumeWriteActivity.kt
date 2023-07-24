@@ -39,8 +39,8 @@ class ResumeWriteActivity : AppCompatActivity() {
         editTextCertificate = findViewById(R.id.edtCertificate)
         editTextEducation = findViewById(R.id.edtEducation)
         editTextDesire = findViewById(R.id.edtDesire)
-        buttonSubmit1 = findViewById(R.id.buttonSubmit1)
-        buttonSubmit2 = findViewById(R.id.buttonSubmit2)
+        buttonSubmit1 = findViewById(R.id.buttonSubmit_temporary)
+        buttonSubmit2 = findViewById(R.id.buttonSubmit_complete)
 
         buttonSubmit1.setOnClickListener { // 임시 저장
             val personal_id = userId

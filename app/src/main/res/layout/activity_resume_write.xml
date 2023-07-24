@@ -179,13 +179,13 @@
             </LinearLayout>
 
             <Button
-                android:id="@+id/buttonSubmit1"
+                android:id="@+id/buttonSubmit_temporary"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="임시저장" />
 
             <Button
-                android:id="@+id/buttonSubmit2"
+                android:id="@+id/buttonSubmit_complete"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="작성완료" />

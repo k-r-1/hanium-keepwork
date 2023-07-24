@@ -33,7 +33,7 @@
                     android:id="@+id/tvResume"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="님의 이력서"
+                    android:text="님의 이력서 작성"
                     android:textSize="20dp" />
             </LinearLayout>
 

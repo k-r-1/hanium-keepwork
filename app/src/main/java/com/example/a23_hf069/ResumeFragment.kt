@@ -25,7 +25,7 @@ import java.io.IOException
 
 class ResumeFragment : Fragment() {
     // 서버의 IP 주소를 저장할 변수
-    private var IP_ADDRESS = "54.180.120.162"
+    private var IP_ADDRESS = "15.165.160.71"
 
     // 사용자 ID를 저장할 변수
     private lateinit var userId: String

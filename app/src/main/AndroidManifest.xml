@@ -57,6 +57,9 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".ResumeChangeActivity"
+            android:exported="false" />
+        <activity
             android:name=".ResumeWriteActivity"
             android:exported="false" />
         <activity

@@ -6,6 +6,14 @@
     android:layout_height="match_parent"
     tools:context=".MypageFragment">
 
+    <FrameLayout
+        android:id="@+id/fl_container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -41,15 +49,88 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
+            <LinearLayout
+                android:id="@+id/member_info"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:orientation="horizontal">
+                <LinearLayout
+                    android:id="@+id/member_info_edit_btn"
+                    android:layout_width="120dp"
+                    android:layout_height="60dp"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="40dp"
+                    >
+                    <TextView
+                        android:id="@+id/tv_user_name"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginStart="20dp"
+                        android:textAlignment="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:includeFontPadding="false"
+                        android:text="길라임"
+                        android:textColor="@color/black"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        />
+                    <TextView
+                        android:layout_marginTop="20dp"
+                        android:layout_marginStart="5dp"
+                        android:textAlignment="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:includeFontPadding="false"
+                        android:text="님 >"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        />
+                </LinearLayout>
+                <Button
+                    android:id="@+id/resume_management_btn"
+                    android:textAlignment="center"
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="60dp"
+                    android:includeFontPadding="false"
+                    android:text="이력서 관리"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:backgroundTint="@color/white"
+                    android:outlineProvider="none"
+                    android:layout_marginTop="10dp"
+                    app:strokeColor="#35B790"
+                    app:strokeWidth="2dp"
+                    android:layout_marginRight="10dp"
+                    />
 
+                <Button
+                    android:id="@+id/application_history_btn"
+                    android:textAlignment="center"
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="60dp"
+                    android:includeFontPadding="false"
+                    android:text="입사지원 목록"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:backgroundTint="@color/white"
+                    android:outlineProvider="none"
+                    android:layout_marginTop="10dp"
+                    app:strokeColor="#35B790"
+                    app:strokeWidth="2dp"
+                    />
+            </LinearLayout>
+
+            <!--관심기업, 스크랩 ,최근본 공고-->
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="100dp"
                 android:background="@drawable/rounded_rectangle_border"
                 android:layout_marginTop="20dp"
                 android:layout_marginLeft="10dp"
@@ -61,17 +142,7 @@
                     android:orientation="horizontal"
                     android:gravity="center"
                     >
-            <TextView
-                android:textAlignment="center"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:includeFontPadding="false"
-                android:layout_marginLeft="5dp"
-                android:text="길라임님의 "
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                />
+
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -79,15 +150,16 @@
                         android:layout_marginRight="3dp"
                         android:orientation="vertical"
                         android:gravity="center">
-                    <Button
-                        android:id="@+id/interesting_company"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="관심기업"
-                        android:textColor="@color/white"
-                        />
-                        >
+                        <Button
+                            android:id="@+id/interesting_company_btn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="관심기업"
+                            android:textColor="@color/white"
+                            />
+
                         <TextView
+                            android:id="@+id/interesting_company_count"
                             android:textAlignment="center"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -95,65 +167,183 @@
                             android:layout_marginTop="10dp"
                             android:text="0"
                             android:textColor="@color/black"
-                            android:textSize="20sp"
+                            android:textSize="24sp"
                             android:textStyle="bold" />
                     </LinearLayout>
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="3dp"
-                    android:orientation="vertical"
-                    android:gravity="center">
-                    <Button
-                        android:id="@+id/scrap_company"
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/white"
-                        android:text="스크랩" />
-                    <TextView
-                        android:textAlignment="center"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="3dp"
+                        android:orientation="vertical"
+                        android:gravity="center">
+                        <Button
+                            android:id="@+id/scrap_company_btn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/white"
+                            android:text="스크랩" />
+                        <TextView
+                            android:id="@+id/scrap_company_count"
+                            android:textAlignment="center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:includeFontPadding="false"
+                            android:text="1"
+                            android:layout_marginTop="10dp"
+                            android:textColor="@color/black"
+                            android:textSize="24sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:includeFontPadding="false"
-                        android:text="0"
-                        android:layout_marginTop="10dp"
-                        android:textColor="@color/black"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="3dp"
-                    android:orientation="vertical"
-                    android:gravity="center">
-                    <Button
-                        android:id="@+id/recent_wanted"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/white"
-                        android:text="최근본공고"
-                        android:textSize="12sp"
-                        />
-                    <TextView
-                        android:textAlignment="center"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:includeFontPadding="false"
-                        android:text="0"
-                        android:layout_marginTop="10dp"
-                        android:textColor="@color/black"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="3dp"
+                        android:orientation="vertical"
+                        android:gravity="center">
+                        <Button
+                            android:id="@+id/recent_wanted_btn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/white"
+                            android:text="최근본공고"
+                            />
+                        <TextView
+                            android:id="@+id/recent_wanted_count"
+                            android:textAlignment="center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:includeFontPadding="false"
+                            android:text="3"
+                            android:layout_marginTop="10dp"
+                            android:textColor="@color/black"
+                            android:textSize="24sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
 
 
                 </LinearLayout>
 
             </FrameLayout>
 
+            <!--가까운 새일센터 찾기 -->
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/rounded_rectangle_border2"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="30dp"
+                >
+                <Button
+                    android:id="@+id/saeil_center_btn"
+                    android:textAlignment="center"
+                    android:layout_gravity="center"
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
+                    android:text="가까운 새일센터 찾기"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:backgroundTint="?attr/colorPrimary"
+                    android:outlineProvider="none"
+                    android:drawableRight="@drawable/ic_baseline_search_24"
+                    />
+
+            </FrameLayout>
+            <!--메뉴 모음-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:orientation="vertical">
+
+                <!-- 알림설정 버튼 -->
+                <TextView
+                    android:id="@+id/notificationButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    android:padding="16dp"
+                    android:text="알림설정"
+                    android:gravity="center_vertical" />
+
+                <!-- 구분선 -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/darker_gray" />
+
+                <!-- 공지사항 버튼 -->
+                <TextView
+                    android:id="@+id/noticeButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:text="공지사항"
+                    android:gravity="center_vertical" />
+
+                <!-- 구분선 -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/darker_gray" />
+
+                <!-- 자주묻는질문 버튼 -->
+                <TextView
+                    android:id="@+id/faqButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    android:text="자주묻는질문"
+                    android:gravity="center_vertical" />
+
+                <!-- 구분선 -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/darker_gray" />
+
+                <!-- 로그아웃 버튼 -->
+                <TextView
+                    android:id="@+id/logoutButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    android:text="로그아웃"
+                    android:gravity="center_vertical" />
+
+                <!-- 구분선 -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/darker_gray" />
+
+                <!-- 회원탈퇴 버튼 -->
+                <TextView
+                    android:id="@+id/withdrawButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    android:text="회원탈퇴"
+                    android:gravity="center_vertical" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/darker_gray" />
+
+            </LinearLayout>
 
 
         </LinearLayout>

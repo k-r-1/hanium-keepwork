@@ -55,7 +55,7 @@
                 android:backgroundTint="#35B891"
                 android:drawableRight="@drawable/ic_baseline_search2_24"
                 android:ems="10"
-                android:hint="어떤 일자리를 찾으세요?"
+                android:hint="즉시지원 가능한 일자리 검색"
                 android:imeOptions="actionSearch"
                 android:inputType="text"
                 android:minHeight="48dp"

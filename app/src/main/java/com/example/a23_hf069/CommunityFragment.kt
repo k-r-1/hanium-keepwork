@@ -6,26 +6,83 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
+import android.widget.EditText
+import android.widget.ImageButton
+import androidx.viewpager.widget.ViewPager
+import com.google.android.material.tabs.TabLayout
 
-class CommunityFragment : Fragment() {
+class CommunityFragment : Fragment(), TabLayout.OnTabSelectedListener {
+
+    private lateinit var searchContent: EditText
+    private lateinit var viewPager: ViewPager
+    private lateinit var tabLayout: TabLayout
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_community, container, false)
 
-        // 레이아웃에서 버튼을 찾습니다.
-        val button: Button = view.findViewById(R.id.button)
+        val adapter = PagerAdapter(childFragmentManager)
+        adapter.addFragment(CommunityBoardFragment(), "커뮤니티")
+        adapter.addFragment(PublicityBoardFragment(), "홍보 게시판")
 
-        // 버튼에 클릭 리스너를 추가합니다.
-        button.setOnClickListener {
-            // SaeilSearchActivity로 이동하는 코드를 작성합니다.
-            //val intent = Intent(activity, SaeilSearchActivity::class.java)
-            //startActivity(intent)
+        viewPager = view.findViewById<ViewPager>(R.id.viewpager01)
+        viewPager.adapter = adapter
+
+        tabLayout = view.findViewById<TabLayout>(R.id.tablayout01)
+        tabLayout.setupWithViewPager(viewPager)
+        tabLayout.addOnTabSelectedListener(this)
+
+        searchContent = view.findViewById<EditText>(R.id.searchContent)
+        searchContent.setOnTouchListener { _, _ ->
+            val currentTab = tabLayout.selectedTabPosition
+            if (currentTab == 1) {
+                val PublicityBoardSearchFragment = PublicityBoardSearchFragment()
+                requireActivity().supportFragmentManager.beginTransaction()
+                    .replace(R.id.fl_container, PublicityBoardSearchFragment)
+                    .addToBackStack(null)
+                    .commit()
+                searchContent.hint = "홍보 게시판 검색"
+            } else if (currentTab == 0) {
+                val CommunityBoardSearchFragment = CommunityBoardSearchFragment()
+                requireActivity().supportFragmentManager.beginTransaction()
+                    .replace(R.id.fl_container, CommunityBoardSearchFragment)
+                    .addToBackStack(null)
+                    .commit()
+                searchContent.hint = "커뮤니티 검색"
+            }
+            true
         }
+
 
         return view
     }
+
+    private fun hideKeyboard() {
+        // 키보드 숨김 처리를 수행
+        val imm =
+            requireContext().getSystemService(android.content.Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(view?.windowToken, 0)
+        view?.clearFocus()
+    }
+
+    override fun onTabSelected(tab: TabLayout.Tab?) {
+        val currentTab = tab?.position
+        if (currentTab == 1) {
+            searchContent.hint = "홍보 게시판 검색"
+        } else if (currentTab == 0) {
+            searchContent.hint = "커뮤니티 검색"
+        }
+    }
+
+    override fun onTabUnselected(tab: TabLayout.Tab?) {
+        // Do nothing
+    }
+
+    override fun onTabReselected(tab: TabLayout.Tab?) {
+        // Do nothing
+    }
+
 }

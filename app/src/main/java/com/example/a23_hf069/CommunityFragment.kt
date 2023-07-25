@@ -22,8 +22,8 @@ class CommunityFragment : Fragment() {
         // 버튼에 클릭 리스너를 추가합니다.
         button.setOnClickListener {
             // SaeilSearchActivity로 이동하는 코드를 작성합니다.
-            val intent = Intent(activity, SaeilSearchActivity::class.java)
-            startActivity(intent)
+            //val intent = Intent(activity, SaeilSearchActivity::class.java)
+            //startActivity(intent)
         }
 
         return view

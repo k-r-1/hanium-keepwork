@@ -10,6 +10,9 @@ import android.widget.LinearLayout
 
 class MypageFragment : Fragment() {
     lateinit var member_info : LinearLayout
+    lateinit var notificationButton : Button
+    lateinit var faqButton : Button
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -25,6 +28,22 @@ class MypageFragment : Fragment() {
             val fragment_info = MemberInfoEditFragment()
             requireActivity().supportFragmentManager.beginTransaction()
                 .replace(R.id.fl_container, fragment_info) // 프래그먼트 교체
+                .addToBackStack(null) // 이전 프래그먼트로 돌아가기
+                .commit()
+        }
+        notificationButton = view.findViewById<Button>(R.id.notificationButton)
+        notificationButton.setOnClickListener(){// 알림 설정 프래그먼트로 전환
+            val fragment_notification_settings = NotificationSettingsFragment()
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.fl_container, fragment_notification_settings) // 프래그먼트 교체
+                .addToBackStack(null) // 이전 프래그먼트로 돌아가기
+                .commit()
+        }
+        faqButton = view.findViewById<Button>(R.id.faqButton)
+        faqButton.setOnClickListener(){// 자주 묻는 질문 프래그먼트로 전환
+            val fragment_faq = FAQFragment()
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.fl_container, fragment_faq) // 프래그먼트 교체
                 .addToBackStack(null) // 이전 프래그먼트로 돌아가기
                 .commit()
         }

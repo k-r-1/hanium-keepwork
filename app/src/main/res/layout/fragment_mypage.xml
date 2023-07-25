@@ -255,14 +255,15 @@
                 android:orientation="vertical">
 
                 <!-- 알림설정 버튼 -->
-                <TextView
+                <Button
                     android:id="@+id/notificationButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
                     android:textColor="@color/black"
                     android:padding="16dp"
-                    android:text="알림설정"
+                    android:text="알림 설정"
+                    android:background="#00ff0000"
                     android:gravity="center_vertical" />
 
                 <!-- 구분선 -->
@@ -272,7 +273,7 @@
                     android:background="@android:color/darker_gray" />
 
                 <!-- 공지사항 버튼 -->
-                <TextView
+                <Button
                     android:id="@+id/noticeButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -280,6 +281,7 @@
                     android:textColor="@color/black"
                     android:textSize="16sp"
                     android:text="공지사항"
+                    android:background="#00ff0000"
                     android:gravity="center_vertical" />
 
                 <!-- 구분선 -->
@@ -289,14 +291,15 @@
                     android:background="@android:color/darker_gray" />
 
                 <!-- 자주묻는질문 버튼 -->
-                <TextView
+                <Button
                     android:id="@+id/faqButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="16dp"
                     android:textSize="16sp"
                     android:textColor="@color/black"
-                    android:text="자주묻는질문"
+                    android:text="자주 묻는 질문"
+                    android:background="#00ff0000"
                     android:gravity="center_vertical" />
 
                 <!-- 구분선 -->
@@ -306,7 +309,7 @@
                     android:background="@android:color/darker_gray" />
 
                 <!-- 로그아웃 버튼 -->
-                <TextView
+                <Button
                     android:id="@+id/logoutButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -314,6 +317,7 @@
                     android:textSize="16sp"
                     android:textColor="@color/black"
                     android:text="로그아웃"
+                    android:background="#00ff0000"
                     android:gravity="center_vertical" />
 
                 <!-- 구분선 -->
@@ -323,7 +327,7 @@
                     android:background="@android:color/darker_gray" />
 
                 <!-- 회원탈퇴 버튼 -->
-                <TextView
+                <Button
                     android:id="@+id/withdrawButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -331,6 +335,7 @@
                     android:textSize="16sp"
                     android:textColor="@color/black"
                     android:text="회원탈퇴"
+                    android:background="#00ff0000"
                     android:gravity="center_vertical" />
 
                 <View

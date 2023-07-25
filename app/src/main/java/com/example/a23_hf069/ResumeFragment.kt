@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.a23_hf069.R
 import com.example.a23_hf069.ResumeChangeActivity
+import com.example.a23_hf069.ResumeClickActivity
 import com.example.a23_hf069.ResumeWriteActivity
 import com.google.gson.Gson
 import okhttp3.*
@@ -310,7 +311,7 @@ class ResumeFragment : Fragment() {
 
         // 각각의 뷰를 보유하는 뷰홀더 클래스
         inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-            val textViewTitle: TextView = itemView.findViewById(R.id.tvResumeTitle)
+            val textViewTitle: Button = itemView.findViewById(R.id.tvResumeTitle)
             val textViewStatus: TextView = itemView.findViewById(R.id.tvWriteStatus)
             val buttonRemove: Button = itemView.findViewById(R.id.buttonRemove)
             val buttonChange: Button = itemView.findViewById(R.id.buttonEdit)
@@ -350,7 +351,7 @@ class ResumeFragment : Fragment() {
         // 뷰홀더의 뷰에 데이터를 바인딩
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val data = dataList[position]
-            holder.textViewTitle.text = data.resumeTitle
+            holder.textViewTitle.setText(data.resumeTitle)
             holder.textViewStatus.text = data.writeStatus
 
             // 삭제 버튼 클릭 리스너 설정
@@ -361,6 +362,14 @@ class ResumeFragment : Fragment() {
             // 수정 버튼 클릭 리스너 설정
             holder.buttonChange.setOnClickListener {
                 val intent = Intent(holder.itemView.context, ResumeChangeActivity::class.java)
+                intent.putExtra("resumeListNum", data.resumeListNum)
+                intent.putExtra("userId", userId)
+                holder.itemView.context.startActivity(intent)
+            }
+
+            // 이력서 제목 버튼 클릭 리스너 설정
+            holder.textViewTitle.setOnClickListener {
+                val intent = Intent(holder.itemView.context, ResumeClickActivity::class.java)
                 intent.putExtra("resumeListNum", data.resumeListNum)
                 intent.putExtra("userId", userId)
                 holder.itemView.context.startActivity(intent)

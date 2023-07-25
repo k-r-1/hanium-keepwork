@@ -13,13 +13,16 @@
         android:layout_marginBottom="10dp"
         android:orientation="horizontal">
 
-        <TextView
+        <Button
             android:id="@+id/tvResumeTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:hint="이력서 제목이 들어가야함"
-            android:textSize="20sp" />
+            android:textColor="@android:color/black"
+            android:textAlignment="viewStart"
+            android:textSize="20sp"
+            android:background="@android:color/transparent"/>
 
         <TextView
             android:id="@+id/tvWriteStatus"

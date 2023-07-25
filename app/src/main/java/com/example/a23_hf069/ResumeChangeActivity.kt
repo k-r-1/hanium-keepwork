@@ -8,6 +8,9 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import okhttp3.*
+import org.json.JSONArray // JSONArray를 import 추가
+import org.json.JSONException
+import org.json.JSONObject
 import java.io.IOException
 
 class ResumeChangeActivity : AppCompatActivity() {
@@ -29,7 +32,7 @@ class ResumeChangeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_resume_change)
 
-// Get user ID
+        // Get user ID
         resumeListNum = intent.getIntExtra("resumeListNum", -1)
         userId = intent.getStringExtra("userId") ?: ""
 
@@ -47,7 +50,7 @@ class ResumeChangeActivity : AppCompatActivity() {
         buttonSubmit2 = findViewById(R.id.buttonchSubmit_complete)
 
         buttonSubmit1.setOnClickListener { // 임시 저장
-            val personal_id = userId
+            val resume_listnum = resumeListNum.toString()
             val resume_title = editResumeTitle.text.toString()
             val resume_academic = editTextAcademic.text.toString()
             val resume_career = editTextCareer.text.toString()
@@ -57,8 +60,8 @@ class ResumeChangeActivity : AppCompatActivity() {
             val resume_desire = editTextDesire.text.toString()
             val resume_complete = "작성 중"
 
-            sendResumeData(
-                personal_id,
+            updateResumeData(
+                resume_listnum,
                 resume_title,
                 resume_academic,
                 resume_career,
@@ -73,7 +76,7 @@ class ResumeChangeActivity : AppCompatActivity() {
         }
 
         buttonSubmit2.setOnClickListener { // 작성완료
-            val personal_id = userId
+            val resume_listnum = resumeListNum.toString()
             val resume_title = editResumeTitle.text.toString()
             val resume_academic = editTextAcademic.text.toString()
             val resume_career = editTextCareer.text.toString()
@@ -83,8 +86,8 @@ class ResumeChangeActivity : AppCompatActivity() {
             val resume_desire = editTextDesire.text.toString()
             val resume_complete = "작성 완료"
 
-            sendResumeData(
-                personal_id,
+            updateResumeData(
+                resume_listnum,
                 resume_title,
                 resume_academic,
                 resume_career,
@@ -97,10 +100,13 @@ class ResumeChangeActivity : AppCompatActivity() {
 
             Toast.makeText(this, "이력서가 작성완료되었습니다", Toast.LENGTH_SHORT).show()
         }
+
+        // 이력서 아이템 데이터 불러오기
+        getResumeItemData(resumeListNum)
     }
 
-    private fun sendResumeData(
-        personal_id: String,
+    private fun updateResumeData(
+        resume_listnum: String,
         resume_title: String,
         resume_academic: String,
         resume_career: String,
@@ -110,12 +116,13 @@ class ResumeChangeActivity : AppCompatActivity() {
         resume_desire: String,
         resume_complete: String
     ) {
-        val url = "http://$IP_ADDRESS/android_resume_write_php.php" // URL of the hosting server with PHP script
+        val url =
+            "http://$IP_ADDRESS/android_resume_update.php" // URL of the hosting server with PHP script
 
         val client = OkHttpClient()
 
         val formBody = FormBody.Builder()
-            .add("personal_id", personal_id) // ID
+            .add("resume_listnum", resume_listnum) // ListNum
             .add("resume_title", resume_title) // Title
             .add("resume_academic", resume_academic) // Education
             .add("resume_career", resume_career) // Career
@@ -133,14 +140,70 @@ class ResumeChangeActivity : AppCompatActivity() {
 
         client.newCall(request).enqueue(object : okhttp3.Callback {
             override fun onFailure(call: Call, e: IOException) {
-// Handle request failure
+                // Handle request failure
                 e.printStackTrace()
             }
 
             override fun onResponse(call: Call, response: Response) {
-// Handle request success
+                // Handle request success
                 val responseData = response.body?.string()
+
+                // UI 업데이트를 위한 runOnUiThread 호출
+                runOnUiThread {
+                    Toast.makeText(this@ResumeChangeActivity, responseData, Toast.LENGTH_SHORT).show()
+                }
             }
         })
+    }
+
+    // 이력서 아이템 데이터 불러오기
+    private fun getResumeItemData(resumeListNum: Int) {
+        val url =
+            "http://$IP_ADDRESS/android_resume_change.php?resume_listnum=$resumeListNum" // 데이터를 불러올 PHP 스크립트의 주소
+
+        val client = OkHttpClient()
+
+        val request = Request.Builder()
+            .url(url)
+            .get() // GET 방식으로 요청 변경
+            .build()
+
+        client.newCall(request).enqueue(object : okhttp3.Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                // Handle request failure
+                e.printStackTrace()
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                val responseData = response.body?.string()
+                // 이력서 아이템 데이터를 파싱하여 UI 업데이트
+                runOnUiThread {
+                    handleResumeItemData(responseData)
+                }
+            }
+        })
+    }
+
+    // 이력서 아이템 데이터를 처리하는 함수 추가
+    private fun handleResumeItemData(responseData: String?) {
+        try {
+            val jsonObject = JSONObject(responseData) // JSONObject로 파싱
+
+            // 이력서 아이템 데이터가 존재하는 경우에만 UI 업데이트
+            if (jsonObject.length() > 0) {
+                // 여기서 이력서 아이템 데이터를 파싱하여 UI에 표시하는 작업을 수행하면 됩니다.
+                // 예를 들어, 다음과 같이 각 EditText에 데이터를 설정할 수 있습니다.
+                editResumeTitle.setText(jsonObject.optString("resumeTitle", ""))
+                editTextAcademic.setText(jsonObject.optString("resumeAcademic", ""))
+                editTextCareer.setText(jsonObject.optString("resumeCareer", ""))
+                editTextIntroduction.setText(jsonObject.optString("resumeIntroduction", ""))
+                editTextCertificate.setText(jsonObject.optString("resumeCertificate", ""))
+                editTextEducation.setText(jsonObject.optString("resumeLearning", ""))
+                editTextDesire.setText(jsonObject.optString("resumeDesire", ""))
+            }
+        } catch (e: JSONException) {
+            // JSON 파싱 오류 처리
+            e.printStackTrace()
+        }
     }
 }

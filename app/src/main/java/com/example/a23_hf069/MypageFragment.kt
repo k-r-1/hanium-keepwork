@@ -1,5 +1,7 @@
 package com.example.a23_hf069
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -12,6 +14,7 @@ class MypageFragment : Fragment() {
     lateinit var member_info : LinearLayout
     lateinit var notificationButton : Button
     lateinit var faqButton : Button
+    lateinit var saeil_center_btn : Button
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -22,6 +25,12 @@ class MypageFragment : Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        saeil_center_btn = view.findViewById<Button>(R.id.saeil_center_btn)
+        saeil_center_btn.setOnClickListener {// 가까운 새일센터 찾기 사이트 연결
+            var intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://saeil.mogef.go.kr/hom/info/search.do"))
+            startActivity(intent)
+        }
 
         member_info = view.findViewById<LinearLayout>(R.id.member_info_edit_btn)
         member_info.setOnClickListener(){// 회원정보 수정 프래그먼트로 전환

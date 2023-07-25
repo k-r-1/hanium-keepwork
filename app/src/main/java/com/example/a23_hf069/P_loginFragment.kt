@@ -19,7 +19,7 @@ import java.net.URL
 
 
 class P_loginFragment : Fragment() { //개인로그인
-    private var IP_ADDRESS = "54.180.120.162" // 본인 IP주소를 넣으세요.
+    private var IP_ADDRESS = "15.165.160.71" // 본인 IP주소를 넣으세요.
 
     private var TAG = "phptest" // phptest log 찍으려는 용도
     private lateinit var id_text_input_edit_text: EditText // id

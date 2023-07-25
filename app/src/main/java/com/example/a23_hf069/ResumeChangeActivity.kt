@@ -13,6 +13,7 @@ import java.io.IOException
 class ResumeChangeActivity : AppCompatActivity() {
     private var IP_ADDRESS = "15.165.160.71" // Replace with your IP address.
     private var userId: String = "" // User ID
+    private var resumeListNum: Int = -1
     private lateinit var editResumeTitle: EditText
     private lateinit var editTextAcademic: EditText
     private lateinit var editTextCareer: EditText
@@ -29,6 +30,7 @@ class ResumeChangeActivity : AppCompatActivity() {
         setContentView(R.layout.activity_resume_change)
 
 // Get user ID
+        resumeListNum = intent.getIntExtra("resumeListNum", -1)
         userId = intent.getStringExtra("userId") ?: ""
 
         val textID = findViewById<TextView>(R.id.tvchID)

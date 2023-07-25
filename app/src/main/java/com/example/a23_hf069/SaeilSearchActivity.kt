@@ -56,10 +56,17 @@ class SaeilSearchActivity : AppCompatActivity() {
 
             override fun onReceivedError(view: WebView?, errorCode: Int, description: String?, failingUrl: String?) {
                 super.onReceivedError(view, errorCode, description, failingUrl)
+                // 에러 메시지 출력 (테스트용)
+                description?.let {
+                    val errorMessage = "Error Code: $errorCode, Description: $it"
+                    println(errorMessage)
+                }
                 android.util.Log.e("WebView", "Error loading page: $description")
             }
 
             override fun onReceivedSslError(view: WebView?, handler: SslErrorHandler?, error: android.net.http.SslError?) {
+                val sslErrorMessage = "SSL Error: ${error?.primaryError}"
+                println(sslErrorMessage)
                 // SSL 인증서 오류가 발생했을 때 사용자에게 허용 여부를 묻는 다이얼로그 표시
                 val dialogBuilder = AlertDialog.Builder(this@SaeilSearchActivity)
                 dialogBuilder.setMessage("SSL 인증서 오류가 발생했습니다. 계속 진행하시겠습니까?")

@@ -4,14 +4,16 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import okhttp3.*
 import java.io.IOException
 
 class ResumeWriteActivity : AppCompatActivity() {
-    private var IP_ADDRESS = "15.165.160.71" // Replace with your IP address.
+    private var IP_ADDRESS = "3.34.129.88" // Replace with your IP address.
     private var userId: String = "" // User ID
+    private lateinit var backButton: ImageButton
     private lateinit var editResumeTitle: EditText
     private lateinit var editTextAcademic: EditText
     private lateinit var editTextCareer: EditText
@@ -24,6 +26,7 @@ class ResumeWriteActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        supportActionBar?.hide()
         setContentView(R.layout.activity_resume_write)
 
 // Get user ID
@@ -32,6 +35,7 @@ class ResumeWriteActivity : AppCompatActivity() {
         val textID = findViewById<TextView>(R.id.tvID)
         textID.text = userId
 
+        backButton = findViewById(R.id.backButton)
         editTextAcademic = findViewById(R.id.edtAcademic)
         editResumeTitle = findViewById(R.id.edtTitle)
         editTextCareer = findViewById(R.id.edtCareer)
@@ -41,6 +45,10 @@ class ResumeWriteActivity : AppCompatActivity() {
         editTextDesire = findViewById(R.id.edtDesire)
         buttonSubmit_temporary = findViewById(R.id.buttonSubmit_temporary) // 임시 저장 버튼
         buttonSubmit_complete = findViewById(R.id.buttonSubmit_complete) // 작성 완료 버튼
+
+        backButton.setOnClickListener {
+            onBackPressed()
+        }
 
         buttonSubmit_temporary.setOnClickListener { // 임시 저장
             val personal_id = userId

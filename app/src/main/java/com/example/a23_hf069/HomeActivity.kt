@@ -56,12 +56,16 @@ class HomeActivity : AppCompatActivity() {
                 }
                 R.id.mypageMenu -> { // 마이페이지
                     val mypageFragment = MypageFragment()
+                    // 사용자 아이디를 Bundle에 추가해서 전달
+                    val bundle = Bundle()
+                    bundle.putString("userId", userId)
+                    mypageFragment.arguments = bundle
                     supportFragmentManager.beginTransaction().replace(R.id.fl_container, mypageFragment).commit()
                 }
             }
             true
         }
-            selectedItemId = R.id.homeMenu
+            bnv_main.selectedItemId = R.id.homeMenu
         }
     }
 }

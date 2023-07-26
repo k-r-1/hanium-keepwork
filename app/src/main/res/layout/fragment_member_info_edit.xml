@@ -33,7 +33,7 @@
             android:textSize="18sp" />
 
         <ImageButton
-            android:id="@+id/backButton"
+            android:id="@+id/backButton_search"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start|center_vertical"
@@ -59,7 +59,7 @@
                 android:layout_marginBottom="20dp">
 
                 <TextView
-                    android:id="@+id/tvWrite_line2"
+                    android:id="@+id/tvWrite_line5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="3dp"
@@ -92,7 +92,7 @@
                 android:layout_marginBottom="10dp">
 
                 <TextView
-                    android:id="@+id/tvWrite_line3"
+                    android:id="@+id/tvWrite_line6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="3dp"
@@ -123,7 +123,7 @@
                 android:layout_marginBottom="20dp">
 
                 <TextView
-                    android:id="@+id/tvWrite_line4"
+                    android:id="@+id/tvWrite_line7"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="3dp"
@@ -155,7 +155,7 @@
                 android:layout_marginBottom="20dp">
 
                 <TextView
-                    android:id="@+id/tvWrite_line6"
+                    android:id="@+id/tvWrite_line9"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="3dp"
@@ -233,7 +233,7 @@
                 android:layout_marginBottom="20dp">
 
                 <TextView
-                    android:id="@+id/tvWrite_line7"
+                    android:id="@+id/tvWrite_line10"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="3dp"
@@ -268,7 +268,7 @@
                 android:layout_marginBottom="20dp">
 
                 <TextView
-                    android:id="@+id/tvWrite_line8"
+                    android:id="@+id/tvWrite_line1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="3dp"
@@ -319,7 +319,7 @@
                 android:orientation="horizontal">
 
                 <Button
-                    android:id="@+id/buttonSubmit_temporary"
+                    android:id="@+id/buttonSubmit_temporary_write"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="5dp"
@@ -333,7 +333,7 @@
                     app:strokeWidth="2dp" />
 
                 <Button
-                    android:id="@+id/buttonSubmit_complete"
+                    android:id="@+id/buttonSubmit_complete_write"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"

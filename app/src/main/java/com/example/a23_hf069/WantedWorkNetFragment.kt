@@ -241,9 +241,6 @@ class JobDetailActivity : AppCompatActivity() {
         binding.wantedMobileInfoUrl.text = job?.wantedMobileInfoUrl
         binding.jobsCd.text = job?.jobsCd
 
-        binding.backButton.setOnClickListener {
-            onBackPressed()
-        }
     }
 }
 

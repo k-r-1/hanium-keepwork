@@ -15,8 +15,6 @@ import android.widget.ListView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import org.xmlpull.v1.XmlPullParser
@@ -478,7 +476,7 @@ class JobDetailActivity3 : AppCompatActivity() {
         // 기본 툴바 숨기기
         supportActionBar?.hide()
 
-        backButton = findViewById(R.id.backButton)
+        backButton = findViewById(R.id.backButton_search)
         company = findViewById(R.id.company)
         title = findViewById(R.id.title)
         salTpNm = findViewById(R.id.salTpNm)

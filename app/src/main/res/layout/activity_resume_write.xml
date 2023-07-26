@@ -15,7 +15,7 @@
         android:background="?attr/colorPrimary">
 
         <ImageButton
-            android:id="@+id/backButton"
+            android:id="@+id/backButton_search"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start|center_vertical"
@@ -23,7 +23,7 @@
             android:src="@drawable/ic_baseline_arrow_back_ios_new_24" />
 
         <ImageView
-            android:id="@+id/imageView2"
+            android:id="@+id/imageViewLogo_write"
             android:layout_width="324dp"
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/ic_main_logo" />
@@ -52,7 +52,7 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/tvWrite_line8"
+                        android:id="@+id/tvWrite_line1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="3dp"
@@ -63,7 +63,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/tvID"
+                        android:id="@+id/tvWrite_ID"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="아이디"
@@ -72,7 +72,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/tvResume"
+                        android:id="@+id/tvResumewrite"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text=" 님의 이력서 작성"
@@ -80,7 +80,7 @@
                         android:textSize="22dp" />
 
                     <TextView
-                        android:id="@+id/tvWrite_line9"
+                        android:id="@+id/tvWrite_line2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="3dp"
@@ -98,7 +98,7 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/tvWrite_line1"
+                        android:id="@+id/tvWrite_line3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="3dp"
@@ -108,7 +108,7 @@
                         android:textStyle="bold" />
 
                     <EditText
-                        android:id="@+id/edtTitle"
+                        android:id="@+id/edtWrite_title"
                         android:layout_width="359dp"
                         android:layout_height="match_parent"
                         android:background="@null"
@@ -117,7 +117,7 @@
                         android:textAlignment="center" />
 
                     <TextView
-                        android:id="@+id/tvWrite_line"
+                        android:id="@+id/tvWrite_line4"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="3dp"
@@ -126,139 +126,6 @@
                         android:textColor="#35B790"
                         android:textSize="30sp"
                         android:textStyle="bold" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    android:orientation="vertical">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/tvWrite_line2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="3dp"
-                            android:text="|"
-                            android:textColor="#35B790"
-                            android:textSize="30sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/tvWrite_academic"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="2dp"
-                            android:text="학력"
-                            android:textColor="#000000"
-                            android:textSize="20dp" />
-                    </LinearLayout>
-
-                    <FrameLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="55dp"
-                        android:background="@drawable/rounded_rectangle_border">
-
-                        <EditText
-                            android:id="@+id/edtAcademic"
-                            android:layout_width="match_parent"
-                            android:layout_height="87dp"
-                            android:background="@null" />
-                    </FrameLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    android:orientation="vertical">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/tvWrite_line3"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="3dp"
-                            android:text="|"
-                            android:textColor="#35B790"
-                            android:textSize="30sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/tvWrite_career"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="2dp"
-                            android:text="경력"
-                            android:textColor="#000000"
-                            android:textSize="20dp" />
-                    </LinearLayout>
-
-                    <FrameLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="88dp"
-                        android:background="@drawable/rounded_rectangle_border">
-
-                        <EditText
-                            android:id="@+id/edtCareer"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@null" />
-                    </FrameLayout>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    android:orientation="vertical">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/tvWrite_line4"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="3dp"
-                            android:text="|"
-                            android:textColor="#35B790"
-                            android:textSize="30sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/tvWrite_introduction"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="2dp"
-                            android:text="자기 소개"
-                            android:textColor="@color/black"
-                            android:textSize="20dp" />
-                    </LinearLayout>
-
-                    <FrameLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/rounded_rectangle_border">
-
-                        <EditText
-                            android:id="@+id/edtIntroduction"
-                            android:layout_width="match_parent"
-                            android:layout_height="86dp"
-                            android:background="@null" />
-                    </FrameLayout>
                 </LinearLayout>
 
                 <LinearLayout
@@ -283,26 +150,25 @@
                             android:textStyle="bold" />
 
                         <TextView
-                            android:id="@+id/tvWrite_certificate"
+                            android:id="@+id/tvWrite_academic"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="2dp"
-                            android:text="자격사항"
-                            android:textColor="@color/black"
+                            android:text="학력"
+                            android:textColor="#000000"
                             android:textSize="20dp" />
+
                     </LinearLayout>
 
-                    <FrameLayout
+                    <EditText
+                        android:id="@+id/edtWrite_academic"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/rounded_rectangle_border">
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/rounded_rectangle_border"
+                        android:padding="5dp"
+                        android:textColor="#342F2F"
+                        android:textSize="16dp" />
 
-                        <EditText
-                            android:id="@+id/edtCertificate"
-                            android:layout_width="match_parent"
-                            android:layout_height="80dp"
-                            android:background="@null" />
-                    </FrameLayout>
                 </LinearLayout>
 
                 <LinearLayout
@@ -327,26 +193,24 @@
                             android:textStyle="bold" />
 
                         <TextView
-                            android:id="@+id/tvWrite_learning"
+                            android:id="@+id/tvWrite_career"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="2dp"
-                            android:text="교육사항"
-                            android:textColor="@color/black"
+                            android:text="경력"
+                            android:textColor="#000000"
                             android:textSize="20dp" />
                     </LinearLayout>
 
-                    <FrameLayout
+                    <EditText
+                        android:id="@+id/edtWrite_career"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/rounded_rectangle_border">
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/rounded_rectangle_border"
+                        android:padding="5dp"
+                        android:textColor="#342F2F"
+                        android:textSize="16dp" />
 
-                        <EditText
-                            android:id="@+id/edtEducation"
-                            android:layout_width="match_parent"
-                            android:layout_height="72dp"
-                            android:background="@null" />
-                    </FrameLayout>
                 </LinearLayout>
 
                 <LinearLayout
@@ -371,6 +235,132 @@
                             android:textStyle="bold" />
 
                         <TextView
+                            android:id="@+id/tvWrite_introduction"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="2dp"
+                            android:text="자기 소개"
+                            android:textColor="@color/black"
+                            android:textSize="20dp" />
+                    </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/edtWrite_introduction"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/rounded_rectangle_border"
+                        android:padding="5dp"
+                        android:textColor="#342F2F"
+                        android:textSize="16dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tvWrite_line8"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="3dp"
+                            android:text="|"
+                            android:textColor="#35B790"
+                            android:textSize="30sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvWrite_certificate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="2dp"
+                            android:text="자격사항"
+                            android:textColor="@color/black"
+                            android:textSize="20dp" />
+                    </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/edtWrite_certificate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/rounded_rectangle_border"
+                        android:padding="5dp"
+                        android:textColor="#342F2F"
+                        android:textSize="16dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tvWrite_line9"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="3dp"
+                            android:text="|"
+                            android:textColor="#35B790"
+                            android:textSize="30sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvWrite_learning"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="2dp"
+                            android:text="교육사항"
+                            android:textColor="@color/black"
+                            android:textSize="20dp" />
+                    </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/edtWrite_education"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/rounded_rectangle_border"
+                        android:padding="5dp"
+                        android:textColor="#342F2F"
+                        android:textSize="16dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tvWrite_line10"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="3dp"
+                            android:text="|"
+                            android:textColor="#35B790"
+                            android:textSize="30sp"
+                            android:textStyle="bold" />
+
+                        <TextView
                             android:id="@+id/tvWrite_desire"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -380,17 +370,15 @@
                             android:textSize="20dp" />
                     </LinearLayout>
 
-                    <FrameLayout
+                    <EditText
+                        android:id="@+id/edtWrite_desire"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/rounded_rectangle_border">
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/rounded_rectangle_border"
+                        android:padding="5dp"
+                        android:textColor="#342F2F"
+                        android:textSize="16dp" />
 
-                        <EditText
-                            android:id="@+id/edtDesire"
-                            android:layout_width="match_parent"
-                            android:layout_height="89dp"
-                            android:background="@null" />
-                    </FrameLayout>
                 </LinearLayout>
 
                 <LinearLayout
@@ -399,7 +387,7 @@
                     android:orientation="horizontal">
 
                     <Button
-                        android:id="@+id/buttonSubmit_temporary"
+                        android:id="@+id/buttonSubmit_temporary_write"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="5dp"
@@ -413,7 +401,7 @@
                         app:strokeWidth="4dp" />
 
                     <Button
-                        android:id="@+id/buttonSubmit_complete"
+                        android:id="@+id/buttonSubmit_complete_write"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"

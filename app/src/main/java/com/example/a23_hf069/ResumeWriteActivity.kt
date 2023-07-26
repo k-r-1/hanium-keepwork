@@ -32,19 +32,19 @@ class ResumeWriteActivity : AppCompatActivity() {
 // Get user ID
         userId = intent.getStringExtra("userId") ?: ""
 
-        val textID = findViewById<TextView>(R.id.tvID)
+        val textID = findViewById<TextView>(R.id.tvWrite_ID)
         textID.text = userId
 
-        backButton = findViewById(R.id.backButton)
-        editTextAcademic = findViewById(R.id.edtAcademic)
-        editResumeTitle = findViewById(R.id.edtTitle)
-        editTextCareer = findViewById(R.id.edtCareer)
-        editTextIntroduction = findViewById(R.id.edtIntroduction)
-        editTextCertificate = findViewById(R.id.edtCertificate)
-        editTextEducation = findViewById(R.id.edtEducation)
-        editTextDesire = findViewById(R.id.edtDesire)
-        buttonSubmit_temporary = findViewById(R.id.buttonSubmit_temporary) // 임시 저장 버튼
-        buttonSubmit_complete = findViewById(R.id.buttonSubmit_complete) // 작성 완료 버튼
+        backButton = findViewById(R.id.backButton_search)
+        editTextAcademic = findViewById(R.id.edtWrite_academic)
+        editResumeTitle = findViewById(R.id.edtWrite_title)
+        editTextCareer = findViewById(R.id.edtWrite_career)
+        editTextIntroduction = findViewById(R.id.edtWrite_introduction)
+        editTextCertificate = findViewById(R.id.edtWrite_certificate)
+        editTextEducation = findViewById(R.id.edtWrite_education)
+        editTextDesire = findViewById(R.id.edtWrite_desire)
+        buttonSubmit_temporary = findViewById(R.id.buttonSubmit_temporary_write) // 임시 저장 버튼
+        buttonSubmit_complete = findViewById(R.id.buttonSubmit_complete_write) // 작성 완료 버튼
 
         backButton.setOnClickListener {
             onBackPressed()

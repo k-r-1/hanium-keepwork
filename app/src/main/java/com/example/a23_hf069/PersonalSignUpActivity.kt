@@ -54,7 +54,7 @@ class PersonalSignUpActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
         }
 
         // 각 뷰의 요소들과 레이아웃 파일에서의 아이디 연결
-        backButton = findViewById(R.id.backButton)  // go back to prev page
+        backButton = findViewById(R.id.backButton_search)  // go back to prev page
         id_text_input_edit_text = findViewById(R.id.id_text_input_edit_text) // personal id
         idcheck_button = findViewById(R.id.idCheck_button) // id duplicate check
         password_text_input_edit_text = findViewById(R.id.password_text_input_edit_text) // personal password

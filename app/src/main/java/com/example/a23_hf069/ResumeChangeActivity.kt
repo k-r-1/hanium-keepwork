@@ -5,10 +5,10 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import okhttp3.*
-import org.json.JSONArray // JSONArray를 import 추가
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
@@ -27,27 +27,36 @@ class ResumeChangeActivity : AppCompatActivity() {
     private lateinit var buttonSubmit1: Button
     private lateinit var buttonSubmit2: Button
 
+    private lateinit var backButton_change: ImageButton
+
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        supportActionBar?.hide()
         setContentView(R.layout.activity_resume_change)
 
         // Get user ID
         resumeListNum = intent.getIntExtra("resumeListNum", -1)
         userId = intent.getStringExtra("userId") ?: ""
 
-        val textID = findViewById<TextView>(R.id.tvchID)
+        val textID = findViewById<TextView>(R.id.tvChange_ID)
         textID.text = userId
 
-        editTextAcademic = findViewById(R.id.edtchAcademic)
-        editResumeTitle = findViewById(R.id.edtchTitle)
-        editTextCareer = findViewById(R.id.edtchCareer)
-        editTextIntroduction = findViewById(R.id.edtchIntroduction)
-        editTextCertificate = findViewById(R.id.edtchCertificate)
-        editTextEducation = findViewById(R.id.edtchEducation)
-        editTextDesire = findViewById(R.id.edtchDesire)
-        buttonSubmit1 = findViewById(R.id.buttonchSubmit_temporary)
-        buttonSubmit2 = findViewById(R.id.buttonchSubmit_complete)
+        editTextAcademic = findViewById(R.id.edtChange_academic)
+        editResumeTitle = findViewById(R.id.edtChange_title)
+        editTextCareer = findViewById(R.id.edtChange_career)
+        editTextIntroduction = findViewById(R.id.edtChange_introduction)
+        editTextCertificate = findViewById(R.id.edtChange_certificate)
+        editTextEducation = findViewById(R.id.edtChange_education)
+        editTextDesire = findViewById(R.id.edtChange_desire)
+        buttonSubmit1 = findViewById(R.id.buttonSubmit_temporary_change)
+        buttonSubmit2 = findViewById(R.id.buttonSubmit_complete_change)
+
+        backButton_change = findViewById(R.id.backButton_change)
+
+        backButton_change.setOnClickListener {
+            onBackPressed()
+        }
 
         buttonSubmit1.setOnClickListener { // 임시 저장
             val resume_listnum = resumeListNum.toString()
@@ -73,6 +82,7 @@ class ResumeChangeActivity : AppCompatActivity() {
             )
 
             Toast.makeText(this, "이력서가 임시저장되었습니다", Toast.LENGTH_SHORT).show()
+            onBackPressed()
         }
 
         buttonSubmit2.setOnClickListener { // 작성완료
@@ -99,6 +109,7 @@ class ResumeChangeActivity : AppCompatActivity() {
             )
 
             Toast.makeText(this, "이력서가 작성완료되었습니다", Toast.LENGTH_SHORT).show()
+            onBackPressed()
         }
 
         // 이력서 아이템 데이터 불러오기

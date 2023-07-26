@@ -5,8 +5,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
 import android.widget.ImageButton
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
@@ -33,7 +31,7 @@ class FAQFragment : Fragment(), TabLayout.OnTabSelectedListener {
         tabLayout.setupWithViewPager(viewPager)
         tabLayout.addOnTabSelectedListener(this)
 
-        val closeButton = view.findViewById<ImageButton>(R.id.backButton)
+        val closeButton = view.findViewById<ImageButton>(R.id.backButton_search)
         closeButton.setOnClickListener {
             requireActivity().onBackPressed()
         }

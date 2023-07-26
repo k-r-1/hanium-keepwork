@@ -1,14 +1,10 @@
 package com.example.a23_hf069
 
-import android.annotation.SuppressLint
 import android.os.Bundle
+import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
-import android.widget.Button
-import android.widget.EditText
 import android.widget.TextView
-import android.widget.Toast
 import okhttp3.*
-import org.json.JSONArray // JSONArray를 import 추가
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
@@ -25,27 +21,36 @@ class ResumeClickActivity : AppCompatActivity() {
     private lateinit var editTextEducation: TextView
     private lateinit var editTextDesire: TextView
 
+    private lateinit var backButton_click: ImageButton
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        supportActionBar?.hide()
         setContentView(R.layout.activity_resume_click)
 
         // Get user ID
         resumeListNum = intent.getIntExtra("resumeListNum", -1)
         userId = intent.getStringExtra("userId") ?: ""
 
-        val textID = findViewById<TextView>(R.id.tvclID)
+        val textID = findViewById<TextView>(R.id.tvClick_ID)
         textID.text = userId
 
-        editTextAcademic = findViewById(R.id.edtclAcademic)
-        editResumeTitle = findViewById(R.id.edtclTitle)
-        editTextCareer = findViewById(R.id.edtclCareer)
-        editTextIntroduction = findViewById(R.id.edtclIntroduction)
-        editTextCertificate = findViewById(R.id.edtclCertificate)
-        editTextEducation = findViewById(R.id.edtclEducation)
-        editTextDesire = findViewById(R.id.edtclDesire)
+        editTextAcademic = findViewById(R.id.edtClick_academic)
+        editResumeTitle = findViewById(R.id.edtClick_title)
+        editTextCareer = findViewById(R.id.edtClick_career)
+        editTextIntroduction = findViewById(R.id.edtClick_introduction)
+        editTextCertificate = findViewById(R.id.edtClick_certificate)
+        editTextEducation = findViewById(R.id.edtClick_education)
+        editTextDesire = findViewById(R.id.edtClick_desire)
+
+        backButton_click = findViewById(R.id.backButton_click)
 
         // 이력서 아이템 데이터 불러오기
         getResumeItemData(resumeListNum)
+
+        backButton_click.setOnClickListener {
+            onBackPressed()
+        }
     }
 
     // 이력서 아이템 데이터 불러오기

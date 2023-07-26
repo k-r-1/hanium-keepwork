@@ -1,5 +1,6 @@
 package com.example.a23_hf069
 
+import ResumeFragment
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -9,9 +10,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
+import android.widget.TextView
 
 class MypageFragment : Fragment() {
-    lateinit var member_info : LinearLayout
+    // 사용자 ID를 저장할 변수
+    private lateinit var userId: String
+
+    lateinit var member_info : Button
     lateinit var notificationButton : Button
     lateinit var faqButton : Button
     lateinit var saeil_center_btn : Button
@@ -25,6 +30,13 @@ class MypageFragment : Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        // Argument로부터 전달받은 사용자 ID를 변수에 저장
+        if (arguments != null) {
+            userId = arguments?.getString("userId", "") ?: ""
+        }
+        // 사용자 ID를 표시할 TextView 초기화
+        val textID = view.findViewById<TextView>(R.id.tv_user_name)
+        textID.text = userId
 
         saeil_center_btn = view.findViewById<Button>(R.id.saeil_center_btn)
         saeil_center_btn.setOnClickListener {// 가까운 새일센터 찾기 사이트 연결
@@ -32,7 +44,7 @@ class MypageFragment : Fragment() {
             startActivity(intent)
         }
 
-        member_info = view.findViewById<LinearLayout>(R.id.member_info_edit_btn)
+        member_info = view.findViewById<Button>(R.id.resume_management_btn)
         member_info.setOnClickListener(){// 회원정보 수정 프래그먼트로 전환
             val fragment_info = MemberInfoEditFragment()
             requireActivity().supportFragmentManager.beginTransaction()

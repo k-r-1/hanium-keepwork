@@ -76,6 +76,11 @@ class PersonalSignUpActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
             finish()
         }
 
+        // 버튼 클릭 시 아이디 중복 확인 과정 수행
+        idcheck_button.setOnClickListener {
+
+        }
+
         // 버튼 클릭 시 회원가입 과정 수행
         signUp_button.setOnClickListener {
             val id = id_text_input_edit_text.text.toString().trim()

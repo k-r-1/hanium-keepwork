@@ -1,6 +1,8 @@
 package com.example.a23_hf069
 
 import android.content.Context
+import android.graphics.Color
+import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.GestureDetector
@@ -92,9 +94,11 @@ class FAQPersonalFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(activity)
 
         // 구분선 추가
-        val dividerDrawable: Drawable? = ContextCompat.getDrawable(requireContext(), R.drawable.divider_line)
+        val dividerColor = Color.parseColor("#E6E6E6")
         val itemDecoration = DividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL)
+        val dividerDrawable: Drawable? = ContextCompat.getDrawable(requireContext(), R.drawable.divider_line)
         dividerDrawable?.let {
+            it.setTint(dividerColor) // 구분선 Drawable에 색상을 설정합니다.
             itemDecoration.setDrawable(it)
         }
         recyclerView.addItemDecoration(itemDecoration)
@@ -153,6 +157,8 @@ class FAQPersonalFragment : Fragment() {
             fun onItemClick(menu: String)
         }
 
+        private var selectedPosition = 0 // 선택된 메뉴의 포지션을 기억하는 변수
+
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MenuViewHolder {
             val itemView = LayoutInflater.from(parent.context)
                 .inflate(R.layout.menu_item_layout, parent, false)
@@ -163,7 +169,21 @@ class FAQPersonalFragment : Fragment() {
             val currentMenu = menuList[position]
             holder.menuText.text = currentMenu
 
+            // 선택된 메뉴의 스타일 변경
+            if (selectedPosition == position) {
+                holder.menuText.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.selectedMenuColor))
+                holder.menuText.setTypeface(null, Typeface.BOLD)
+            } else {
+                holder.menuText.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.defaultMenuColor))
+                holder.menuText.setTypeface(null, Typeface.NORMAL)
+            }
+
             holder.itemView.setOnClickListener {
+                // 선택된 메뉴의 스타일 변경
+                notifyItemChanged(selectedPosition)
+                selectedPosition = holder.adapterPosition
+                notifyItemChanged(selectedPosition)
+
                 listener.onItemClick(currentMenu)
             }
         }

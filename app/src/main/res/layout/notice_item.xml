@@ -30,7 +30,7 @@
             android:textColor="#4800E0"
             android:textSize="18dp" />
 
-        <TextView
+        <Button
             android:id="@+id/tvNotice_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -38,7 +38,8 @@
             android:gravity="center_vertical"
             android:text="공지사항 제목"
             android:textColor="@color/black"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:background="@android:color/transparent"/>
 
         <TextView
             android:id="@+id/tvNotice_date"

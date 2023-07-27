@@ -1,10 +1,12 @@
 package com.example.a23_hf069
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
@@ -37,7 +39,7 @@ class NoticeActivity : AppCompatActivity() {
 
     // View holder class for DataAdapter
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val titleTextView: TextView = itemView.findViewById(R.id.tvNotice_title)
+        val titleTextView: Button = itemView.findViewById(R.id.tvNotice_title)
         val dateTextView: TextView = itemView.findViewById(R.id.tvNotice_date)
     }
 
@@ -54,8 +56,15 @@ class NoticeActivity : AppCompatActivity() {
         // Bind data to each item in the RecyclerView
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val item = dataList[position]
-            holder.titleTextView.text = item.noticeTitle
+            holder.titleTextView.setText(item.noticeTitle)
             holder.dateTextView.text = item.noticeDate
+
+            // 공지사항 제목 버튼 클릭 리스너 설정
+            holder.titleTextView.setOnClickListener {
+                val intent = Intent(holder.itemView.context, NoticeContentActivity::class.java)
+                intent.putExtra("noticeListNum", item.noticeListNum)
+                holder.itemView.context.startActivity(intent)
+            }
         }
 
         // Get the number of items in the list

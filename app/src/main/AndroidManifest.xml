@@ -26,6 +26,9 @@
                 android:value="" />
         </activity>
         <activity
+            android:name=".NoticeContentActivity"
+            android:exported="false" />
+        <activity
             android:name=".ResumeClickActivity"
             android:exported="false" />
         <!--<activity

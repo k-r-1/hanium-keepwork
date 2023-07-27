@@ -12,7 +12,7 @@ import java.io.IOException
 
 class NoticeContentActivity : AppCompatActivity() {
     private var IP_ADDRESS = "3.34.48.60" // Replace with your IP address.
-    private var resumeListNum: Int = -1
+    private var noticeListNum: Int = -1
     private lateinit var noticeTitle: TextView
     private lateinit var noticeContent: TextView
     private lateinit var noticeDate: TextView
@@ -26,7 +26,7 @@ class NoticeContentActivity : AppCompatActivity() {
         setContentView(R.layout.activity_notice_content)
 
         // Get user ID
-        resumeListNum = intent.getIntExtra("resumeListNum", -1)
+        noticeListNum = intent.getIntExtra("noticeListNum", -1)
 
         noticeTitle = findViewById(R.id.notice_title)
         noticeContent = findViewById(R.id.notice_content)
@@ -35,7 +35,7 @@ class NoticeContentActivity : AppCompatActivity() {
         backButton_click = findViewById(R.id.backButton_click)
 
         // 공지사항 아이템 데이터 불러오기
-        getNoticeItemData(resumeListNum)
+        getNoticeItemData(noticeListNum)
 
         backButton_click.setOnClickListener {
             onBackPressed()
@@ -43,9 +43,9 @@ class NoticeContentActivity : AppCompatActivity() {
     }
 
     // 공지사항 아이템 데이터 불러오기
-    private fun getNoticeItemData(resumeListNum: Int) {
+    private fun getNoticeItemData(noticeListNum: Int) {
         val url =
-            "http://$IP_ADDRESS/android_notice_content.php?resume_listnum=$resumeListNum" // 데이터를 불러올 PHP 스크립트의 주소
+            "http://$IP_ADDRESS/android_notice_content.php?notice_listnum=$noticeListNum" // 데이터를 불러올 PHP 스크립트의 주소
 
         val client = OkHttpClient()
 

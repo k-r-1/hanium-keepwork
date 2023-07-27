@@ -16,6 +16,7 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
+        android:background="#35B891"
         android:layout_width="0dp"
         android:layout_height="?attr/actionBarSize"
         app:layout_constraintEnd_toEndOf="parent"
@@ -28,7 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="자주 묻는 질문"
-            android:textColor="@android:color/black"
+            android:textColor="@android:color/white"
             android:textSize="18sp" />
 
         <ImageButton
@@ -37,7 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="start|center_vertical"
             android:background="@null"
-            android:src="@drawable/ic_baseline_cancel_presentation_24" />
+            android:src="@drawable/ic_baseline_cancel_presentation_24_2" />
 
     </androidx.appcompat.widget.Toolbar>
 

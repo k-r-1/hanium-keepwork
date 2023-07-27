@@ -19,11 +19,18 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".NoticeActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".ResumeClickActivity"
             android:exported="false" />
-        <!--<activity
+        <activity
             android:name=".SaeilSearchActivity"
-            android:exported="false" />-->
+            android:exported="false" />
         <activity
             android:name=".CorporateSignUpActivity"
             android:exported="false" />
@@ -74,11 +81,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name=".NoticeActivity"
-            android:label="공지사항"
-            android:exported="false">
         </activity>
     </application>
 

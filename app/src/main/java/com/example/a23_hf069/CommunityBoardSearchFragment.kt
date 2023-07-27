@@ -13,7 +13,7 @@ class CommunityBoardSearchFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         val rootView = inflater.inflate(R.layout.fragment_community_board_search, container, false)
 
-        val closeButton = rootView.findViewById<ImageButton>(R.id.backButton_search)
+        val closeButton = rootView.findViewById<ImageButton>(R.id.backButton_notice)
         closeButton.setOnClickListener {
             requireActivity().onBackPressed()
         }

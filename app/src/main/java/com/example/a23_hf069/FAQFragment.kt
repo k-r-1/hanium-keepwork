@@ -31,7 +31,7 @@ class FAQFragment : Fragment(), TabLayout.OnTabSelectedListener {
         tabLayout.setupWithViewPager(viewPager)
         tabLayout.addOnTabSelectedListener(this)
 
-        val closeButton = view.findViewById<ImageButton>(R.id.backButton_search)
+        val closeButton = view.findViewById<ImageButton>(R.id.backButton_notice)
         closeButton.setOnClickListener {
             requireActivity().onBackPressed()
         }

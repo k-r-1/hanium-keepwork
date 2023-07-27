@@ -476,7 +476,7 @@ class JobDetailActivity3 : AppCompatActivity() {
         // 기본 툴바 숨기기
         supportActionBar?.hide()
 
-        backButton = findViewById(R.id.backButton_search)
+        backButton = findViewById(R.id.backButton_notice)
         company = findViewById(R.id.company)
         title = findViewById(R.id.title)
         salTpNm = findViewById(R.id.salTpNm)

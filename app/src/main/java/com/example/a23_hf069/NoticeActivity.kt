@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -18,7 +19,9 @@ import java.io.IOException
 
 class NoticeActivity : AppCompatActivity() {
     // 서버의 IP 주소를 저장할 변수
-    private var IP_ADDRESS = "43.201.105.154"
+    private var IP_ADDRESS = "3.34.48.60"
+
+    private lateinit var backButton_notice: ImageButton
 
     // 데이터를 담을 리스트
     private var dataList: List<NoticeItem> = emptyList()
@@ -76,6 +79,12 @@ class NoticeActivity : AppCompatActivity() {
 
         // 사용자의 작성중 이력서 개수와 작성완료 이력서 개수를 업데이트
         fetchDataFromServer()
+
+        backButton_notice = findViewById(R.id.backButton_notice)
+
+        backButton_notice.setOnClickListener {
+            finish()
+        }
     }
 
     // 서버로부터 데이터를 가져오는 메서드

@@ -28,9 +28,9 @@
         <activity
             android:name=".ResumeClickActivity"
             android:exported="false" />
-        <activity
+        <!--<activity
             android:name=".SaeilSearchActivity"
-            android:exported="false" />
+            android:exported="false" />-->
         <activity
             android:name=".CorporateSignUpActivity"
             android:exported="false" />

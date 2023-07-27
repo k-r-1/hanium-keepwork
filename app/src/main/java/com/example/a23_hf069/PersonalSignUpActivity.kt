@@ -23,7 +23,7 @@ import java.net.URL
 class PersonalSignUpActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
     // IP 주소와 태그를 초기화
-    private var IP_ADDRESS = "43.201.105.154" // 본인 IP주소를 넣으세요.
+    private var IP_ADDRESS = "3.34.48.60" // 본인 IP주소를 넣으세요.
     private var TAG = "phptest" // phptest log 찍으려는 용도
 
     // 뷰 요소들을 선언
@@ -54,7 +54,7 @@ class PersonalSignUpActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
         }
 
         // 각 뷰의 요소들과 레이아웃 파일에서의 아이디 연결
-        backButton = findViewById(R.id.backButton_search)  // go back to prev page
+        backButton = findViewById(R.id.backButton_notice)  // go back to prev page
         id_text_input_edit_text = findViewById(R.id.id_text_input_edit_text) // personal id
         idcheck_button = findViewById(R.id.idCheck_button) // id duplicate check
         password_text_input_edit_text = findViewById(R.id.password_text_input_edit_text) // personal password

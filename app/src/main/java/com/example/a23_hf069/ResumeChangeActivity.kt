@@ -14,7 +14,7 @@ import org.json.JSONObject
 import java.io.IOException
 
 class ResumeChangeActivity : AppCompatActivity() {
-    private var IP_ADDRESS = "13.124.235.120" // Replace with your IP address.
+    private var IP_ADDRESS = "43.201.105.154" // Replace with your IP address.
     private var userId: String = "" // User ID
     private var resumeListNum: Int = -1
     private lateinit var editResumeTitle: EditText

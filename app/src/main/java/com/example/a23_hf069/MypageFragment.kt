@@ -1,6 +1,5 @@
 package com.example.a23_hf069
 
-import ResumeFragment
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -18,6 +17,7 @@ class MypageFragment : Fragment() {
 
     lateinit var member_info : Button
     lateinit var notificationButton : Button
+    lateinit var noticeButton: Button
     lateinit var faqButton : Button
     lateinit var saeil_center_btn : Button
 
@@ -60,6 +60,13 @@ class MypageFragment : Fragment() {
                 .addToBackStack(null) // 이전 프래그먼트로 돌아가기
                 .commit()
         }
+        noticeButton = view.findViewById<Button>(R.id.noticeButton)
+        noticeButton.setOnClickListener {
+            // NoticeActivity로 이동하는 코드
+            val intent = Intent(requireContext(), NoticeActivity::class.java)
+            startActivity(intent)
+        }
+
         faqButton = view.findViewById<Button>(R.id.faqButton)
         faqButton.setOnClickListener(){// 자주 묻는 질문 프래그먼트로 전환
             val fragment_faq = FAQFragment()

@@ -23,7 +23,7 @@ import java.net.URL
 class PersonalSignUpActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
     // IP 주소와 태그를 초기화
-    private var IP_ADDRESS = "13.124.235.120" // 본인 IP주소를 넣으세요.
+    private var IP_ADDRESS = "43.201.105.154" // 본인 IP주소를 넣으세요.
     private var TAG = "phptest" // phptest log 찍으려는 용도
 
     // 뷰 요소들을 선언

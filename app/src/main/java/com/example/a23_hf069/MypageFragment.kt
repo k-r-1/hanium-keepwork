@@ -19,6 +19,7 @@ class MypageFragment : Fragment() {
     lateinit var notificationButton : Button
     lateinit var noticeButton: Button
     lateinit var faqButton : Button
+    lateinit var logoutButton: Button
     lateinit var saeil_center_btn : Button
 
     override fun onCreateView(
@@ -74,6 +75,12 @@ class MypageFragment : Fragment() {
                 .replace(R.id.fl_container, fragment_faq) // 프래그먼트 교체
                 .addToBackStack(null) // 이전 프래그먼트로 돌아가기
                 .commit()
+        }
+
+        logoutButton = view.findViewById<Button>(R.id.logoutButton)
+        logoutButton.setOnClickListener(){// P_login프래그먼트로 전환
+            val intent = Intent(requireContext(), MainActivity::class.java)
+            startActivity(intent)
         }
     }
 }

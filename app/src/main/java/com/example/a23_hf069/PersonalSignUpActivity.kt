@@ -23,7 +23,7 @@ import java.net.URL
 class PersonalSignUpActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
     // IP 주소와 태그를 초기화
-    private var IP_ADDRESS = "3.34.48.60" // 본인 IP주소를 넣으세요.
+    private var IP_ADDRESS = "3.34.136.178" // 본인 IP주소를 넣으세요.
     private var TAG = "phptest" // phptest log 찍으려는 용도
     private var checkID = false
 
@@ -63,9 +63,9 @@ class PersonalSignUpActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
         name_textview_input_edit_text = findViewById(R.id.name_textview_input_edit_text) // personal name
         email_textview_input_edit_text = findViewById(R.id.email_textview_input_edit_text) // personal email
         phoneNumber_textview_input_edit_text = findViewById(R.id.phoneNumber_textview_input_edit_text) // personal phonenum
-        phoneNumber_button = findViewById(R.id.phoneNumber_button) // identification
-        phoneNumberCheck_textview_input_edit_text = findViewById(R.id.phoneNumberCheck_textview_input_edit_text) // identification number
-        phoneNumberCheck_button = findViewById(R.id.phoneNumberCheck_button) // identification check button
+        // phoneNumber_button = findViewById(R.id.phoneNumber_button) // identification
+        // phoneNumberCheck_textview_input_edit_text = findViewById(R.id.phoneNumberCheck_textview_input_edit_text) // identification number
+        // phoneNumberCheck_button = findViewById(R.id.phoneNumberCheck_button) // identification check button
         signUp_button = findViewById(R.id.signUp_button) // sign up button
 
         // mTextViewResult를 스크롤 가능하도록 설정
@@ -101,7 +101,7 @@ class PersonalSignUpActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
             val name = name_textview_input_edit_text.text.toString().trim()
             val email = email_textview_input_edit_text.text.toString().trim()
             val phoneNumber = phoneNumber_textview_input_edit_text.text.toString().trim()
-            val phoneNumberCheck = phoneNumberCheck_textview_input_edit_text.toString().trim()
+            // val phoneNumberCheck = phoneNumberCheck_textview_input_edit_text.toString().trim()
 
             if (id.isEmpty() || password.isEmpty() || password_recheck.isEmpty() || name.isEmpty() || email.isEmpty() || phoneNumber.isEmpty()) {
                 Toast.makeText(this@PersonalSignUpActivity, "정보를 입력해주세요.", Toast.LENGTH_SHORT).show()

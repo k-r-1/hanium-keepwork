@@ -21,7 +21,7 @@ import java.io.IOException
 
 class NoticeActivity : AppCompatActivity() {
     // 서버의 IP 주소를 저장할 변수
-    private var IP_ADDRESS = "3.34.48.60"
+    private var IP_ADDRESS = "3.34.136.178"
 
     private lateinit var backButton_notice: ImageButton
 

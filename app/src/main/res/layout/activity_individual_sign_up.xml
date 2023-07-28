@@ -224,50 +224,50 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="@style/TextLabel" />
 
-                <Button
-                    android:id="@+id/phoneNumber_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:text="본인인증" />
+<!--                <Button-->
+<!--                    android:id="@+id/phoneNumber_button"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_gravity="end"-->
+<!--                    android:text="본인인증" />-->
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <!--전화번호 인증번호-->
-            <TextView
-                android:id="@+id/phoneNumberCheck_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="40dp"
-                android:layout_marginTop="20dp"
-                android:text="인증번호"
-                android:textColor="@color/black"
-                android:textSize="15sp"
-                android:textStyle="bold" />
+<!--            <TextView-->
+<!--                android:id="@+id/phoneNumberCheck_textview"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="40dp"-->
+<!--                android:layout_marginTop="20dp"-->
+<!--                android:text="인증번호"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:textSize="15sp"-->
+<!--                android:textStyle="bold" />-->
 
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/phoneNumberCheck_textview_input_layout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="40dp"
-                android:layout_marginTop="10dp">
+<!--            <com.google.android.material.textfield.TextInputLayout-->
+<!--                android:id="@+id/phoneNumberCheck_textview_input_layout"-->
+<!--                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginHorizontal="40dp"-->
+<!--                android:layout_marginTop="10dp">-->
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/phoneNumberCheck_textview_input_edit_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="@style/TextLabel" />
+<!--                <com.google.android.material.textfield.TextInputEditText-->
+<!--                    android:id="@+id/phoneNumberCheck_textview_input_edit_text"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:textAppearance="@style/TextLabel" />-->
 
-                <Button
-                    android:id="@+id/phoneNumberCheck_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:text="확인" />
+<!--                <Button-->
+<!--                    android:id="@+id/phoneNumberCheck_button"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_gravity="end"-->
+<!--                    android:text="확인" />-->
 
-            </com.google.android.material.textfield.TextInputLayout>
+<!--            </com.google.android.material.textfield.TextInputLayout>-->
 
             <!--회원가입 버튼-->
             <Button

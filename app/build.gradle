@@ -25,8 +25,10 @@ android {
     buildFeatures {
         // 뷰 바인딩 활성화
         viewBinding = true
+        // 데이터 바인딩 활성화
         dataBinding = true
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -37,6 +39,9 @@ android {
 }
 
 dependencies {
+
+
+
     implementation 'com.google.code.gson:gson:2.8.8'
 
     implementation 'androidx.core:core-ktx:1.6.0'
@@ -75,6 +80,9 @@ dependencies {
 
     /*웹뷰*/
     implementation 'androidx.webkit:webkit:1.4.0'
+
+    //데이터바인딩
+    implementation "androidx.databinding:databinding-runtime:3.5.0"
 }
 
 // Kotlin Android Extensions 플러그인 적용

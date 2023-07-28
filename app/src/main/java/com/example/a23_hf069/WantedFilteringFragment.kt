@@ -1,82 +1,73 @@
 package com.example.a23_hf069
 
-import android.content.Context
-import android.content.Intent
-import android.os.AsyncTask
 import android.os.Build
 import android.os.Bundle
+import android.util.Xml
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import android.widget.Button
-import android.widget.ImageView
-import android.widget.ListView
+import android.widget.CheckBox
 import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import com.example.a23_hf069.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import okhttp3.*
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserFactory
-import java.io.InputStream
-import java.net.HttpURLConnection
-import java.net.URL
+import java.io.IOException
+import java.io.StringReader
+import java.text.SimpleDateFormat
 import java.time.LocalDate
-
+import java.time.format.DateTimeFormatter
+import java.util.*
 
 class WantedFilteringFragment : Fragment() {
-    private lateinit var jobList: List<Job>
-    private lateinit var jobListView: ListView
-    private var filteredJobListGlobal: List<Job> = emptyList() // 전역 변수로 선언
 
-    private val sharedSelectionViewModel: SharedSelectionViewModel by activityViewModels()
-
+    private val baseUrl =
+        "http://openapi.work.go.kr/opi/opi/opia/wantedApi.do?authKey=WNLJYZLM2VZXTT2TZA9XR2VR1HK&callTp=L&returnType=XML&startPage=1&display=10"
+    //지역,직종
     lateinit var regioncl_btn: Button
     lateinit var jobcl_btn: Button
     lateinit var tv_jobcl_selected: TextView
     lateinit var tv_regioncl_selected: TextView
+    //학력
+    lateinit var cbAllEdu: CheckBox // 학력무관
+    lateinit var cbElementaryEdu:CheckBox //초졸 = 학력무관
+    lateinit var cbMiddleEdu:CheckBox //중졸 = 학력무관
+    lateinit var cbHighEdu: CheckBox // 고졸
+    lateinit var cbUniv2: CheckBox // 대졸(2~3년)
+    lateinit var cbUniv4: CheckBox // 대졸(4년)
+    //경력
+    lateinit var cbAllCareer : CheckBox // 경력무관
+    lateinit var cbFresh : CheckBox // 신입
+    lateinit var cbExperienced : CheckBox // 경력
+    //마감일
+    lateinit var cbToday : CheckBox//오늘까지
+    lateinit var cbTomorrow : CheckBox//내일까지
+    lateinit var cb7days : CheckBox//일주일 이내
+    lateinit var cb30days : CheckBox//한달 이내
+    lateinit var cb60days : CheckBox//두달 이내
 
-    lateinit var edu_btn1: Button
-    lateinit var edu_btn2: Button
-    lateinit var edu_btn3: Button
-    lateinit var edu_btn4: Button
-    lateinit var edu_btn5: Button
-    lateinit var edu_btn6: Button
+    private lateinit var wantedList: List<Wanted>
+    private val sharedSelectionViewModel: SharedSelectionViewModel by activityViewModels()
 
-    lateinit var career_btn1: Button
-    lateinit var career_btn2: Button
-    lateinit var career_btn3: Button
-
-    lateinit var closeDt_btn1: Button
-    lateinit var closeDt_btn2: Button
-    lateinit var closeDt_btn3: Button
-    lateinit var closeDt_btn4: Button
-    lateinit var closeDt_btn5: Button
-    lateinit var closeDt_btn6: Button
-
-    private var selectedEducation: Int = 0  // 0: 전체, 1: 초등학교, 2: 중학교, ...
-    private var selectedCareer: Int = 0  // 0: 전체, 1: 신입, 2: 경력
-    private var selectedCloseDate: Int = 0  // 0: 전체, 1: 1일 이내, 2: 3일 이내, ...
-
-    private val selectedEducationList: MutableSet<Int> = mutableSetOf()
-    private val selectedCareerList: MutableSet<Int> = mutableSetOf()
-    private val selectedCloseDateList: MutableSet<Int> = mutableSetOf()
-
-    lateinit var complete_btn1: Button //완료버튼
-
-    // 화면 띄우기
-    override fun onCreateView( // onCreateView 함수 오버라이드
+    override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-
     ): View? {
-        jobList = emptyList() // 초기화 추가
-        return inflater.inflate(R.layout.fragment_wanted_filtering, container, false)
+        val rootView = inflater.inflate(R.layout.fragment_wanted_filtering, container, false)
+        return rootView
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         //지역 선택
@@ -114,398 +105,343 @@ class WantedFilteringFragment : Fragment() {
         val selectedJob = sharedSelectionViewModel.selectedJob
         tv_jobcl_selected.text = selectedJob
 
-        //학력 체크
-        edu_btn1 = view.findViewById<Button>(R.id.cb_e_1) //전체
-        edu_btn2 = view.findViewById<Button>(R.id.cb_e_2) //초등학교
-        edu_btn3 = view.findViewById<Button>(R.id.cb_e_3)  //중학교
-        edu_btn4 = view.findViewById<Button>(R.id.cb_e_4)  //고등학교
-        edu_btn5 = view.findViewById<Button>(R.id.cb_e_5)  //대학(2년제)
-        edu_btn6 = view.findViewById<Button>(R.id.cb_e_6)  //대학(4년제)
+        // CheckBox 변수들을 초기화
+        cbAllCareer = view.findViewById(R.id.cb_c_1)
+        cbFresh = view.findViewById(R.id.cb_c_2)
+        cbExperienced = view.findViewById(R.id.cb_c_3)
 
-        //경력 체크
-        career_btn1 = view.findViewById<Button>(R.id.cb_c_1)  //전체
-        career_btn2 = view.findViewById<Button>(R.id.cb_c_2)  //신입
-        career_btn3 = view.findViewById<Button>(R.id.cb_c_3) //경력
+        cbAllEdu = view.findViewById(R.id.cb_e_1)
+        cbElementaryEdu = view.findViewById(R.id.cb_e_2)
+        cbMiddleEdu = view.findViewById(R.id.cb_e_3)
+        cbHighEdu = view.findViewById(R.id.cb_e_4)
+        cbUniv2 = view.findViewById(R.id.cb_e_5)
+        cbUniv4 = view.findViewById(R.id.cb_e_6)
 
-        //마감일 체크
-        closeDt_btn1 = view.findViewById<Button>(R.id.cb_d_1)
-        closeDt_btn2 = view.findViewById<Button>(R.id.cb_d_2)
-        closeDt_btn3 = view.findViewById<Button>(R.id.cb_d_3)
-        closeDt_btn4 = view.findViewById<Button>(R.id.cb_d_4)
-        closeDt_btn5 = view.findViewById<Button>(R.id.cb_d_5)
-        closeDt_btn6 = view.findViewById<Button>(R.id.cb_d_6)
+        cbToday = view.findViewById(R.id.cb_d_2)
+        cbTomorrow = view.findViewById(R.id.cb_d_3)
+        cb7days = view.findViewById(R.id.cb_d_4)
+        cb30days = view.findViewById(R.id.cb_d_5)
+        cb60days = view.findViewById(R.id.cb_d_6)
 
-    // 학력 버튼 클릭 리스너
-        edu_btn1.setOnClickListener { SelectedEducation(0) }  // 전체
-        edu_btn2.setOnClickListener { SelectedEducation(1) }  // 초등학교
-        edu_btn3.setOnClickListener { SelectedEducation(2) }  // 중학교
-        edu_btn4.setOnClickListener { SelectedEducation(3) }  // 고등학교
-        edu_btn5.setOnClickListener { SelectedEducation(4) }  // 대학(2년제)
-        edu_btn6.setOnClickListener { SelectedEducation(5) }  // 대학(4년제)
+        // 선택한 지역 혹은 직종에 해당하는 채용공고 리스트 가져오기
+        // ------ 지역 ----------------
+        fetchWantedList("region",selectedRegion)
 
-        // 경력 버튼 클릭 리스너
-        career_btn1.setOnClickListener { SelectedCareer(0) }  // 전체
-        career_btn2.setOnClickListener { SelectedCareer(1) }  // 신입
-        career_btn3.setOnClickListener { SelectedCareer(2) }  // 경력
+        // ------ 직종 ----------------
 
-        // 마감일 버튼 클릭 리스너
-        closeDt_btn1.setOnClickListener { SelectedCloseDate(0) }  // 전체
-        closeDt_btn2.setOnClickListener { SelectedCloseDate(1) }  // 오늘
-        closeDt_btn3.setOnClickListener { SelectedCloseDate(2) }  // 내일
-        closeDt_btn4.setOnClickListener { SelectedCloseDate(3) }  // 1주이내
-        closeDt_btn5.setOnClickListener { SelectedCloseDate(4) }  // 30일 이내
-        closeDt_btn6.setOnClickListener { SelectedCloseDate(5) }  // 30일 이상
 
-        //완료버튼 누르면 필터링된 공고를 WantedFilteredFragment로 전환
-        complete_btn1 = view.findViewById<Button>(R.id.complete_btn1)
-        complete_btn1.setOnClickListener {
-            val fetchJobData = FetchJobData()
-            fetchJobData.execute("http://openapi.work.go.kr/opi/opi/opia/wantedApi.do?authKey=WNLJYZLM2VZXTT2TZA9XR2VR1HK&callTp=L&returnType=XML&startPage=1&display=10")
+        // 각 CheckBox에 리스너를 등록하여 박스 선택시 이벤트를 처리
+        // ------ 경력 ----------------
+        cbAllCareer.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                fetchWantedList("career","관계없음")            }
+        }
+        cbFresh.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                fetchWantedList("career","관계없음")
+            }
+        }
+        cbExperienced.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                fetchWantedList("career","경력")            }
+        }
 
-        // 새로운 리스트를 생성하여 필터링된 항목을 저장
-            val filteredJobList = fetchJobData.get().toMutableList()
+        // ------ 학력 ----------------
+        cbAllEdu.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                fetchWantedList("edu","학력무관")            }
+        }
+        cbElementaryEdu.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                fetchWantedList("edu","학력무관")            }
+        }
+        cbMiddleEdu.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                fetchWantedList("edu","학력무관")            }
+        }
+        cbHighEdu.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                fetchWantedList("edu","고졸")            }
+        }
+        cbUniv2.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                fetchWantedList("edu","대졸(2~3년)")            }
+        }
+        cbUniv4.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                fetchWantedList("edu","대졸(4년)")            }
+        }
+        //-----------마감일------------------------
+        cbToday.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                fetchWantedList("closeDt","today")            }
+        }
+        cbTomorrow.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                fetchWantedList("closeDt","tomorrow")            }
+        }
+        cb7days.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                fetchWantedList("closeDt","7days")            }
+        }
+        cb30days.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                fetchWantedList("closeDt","30days")            }
+        }
+        cb60days.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                fetchWantedList("closeDt","60days")            }
+        }
 
-        // WantedFilteredFragment로 전달
-            val wantedFilteredFragment = WantedFilteredFragment()
-            val args = Bundle()
-            args.putParcelableArrayList("filteredJobList", ArrayList(filteredJobList))
-            wantedFilteredFragment.arguments = args
-
-            requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.fl_container, wantedFilteredFragment)
-                .addToBackStack(null)
-                .commit()
-        } //만약 조건선택이 완료되지 않은 채 완료버튼을 눌렀다면? ->
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun SelectedEducation(selected: Int) {
-        //전체 체크해놓고 다른거 같이 체크했을때
-        if (selectedEducation == 0 || selected > selectedEducation) {
-            selectedEducationList.clear()
-            selectedEducationList.add(0)
-            filterItems()
-        }
-        // 1번이나 2번이 선택되었을 때(혹은 1,2 둘다), 0번과 같은 결과를 출력(초졸, 중졸은 학력무관과 마찬가지)
-       else if (selectedEducation == 1 || selectedEducation == 2) {
-            selectedEducationList.clear()
-            selectedEducationList.add(0)
-            filterItems()
-       }
-        else { // 그 외의 경우 선택된 버튼 중 가장 작은 값을 선택(ex. 고졸+대졸 => 고졸)
-                val min = minOf(selectedEducation, selected)
-                selectedEducationList.clear()
-                selectedEducationList.add(min)
-                filterItems()
-            }
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun SelectedCareer(selected: Int) {
-        //전체 체크된 상태로 다른도 on
-        if (selectedCareer == 0 || selected > selectedCareer) {
-            selectedCareerList.clear()
-            selectedCareerList.add(0)
-            filterItems()
-        }else if(selectedCareerList.contains(1) && selectedCareerList.contains(2)){ //신입 경력 둘다눌렸을때 => 전체
-            selectedCareerList.clear()
-            selectedCareerList.add(0)
-            filterItems()
-        }else{
-            selectedCareerList.add(selected)
-            filterItems()
-        }
-        filterItems()
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun SelectedCloseDate(selected: Int) {
-        if (selectedCloseDate == 0 || selected > selectedCloseDate) {
-            selectedCloseDate = selected
-        }
-        filterItems()
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun filterItems() {
-        // 선택한 조건에 따라 필터링된 항목을 리스트에 저장(중복값을 찾기위해)
-        val filteredEducationList =
-            if (selectedEducationList.isEmpty()) listOf(0) else selectedEducationList
-        val filteredCareerList = if (selectedCareerList.isEmpty()) listOf(0) else selectedCareerList
-        val filteredCloseDateList =
-            if (selectedCloseDateList.isEmpty()) listOf(0) else selectedCloseDateList
-
-        // 기존의 parseXml 함수와 비슷한 방식으로 필터링된 jobList를 구성합니다.
-        val filteredJobList = jobList.filter { job ->
-            val convertedEducationList = filteredEducationList.map { value ->
-                when (value) {
-                    0 -> "00"
-                    1 -> "01"
-                    2 -> "02"
-                    3 -> "03"
-                    4 -> "04"
-                    5 -> "05"
-                    else -> ""
-                }
-            }
-            val convertedCareerList = filteredCareerList.map { value ->
-                when (value) {
-                    0 -> "N"
-                    1 -> "E"
-                    2 -> "Z"
-                    else -> ""
-                }
+    // 카테고리와 키워드에 해당하는 채용공고 가져오기
+    private fun fetchWantedList(category:String?,keyword: String?){
+        val client = OkHttpClient()
+        val request = Request.Builder()
+            .url("$baseUrl")
+            .build()
+        var result: List<Wanted> = emptyList()
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                println(e.printStackTrace())
             }
 
-            val convertedCloseDateList = filteredCloseDateList.map { value ->
-                val today = LocalDate.now()
-                val deadlineDate = when (value) {
-                    0 -> today // 오늘
-                    1 -> today.plusDays(1) // 내일
-                    2 -> today.plusDays(7) // 1주 이내
-                    3 -> today.plusMonths(1) // 한달 이내
-                    4 -> today.plusMonths(1) // 한달 이상
-                    else -> today // 기본값은 오늘로 설정
-                }
-                deadlineDate.toString() // 날짜를 문자열로 변환하여 반환
-            }
-            convertedEducationList.contains(job.minEdubg) &&
-                    convertedCareerList.contains(job.career) &&
-                    convertedCloseDateList.contains(job.closeDt)
-        }
-
-        // 필터링된 데이터를 전역 변수에 저장합니다.
-        filteredJobListGlobal = filteredJobList
-
-        // 필터링된 데이터로 화면을 갱신합니다.
-        showFilteredJobList()
-    }
-
-    //워크넷 api 채용목록 xml파일 parsing하는 코드
-    private inner class FetchJobData : AsyncTask<String, Void, List<Job>>() {
-        override fun doInBackground(vararg urls: String): List<Job> {
-            val urlString = urls[0]
-            var result: List<Job> = emptyList()
-            var connection: HttpURLConnection? = null
-            var filteredJobList: List<Job> = emptyList() // filteredJobList를 지역 변수로 선언
-
-            try {
-                val url = URL(urlString)
-                connection = url.openConnection() as HttpURLConnection
-                connection.requestMethod = "GET"
-                connection.readTimeout = 15 * 1000
-                connection.connectTimeout = 15 * 1000
-
-                val responseCode = connection.responseCode
-                if (responseCode == HttpURLConnection.HTTP_OK) {
-                    val inputStream = connection.inputStream
-                    result = parseXml(inputStream)
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-            } finally {
-                connection?.disconnect()
-            }
-            return filteredJobList // 여기서 반환
-        }
-
-        @RequiresApi(Build.VERSION_CODES.O)
-        override fun onPostExecute(result: List<Job>) {
-            super.onPostExecute(result)
-            // jobList에 데이터 할당
-            jobList = result
-            // 필터링된 데이터로 화면을 갱신합니다.
-            filterItems()
-        }
-
-        private fun parseXml(inputStream: InputStream): List<Job> {
-            val jobList = mutableListOf<Job>()
-            val factory = XmlPullParserFactory.newInstance()
-            val xpp = factory.newPullParser()
-            xpp.setInput(inputStream, null)
-
-            var eventType = xpp.eventType
-            var company: String? = null // 회사명
-            var title: String? = null // 채용제목
-            var salTpNm: String? = null // 임금형태
-            var sal: String? = null // 급여
-            var region: String? = null // 근무지역
-            var holidayTpNm: String? = null // 근무형태
-            var minEdubg: String? = null // 최소학력
-            var career: String? = null // 경력
-            var closeDt: String? = null // 마감일자
-            var wantedMobileInfoUrl: String? = null // 워크넷 모바일 채용정보 URL
-            var jobsCd: String? = null // 직종코드
-
-            while (eventType != XmlPullParser.END_DOCUMENT) {
-                when (eventType) {
-                    XmlPullParser.START_TAG -> {
-                        when (xpp.name) {
-                            "company" -> company = xpp.nextText()
-                            "title" -> title = xpp.nextText()
-                            "salTpNm" -> salTpNm = xpp.nextText()
-                            "sal" -> sal = xpp.nextText()
-                            "region" -> region = xpp.nextText()
-                            "holidayTpNm" -> holidayTpNm = xpp.nextText()
-                            "minEdubg" -> minEdubg = xpp.nextText()
-                            "career" -> career = xpp.nextText()
-                            "closeDt" -> closeDt = xpp.nextText()
-                            "wantedMobileInfoUrl" -> wantedMobileInfoUrl = xpp.nextText()
-                            "jobsCd" -> jobsCd = xpp.nextText()
-                        }
-                    }
-                    XmlPullParser.END_TAG -> {
-                        if (xpp.name == "wanted") {
-                            company?.let { c ->
-                                title?.let { t ->
-                                    jobList.add(
-                                        Job(
-                                            c, t, salTpNm, sal, region, holidayTpNm,
-                                            minEdubg, career, closeDt, wantedMobileInfoUrl, jobsCd
-                                        )
-                                    )
-                                }
+            @RequiresApi(Build.VERSION_CODES.O)
+            override fun onResponse(call: Call, response: Response) {
+                if (response.isSuccessful) {
+                    val xmlString = response.body?.string()
+                    result = parseXmlResponse(xmlString) // parsing하기
+                    wantedList = result
+                    if(category == "region") {
+                        for (i in wantedList) {
+                            if (i.region == keyword) {
+                                println(i.region)
+                                println(i.company)
+                                println(i.title)
+                                println("-------------------")
                             }
-                            company = null
-                            title = null
-                            salTpNm = null
-                            sal = null
-                            region = null
-                            holidayTpNm = null
-                            minEdubg = null
-                            career = null
-                            closeDt = null
-                            wantedMobileInfoUrl = null
-                            jobsCd = null
                         }
                     }
+//                    else if(category == "job"){
+//
+//                    }
+                    else if(category=="edu"){
+                        for(i in wantedList){
+                            if(i.minEdubg == keyword){
+                                println(i.minEdubg)
+                                println(i.company)
+                                println(i.title)
+                                println("-------------------")
+                            }
+
+                        }
+                    }
+                    else if(category=="career"){
+                        for(i in wantedList){
+                            if(i.career == keyword){
+                                println(i.career)
+                                println(i.company)
+                                println(i.title)
+                                println("-------------------")
+                            }
+
+                        }
+                    }
+                    else if(category == "closeDt"){
+                        val formatter = DateTimeFormatter.ofPattern("yy-MM-dd")
+
+                        val today = LocalDate.now()
+                        val formattedToday=formatter.format(today)
+                        val after1Day = formatter.format(today.plusDays(1))
+                        val after7Days = formatter.format(today.plusDays(7))
+                        val after30Days = formatter.format(today.plusMonths(1))
+                        val after60Days = formatter.format(today.plusMonths(2))
+
+                        fun parseDate(dateString: String): LocalDate? {
+                            return try {
+                                LocalDate.parse(dateString, formatter)
+                            } catch (e: Exception) {
+                                e.printStackTrace()
+                                null
+                            }
+                        }
+
+                        val todayDate = parseDate(formattedToday)
+                        val after1DayDate = parseDate(after1Day)
+                        val after7DaysDate = parseDate(after7Days)
+                        val after30DaysDate = parseDate(after30Days)
+                        val after60DaysDate = parseDate(after60Days)
+
+                        if(keyword == "today"){ // 오늘까지인 공고 찾기 => 공고 마감일 = 오늘 날짜
+                            for(i in wantedList){
+                                val a = i.closeDt
+                                // 한글과 공백을 제거하고 순수한 날짜 포맷만 추출
+                                val closeDt = a?.replace(Regex("[채용시까지\\s]"), "")
+                                if (closeDt != null){
+                                    val closeDtDate = parseDate(closeDt)
+                                    if(closeDtDate == todayDate){
+                                        println(i.closeDt)
+                                        println(i.company)
+                                        println(i.title)
+                                        println("----------------")
+                                    }}
+                            }
+                        }
+                        else if(keyword == "tomorrow"){ // 내일까지인 공고 찾기 => 공고 마감일 < 오늘 날짜 + 1
+                            for(i in wantedList){
+                                val a = i.closeDt
+                                // 한글과 공백을 제거하고 순수한 날짜 포맷만 추출
+                                val closeDt = a?.replace(Regex("[채용시까지\\s]"), "")
+                                if (closeDt != null){
+                                    val closeDtDate = parseDate(closeDt)
+                                    if(closeDtDate == after1DayDate){
+                                        println(i.closeDt)
+                                        println(i.company)
+                                        println(i.title)
+                                        println("----------------")
+                                    }}
+                            }
+                        }
+                        else if(keyword == "7days"){ // 일주일 이내인 공고 찾기 => 공고 마감일 < 오늘 날짜 + 7
+                            for(i in wantedList){
+                                val a = i.closeDt
+                                // 한글과 공백을 제거하고 순수한 날짜 포맷만 추출
+                                val closeDt = a?.replace(Regex("[채용시까지\\s]"), "")
+                                if (closeDt != null){
+                                    val closeDtDate = parseDate(closeDt)
+                                    todayDate?.let { today ->
+                                        after7DaysDate?.let { after7 ->
+                                            if(closeDtDate!! in todayDate..after7){
+                                                println(i.closeDt)
+                                                println(i.company)
+                                                println(i.title)
+                                                println("----------------")
+                                            }}}}
+                            }
+                        }
+                        else if(keyword == "30days"){ // 한달 이내인 공고 찾기 => 공고 마감일 < 오늘 날짜 + 30
+                            for(i in wantedList){
+                                val a = i.closeDt
+                                // 한글과 공백을 제거하고 순수한 날짜 포맷만 추출
+                                val closeDt = a?.replace(Regex("[채용시까지\\s]"), "")
+                                if (closeDt != null){
+                                    val closeDtDate = parseDate(closeDt)
+                                    todayDate?.let { today ->
+                                        after30DaysDate?.let { after30 ->
+                                            if(closeDtDate!! in todayDate..after30){
+                                                println(i.closeDt)
+                                                println(i.company)
+                                                println(i.title)
+                                                println("----------------")
+                                            }}}}
+                            }
+                        }
+                        else{ // 두달 이내인 공고 찾기 => 공고 마감일 < 오늘 날짜 + 30
+                            for(i in wantedList){
+                                val a = i.closeDt
+                                // 한글과 공백을 제거하고 순수한 날짜 포맷만 추출
+                                val closeDt = a?.replace(Regex("[채용시까지\\s]"), "")
+                                if (closeDt != null){
+                                    val closeDtDate = parseDate(closeDt)
+                                    todayDate?.let { today ->
+                                        after60DaysDate?.let { after60 ->
+                                            if(closeDtDate!! in todayDate..after60){
+                                                println(i.closeDt)
+                                                println(i.company)
+                                                println(i.title)
+                                                println("----------------")
+                                            }}}}
+                            }
+                        }
+                    }
+
+                } else {
+                    showErrorToast()
                 }
-                eventType = xpp.next()
             }
-
-            return jobList
-        }
-
-        //각각의 리스트에서 추출된 값을 파싱된 xml파일과 대조 -> 중복 건 찾기
-        @RequiresApi(Build.VERSION_CODES.O)
-        private fun isJobMatched(job: Job): Boolean {
-            val convertedEducationList = listOf(
-                "00", "01", "02", "03", "04", "05"
-            ) // 전체, 초등학교, 중학교, 고등학교, 대학(2년제), 대학(4년제)
-            val convertedCareerList = listOf(
-                "N", "E", "Z"
-            ) // 전체, 신입, 경력
-            val convertedCloseDateList = listOf(
-                LocalDate.now().toString(), // 오늘
-                LocalDate.now().plusDays(1).toString(), // 내일
-                LocalDate.now().plusDays(7).toString(), // 1주 이내
-                LocalDate.now().plusMonths(1).toString(), // 한달 이내
-                LocalDate.now().plusMonths(1).plusDays(1).toString() // 한달 이상
-            )
-
-            return convertedEducationList.contains(job.minEdubg) &&
-                    convertedCareerList.contains(job.career) &&
-                    convertedCloseDateList.contains(job.closeDt)
-        }
+        })
 
     }
 
-    private fun showFilteredJobList() {
-        if (::jobListView.isInitialized) {
-            val adapter = CustomAdapter3(requireActivity(), filteredJobListGlobal)
-            jobListView.adapter = adapter
+    data class Wanted(
+        var wantedAuthNo: String? = null,
+        var company: String? = null,
+        var title: String? = null,
+        var salTpNm: String? = null,
+        var sal: String? = null,
+        var region: String? = null,
+        var holidayTpNm: String? = null,
+        var minEdubg: String? = null,
+        var career: String? = null,
+        var closeDt: String? = null,
+        var basicAddr: String? = null,
+        var detailAddr: String? = null
+    )
 
-            jobListView.setOnItemClickListener { _, _, position, _ ->
-                val job = filteredJobListGlobal[position]
-                val intent = JobDetailActivity3.newIntent(requireContext(), job)
-                startActivity(intent)
+    private fun parseXmlResponse(xmlResponse: String?): List<Wanted> {
+        val wantedList = mutableListOf<Wanted>()
+        val factory = XmlPullParserFactory.newInstance()
+        val xpp = factory.newPullParser()
+        xpp.setInput(StringReader(xmlResponse))
+
+        var eventType = xpp.eventType
+        var wantedAuthNo: String? = null
+        var company: String? = null
+        var title: String? = null
+        var salTpNm: String? = null
+        var sal: String? = null
+        var region: String? = null
+        var holidayTpNm: String? = null
+        var minEdubg: String? = null
+        var career: String? = null
+        var closeDt: String? = null
+        var basicAddr: String? = null
+        var detailAddr: String? = null
+
+        while (eventType != XmlPullParser.END_DOCUMENT) {
+            when (eventType) {
+                XmlPullParser.START_TAG -> {
+                    when (xpp.name) {
+                        "wantedAuthNo" -> wantedAuthNo = xpp.nextText()
+                        "company" -> company = xpp.nextText()
+                        "title" -> title = xpp.nextText()
+                        "salTpNm" -> salTpNm = xpp.nextText()
+                        "sal" -> sal = xpp.nextText()
+                        "region" -> region = xpp.nextText()
+                        "holidayTpNm" -> holidayTpNm = xpp.nextText()
+                        "minEdubg" -> minEdubg = xpp.nextText()
+                        "career" -> career = xpp.nextText()
+                        "closeDt" -> closeDt = xpp.nextText()
+                        "basicAddr" -> basicAddr = xpp.nextText()
+                        "detailAddr" -> detailAddr = xpp.nextText()
+                    }
+                }
+
+                XmlPullParser.END_TAG -> {
+                    if (xpp.name == "wanted") {
+                        wantedList.add(Wanted(wantedAuthNo,company,title,salTpNm,sal, region, holidayTpNm, minEdubg, career, closeDt, basicAddr, detailAddr))
+                        wantedAuthNo = null
+                        company = null
+                        title = null
+                        salTpNm = null
+                        sal = null
+                        region = null
+                        holidayTpNm = null
+                        minEdubg = null
+                        career = null
+                        closeDt = null
+                        basicAddr = null
+                        detailAddr = null
+                    }
+                }
             }
-        }
+            eventType = xpp.next()
+        } // while문 종료
+        return wantedList
+    }
+
+    private fun showErrorToast() {
+        Toast.makeText(requireContext(), "Failed to fetch wanted list.", Toast.LENGTH_SHORT).show()
     }
 }
-
-class CustomAdapter3(private val context3: Context, private val jobList: List<Job>) :
-    ArrayAdapter<Job>(context3, R.layout.job_item, jobList) {
-
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val view =
-            convertView ?: LayoutInflater.from(context3).inflate(R.layout.job_item, parent, false)
-
-        val job = jobList[position]
-
-        val titleTextView: TextView = view.findViewById(R.id.titleTextView)
-        val companyTextView: TextView = view.findViewById(R.id.companyTextView)
-        val regionContTextView: TextView = view.findViewById(R.id.regionContTextView)
-
-        titleTextView.text = job.title
-        companyTextView.text = job.company
-        regionContTextView.text = job.region
-
-        return view
-    }
-}
-
-class JobDetailActivity3 : AppCompatActivity() {
-    private lateinit var backButton: ImageView
-    private lateinit var company: TextView // 회사명
-    private lateinit var title: TextView // 제목
-    private lateinit var salTpNm: TextView // 임금형태
-    private lateinit var sal: TextView // 급여
-    private lateinit var region: TextView // 근무지역
-    private lateinit var holidayTpNm: TextView // 근무형태
-    private lateinit var minEdubg: TextView // 최소학력
-    private lateinit var career: TextView // 경력
-    private lateinit var closeDt: TextView // 마감일자
-    private lateinit var wantedMobileInfoUrl: TextView // 워크넷 모바일 채용정보 URL
-    private lateinit var jobsCd: TextView // 직종코드
-
-    companion object {
-        private const val JOB_EXTRA = "job"
-
-        fun newIntent(context2: Context, job: Job): Intent {
-            return Intent(context2, JobDetailActivity3::class.java).apply {
-                putExtra(JOB_EXTRA, job)
-            }
-        }
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_job_detail)
-
-        // 기본 툴바 숨기기
-        supportActionBar?.hide()
-
-        backButton = findViewById(R.id.backButton_notice)
-        company = findViewById(R.id.company)
-        title = findViewById(R.id.title)
-        salTpNm = findViewById(R.id.salTpNm)
-        sal = findViewById(R.id.sal)
-        region = findViewById(R.id.region)
-        holidayTpNm = findViewById(R.id.holidayTpNm)
-        minEdubg = findViewById(R.id.minEdubg)
-        career = findViewById(R.id.career)
-        closeDt = findViewById(R.id.closeDt)
-        wantedMobileInfoUrl = findViewById(R.id.wantedMobileInfoUrl)
-        jobsCd = findViewById(R.id.jobsCd)
-
-        val job = intent.getParcelableExtra<Job>(JOB_EXTRA)
-
-        company.text = job?.company
-        title.text = job?.title
-        salTpNm.text = job?.salTpNm
-        sal.text = job?.sal
-        region.text = job?.region
-        holidayTpNm.text = job?.holidayTpNm
-        minEdubg.text = job?.minEdubg
-        career.text = job?.career
-        closeDt.text = job?.closeDt
-        wantedMobileInfoUrl.text = job?.wantedMobileInfoUrl
-        jobsCd.text = job?.jobsCd
-
-        backButton.setOnClickListener {
-            onBackPressed()
-        }
-    }
-
-    }

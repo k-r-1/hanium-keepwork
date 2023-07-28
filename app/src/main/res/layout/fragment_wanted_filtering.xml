@@ -151,7 +151,9 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="40dp"
-            android:text="전체" />
+            android:text="전체"
+
+            />
 
         <CheckBox
             android:id="@+id/cb_e_2"
@@ -159,7 +161,9 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="40dp"
-            android:text="초등학교 졸" />
+            android:text="초등학교 졸"
+
+            />
 
         <CheckBox
             android:id="@+id/cb_e_3"
@@ -167,7 +171,9 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="40dp"
-            android:text="중학교 졸" />
+            android:text="중학교 졸"
+
+            />
     </LinearLayout>
 
     <LinearLayout
@@ -181,7 +187,9 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="45dp"
             android:layout_marginTop="10dp"
-            android:text="고등학교 졸" />
+            android:text="고등학교 졸"
+
+            />
 
         <CheckBox
             android:id="@+id/cb_e_5"
@@ -189,7 +197,9 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
-            android:text="대학(2년제)" />
+            android:text="대학(2년제)"
+
+            />
 
         <CheckBox
             android:id="@+id/cb_e_6"
@@ -197,7 +207,9 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
-            android:text="대학(4년제)" />
+            android:text="대학(4년제)"
+
+            />
     </LinearLayout>
 
     <LinearLayout
@@ -221,19 +233,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:text="전체" />
+            android:text="전체"
+
+            />
 
         <CheckBox
             android:id="@+id/cb_c_2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="신입" />
+            android:text="신입"
+            />
 
         <CheckBox
             android:id="@+id/cb_c_3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="경력" />
+            android:text="경력"
+            />
     </LinearLayout>
 
     <LinearLayout
@@ -257,19 +273,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:text="전체" />
+            android:text="전체"
+
+            />
 
         <CheckBox
             android:id="@+id/cb_d_2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="오늘" />
+            android:text="오늘"
+            />
 
         <CheckBox
             android:id="@+id/cb_d_3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="내일" />
+            android:text="내일"
+            />
     </LinearLayout>
 
     <LinearLayout
@@ -283,21 +303,27 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="60dp"
-            android:text="1주 이내" />
+            android:text="1주 이내"
+
+            />
 
         <CheckBox
             android:id="@+id/cb_d_5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:text="한달 이내" />
+            android:text="한달 이내"
+
+            />
 
         <CheckBox
             android:id="@+id/cb_d_6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:text="한달 이상" />
+            android:text="한달 이상"
+
+            />
     </LinearLayout>
 
 

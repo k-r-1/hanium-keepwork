@@ -55,7 +55,7 @@ class WantedWorkNetSearchFragment : Fragment() {
             return@setOnTouchListener false
         }
 
-        val closeButton = rootView.findViewById<ImageButton>(R.id.backButton_notice)
+        val closeButton = rootView.findViewById<ImageButton>(R.id.backButton)
         closeButton.setOnClickListener {
             requireActivity().onBackPressed()
         }

@@ -13,7 +13,7 @@ class WantedRequestingSearchFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         val rootView = inflater.inflate(R.layout.fragment_wanted_requesting_search, container, false)
 
-        val closeButton = rootView.findViewById<ImageButton>(R.id.backButton_notice)
+        val closeButton = rootView.findViewById<ImageButton>(R.id.backButton)
         closeButton.setOnClickListener {
             requireActivity().onBackPressed()
         }

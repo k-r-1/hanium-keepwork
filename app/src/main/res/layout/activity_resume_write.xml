@@ -15,7 +15,7 @@
         android:background="?attr/colorPrimary">
 
         <ImageButton
-            android:id="@+id/backButton_notice"
+            android:id="@+id/backButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start|center_vertical"
@@ -52,7 +52,7 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/tvWrite_line1"
+                        android:id="@+id/tvEdit_memberinfo_line6"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="3dp"
@@ -140,7 +140,7 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/tvWrite_line5"
+                            android:id="@+id/tvEdit_memberinfo_line1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginRight="3dp"
@@ -183,7 +183,7 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/tvWrite_line6"
+                            android:id="@+id/tvEdit_memberinfo_line2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginRight="3dp"
@@ -225,7 +225,7 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/tvWrite_line7"
+                            android:id="@+id/tvEdit_memberinfo_line3"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginRight="3dp"
@@ -309,7 +309,7 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/tvWrite_line9"
+                            android:id="@+id/tvEdit_memberinfo_line4"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginRight="3dp"
@@ -351,7 +351,7 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/tvWrite_line10"
+                            android:id="@+id/tvEdit_memberinfo_line5"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginRight="3dp"
@@ -361,7 +361,7 @@
                             android:textStyle="bold" />
 
                         <TextView
-                            android:id="@+id/tvWrite_desire"
+                            android:id="@+id/tvEdit_memberinfo_address"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="2dp"
@@ -387,7 +387,7 @@
                     android:orientation="horizontal">
 
                     <Button
-                        android:id="@+id/buttonSubmit_temporary_write"
+                        android:id="@+id/buttonSubmit_temporary_edit"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="5dp"
@@ -401,7 +401,7 @@
                         app:strokeWidth="4dp" />
 
                     <Button
-                        android:id="@+id/buttonSubmit_complete_write"
+                        android:id="@+id/buttonSubmit_complete_edit"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"

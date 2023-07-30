@@ -13,7 +13,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.a23_hf069.R
 import com.google.gson.Gson
 import okhttp3.*
 import org.json.JSONException
@@ -89,7 +88,7 @@ class NoticeActivity : AppCompatActivity() {
         // 사용자의 작성중 이력서 개수와 작성완료 이력서 개수를 업데이트
         fetchDataFromServer()
 
-        backButton_notice = findViewById(R.id.backButton_notice)
+        backButton_notice = findViewById(R.id.backButton)
 
         backButton_notice.setOnClickListener {
             finish()

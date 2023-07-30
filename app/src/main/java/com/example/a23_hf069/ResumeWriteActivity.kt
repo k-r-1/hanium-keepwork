@@ -11,7 +11,7 @@ import okhttp3.*
 import java.io.IOException
 
 class ResumeWriteActivity : AppCompatActivity() {
-    private var IP_ADDRESS = "3.34.136.178" // Replace with your IP address.
+    private var IP_ADDRESS = "3.34.126.115" // Replace with your IP address.
     private var userId: String = "" // User ID
     private lateinit var backButton: ImageButton
     private lateinit var editResumeTitle: EditText
@@ -35,7 +35,7 @@ class ResumeWriteActivity : AppCompatActivity() {
         val textID = findViewById<TextView>(R.id.tvWrite_ID)
         textID.text = userId
 
-        backButton = findViewById(R.id.backButton_notice)
+        backButton = findViewById(R.id.backButton)
         editTextAcademic = findViewById(R.id.edtWrite_academic)
         editResumeTitle = findViewById(R.id.edtWrite_title)
         editTextCareer = findViewById(R.id.edtWrite_career)
@@ -43,8 +43,8 @@ class ResumeWriteActivity : AppCompatActivity() {
         editTextCertificate = findViewById(R.id.edtWrite_certificate)
         editTextEducation = findViewById(R.id.edtWrite_education)
         editTextDesire = findViewById(R.id.edtWrite_desire)
-        buttonSubmit_temporary = findViewById(R.id.buttonSubmit_temporary_write) // 임시 저장 버튼
-        buttonSubmit_complete = findViewById(R.id.buttonSubmit_complete_write) // 작성 완료 버튼
+        buttonSubmit_temporary = findViewById(R.id.buttonSubmit_temporary_edit) // 임시 저장 버튼
+        buttonSubmit_complete = findViewById(R.id.buttonSubmit_complete_edit) // 작성 완료 버튼
 
         backButton.setOnClickListener {
             onBackPressed()

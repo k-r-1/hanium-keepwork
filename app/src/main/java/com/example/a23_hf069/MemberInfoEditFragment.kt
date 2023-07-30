@@ -13,7 +13,7 @@ class MemberInfoEditFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         val rootView = inflater.inflate(R.layout.fragment_member_info_edit, container, false)
 
-        val closeButton = rootView.findViewById<ImageButton>(R.id.backButton_notice)
+        val closeButton = rootView.findViewById<ImageButton>(R.id.backButton)
         closeButton.setOnClickListener {
             requireActivity().onBackPressed()
         }

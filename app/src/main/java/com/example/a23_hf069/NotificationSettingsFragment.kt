@@ -46,7 +46,7 @@ class NotificationSettingsFragment : Fragment() {
         listView.adapter = adapter
 
         // 닫기 버튼 클릭 이벤트 설정
-        val closeButton = rootView.findViewById<ImageView>(R.id.backButton_notice)
+        val closeButton = rootView.findViewById<ImageView>(R.id.backButton)
         closeButton.setOnClickListener {
             requireActivity().onBackPressed()
         }

@@ -27,6 +27,8 @@ class WantedFilteringFragment : Fragment() {
 
     private val baseUrl =
         "http://openapi.work.go.kr/opi/opi/opia/wantedApi.do?authKey=WNLJYZLM2VZXTT2TZA9XR2VR1HK&callTp=L&returnType=XML&startPage=1&display=10"
+    //완료 버튼
+    lateinit var complete_btn: Button
     //지역,직종
     lateinit var regioncl_btn: Button
     lateinit var jobcl_btn: Button
@@ -65,11 +67,20 @@ class WantedFilteringFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-        //지역 선택
+        //완료 버튼 초기화
+        complete_btn = view.findViewById<Button>(R.id.complete_btn1)
+        //지역 선택 초기화
         regioncl_btn = view.findViewById<Button>(R.id.regioncl_btn)
-        //직종 선택
+        //직종 선택 초기화
         jobcl_btn = view.findViewById<Button>(R.id.jobcl_btn)
+
+        complete_btn.setOnClickListener {
+            val wantedResultFragment = WantedResultFragment()
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.fl_container, wantedResultFragment)
+                .addToBackStack(null)
+                .commit()
+        }
 
         jobcl_btn.setOnClickListener {
             val jobSelectionFragment = JobWorkNetSelectionFragment()
@@ -210,17 +221,8 @@ class WantedFilteringFragment : Fragment() {
                     result = parseXmlResponse(xmlString) // parsing하기
                     wantedList = result
                     if (category == "region") {
-
                         val filteredList = wantedList.filter { it.region == keyword }
                         sharedSelectionViewModel.region_filteredList = filteredList // viewModel에 필터링된 리스트 저장
-
-                        for (i in filteredList) {
-                            println(i.region)
-                            println(i.company)
-                            println(i.title)
-                            println("-------------------")
-
-                        }
 
                     }
                     // if문 region 종료
@@ -229,24 +231,21 @@ class WantedFilteringFragment : Fragment() {
 //
 //                    }
                     else if (category == "edu") {
-                        for (i in wantedList) {
-                            if (i.minEdubg == keyword) {
-                                println(i.minEdubg)
-                                println(i.company)
-                                println(i.title)
-                                println("-------------------")
-                            }
-                        }
-                    } else if (category == "career") {
-                        for (i in wantedList) {
-                            if (i.career == keyword) {
-                                println(i.career)
-                                println(i.company)
-                                println(i.title)
-                                println("-------------------")
-                            }
+//                        for(i in wantedList){
+//                            if(keyword == i.minEdubg){
+//                                println(i.minEdubg)
+//                                println(i.company)
+//                                println(i.title)
+//                            }
+//                        }
+                        val filteredList = wantedList.filter { it.minEdubg == keyword }
+                        sharedSelectionViewModel.edu_filterdList = filteredList // viewModel에 필터링된 리스트 저장
+                    }
+                    else if (category == "career") {
+                        val filteredList = wantedList.filter { it.career == keyword }
+                        sharedSelectionViewModel.career_filterdList = filteredList // viewModel에 필터링된 리스트 저장
 
-                        }
+
                     } else if (category == "closeDt") {
                         val formatter = DateTimeFormatter.ofPattern("yy-MM-dd")
 
@@ -280,10 +279,8 @@ class WantedFilteringFragment : Fragment() {
                                 if (closeDt != null) {
                                     val closeDtDate = parseDate(closeDt)
                                     if (closeDtDate == todayDate) {
-                                        println(i.closeDt)
-                                        println(i.company)
-                                        println(i.title)
-                                        println("----------------")
+                                        val filteredList = wantedList.filter { it.closeDt == keyword }
+                                        sharedSelectionViewModel.closeDt_filterdList = filteredList // viewModel에 필터링된 리스트 저장
                                     }
                                 }
                             }
@@ -295,10 +292,8 @@ class WantedFilteringFragment : Fragment() {
                                 if (closeDt != null) {
                                     val closeDtDate = parseDate(closeDt)
                                     if (closeDtDate == after1DayDate) {
-                                        println(i.closeDt)
-                                        println(i.company)
-                                        println(i.title)
-                                        println("----------------")
+                                        val filteredList = wantedList.filter { it.closeDt == keyword }
+                                        sharedSelectionViewModel.closeDt_filterdList = filteredList // viewModel에 필터링된 리스트 저장
                                     }
                                 }
                             }
@@ -312,10 +307,8 @@ class WantedFilteringFragment : Fragment() {
                                     todayDate?.let { today ->
                                         after7DaysDate?.let { after7 ->
                                             if (closeDtDate!! in todayDate..after7) {
-                                                println(i.closeDt)
-                                                println(i.company)
-                                                println(i.title)
-                                                println("----------------")
+                                                val filteredList = wantedList.filter { it.closeDt == keyword }
+                                                sharedSelectionViewModel.closeDt_filterdList = filteredList // viewModel에 필터링된 리스트 저장
                                             }
                                         }
                                     }
@@ -331,10 +324,8 @@ class WantedFilteringFragment : Fragment() {
                                     todayDate?.let { today ->
                                         after30DaysDate?.let { after30 ->
                                             if (closeDtDate!! in todayDate..after30) {
-                                                println(i.closeDt)
-                                                println(i.company)
-                                                println(i.title)
-                                                println("----------------")
+                                                val filteredList = wantedList.filter { it.closeDt == keyword }
+                                                sharedSelectionViewModel.closeDt_filterdList = filteredList // viewModel에 필터링된 리스트 저장
                                             }
                                         }
                                     }
@@ -350,10 +341,8 @@ class WantedFilteringFragment : Fragment() {
                                     todayDate?.let { today ->
                                         after60DaysDate?.let { after60 ->
                                             if (closeDtDate!! in todayDate..after60) {
-                                                println(i.closeDt)
-                                                println(i.company)
-                                                println(i.title)
-                                                println("----------------")
+                                                val filteredList = wantedList.filter { it.closeDt == keyword }
+                                                sharedSelectionViewModel.closeDt_filterdList = filteredList // viewModel에 필터링된 리스트 저장
                                             }
                                         }
                                     }

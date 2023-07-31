@@ -8,12 +8,14 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.TextView
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+
 
 class WantedResultFragment : Fragment() {
     private lateinit var listView: ListView
-    private lateinit var sharedViewModel: SharedSelectionViewModel
+    //viewModel 생성 (단, var로 선언하면 안됨)
+    private val sharedSelectionViewModel: SharedSelectionViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,7 +35,14 @@ class WantedResultFragment : Fragment() {
 
     // ListView에 표시될 채용공고 목록을 업데이트하는 함수
     fun updateJobList() {
-        val adapter = WantedListAdapter(requireContext(), sharedViewModel.region_filteredList)
+        val filteredList = mutableListOf<WantedFilteringFragment.Wanted>()
+
+        filteredList.addAll(sharedSelectionViewModel.region_filteredList)
+        filteredList.addAll(sharedSelectionViewModel.edu_filterdList)
+        filteredList.addAll(sharedSelectionViewModel.career_filterdList)
+        filteredList.addAll(sharedSelectionViewModel.closeDt_filterdList)
+
+        val adapter = WantedListAdapter(requireContext(), filteredList)
         listView.adapter = adapter
     }
 
@@ -49,12 +58,12 @@ class WantedResultFragment : Fragment() {
 
             val titleTextView: TextView = itemView?.findViewById(R.id.tv_title) ?: throw NullPointerException("tv_title not found in the layout")
             val companyTextView: TextView = itemView?.findViewById(R.id.tv_company) ?: throw NullPointerException("tv_company not found in the layout")
-            val regionTextView: TextView = itemView?.findViewById(R.id.tv_any) ?: throw NullPointerException("tv_any not found in the layout")
+            val closeDtTextView: TextView = itemView?.findViewById(R.id.tv_any) ?: throw NullPointerException("tv_any not found in the layout")
 
             val currentItem = wantedList[position]
             titleTextView.text = currentItem.title
             companyTextView.text = currentItem.company
-            regionTextView.text = currentItem.region
+            closeDtTextView.text = currentItem.closeDt
 
             return itemView
         }

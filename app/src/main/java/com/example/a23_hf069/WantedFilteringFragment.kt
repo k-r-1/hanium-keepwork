@@ -1,30 +1,24 @@
 package com.example.a23_hf069
 
+
+import android.content.Context
 import android.os.Build
 import android.os.Bundle
-import android.util.Xml
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.CheckBox
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModelProvider
 import com.example.a23_hf069.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import okhttp3.*
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserFactory
 import java.io.IOException
 import java.io.StringReader
-import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -57,7 +51,7 @@ class WantedFilteringFragment : Fragment() {
     lateinit var cb60days : CheckBox//두달 이내
 
     private lateinit var wantedList: List<Wanted>
-    private val sharedSelectionViewModel: SharedSelectionViewModel by activityViewModels()
+    private val sharedSelectionViewModel: SharedSelectionViewModel by activityViewModels() // 필터링된 리스트를 전달하는 viewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -70,6 +64,8 @@ class WantedFilteringFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
         //지역 선택
         regioncl_btn = view.findViewById<Button>(R.id.regioncl_btn)
         //직종 선택
@@ -138,7 +134,7 @@ class WantedFilteringFragment : Fragment() {
         }
         cbFresh.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
-                fetchWantedList("career","관계없음")
+                fetchWantedList("career","신입")
             }
         }
         cbExperienced.setOnCheckedChangeListener { _, isChecked ->
@@ -213,33 +209,37 @@ class WantedFilteringFragment : Fragment() {
                     val xmlString = response.body?.string()
                     result = parseXmlResponse(xmlString) // parsing하기
                     wantedList = result
-                    if(category == "region") {
-                        for (i in wantedList) {
-                            if (i.region == keyword) {
-                                println(i.region)
-                                println(i.company)
-                                println(i.title)
-                                println("-------------------")
-                            }
+                    if (category == "region") {
+
+                        val filteredList = wantedList.filter { it.region == keyword }
+                        sharedSelectionViewModel.region_filteredList = filteredList // viewModel에 필터링된 리스트 저장
+
+                        for (i in filteredList) {
+                            println(i.region)
+                            println(i.company)
+                            println(i.title)
+                            println("-------------------")
+
                         }
+
                     }
+                    // if문 region 종료
+
 //                    else if(category == "job"){
 //
 //                    }
-                    else if(category=="edu"){
-                        for(i in wantedList){
-                            if(i.minEdubg == keyword){
+                    else if (category == "edu") {
+                        for (i in wantedList) {
+                            if (i.minEdubg == keyword) {
                                 println(i.minEdubg)
                                 println(i.company)
                                 println(i.title)
                                 println("-------------------")
                             }
-
                         }
-                    }
-                    else if(category=="career"){
-                        for(i in wantedList){
-                            if(i.career == keyword){
+                    } else if (category == "career") {
+                        for (i in wantedList) {
+                            if (i.career == keyword) {
                                 println(i.career)
                                 println(i.company)
                                 println(i.title)
@@ -247,12 +247,11 @@ class WantedFilteringFragment : Fragment() {
                             }
 
                         }
-                    }
-                    else if(category == "closeDt"){
+                    } else if (category == "closeDt") {
                         val formatter = DateTimeFormatter.ofPattern("yy-MM-dd")
 
                         val today = LocalDate.now()
-                        val formattedToday=formatter.format(today)
+                        val formattedToday = formatter.format(today)
                         val after1Day = formatter.format(today.plusDays(1))
                         val after7Days = formatter.format(today.plusDays(7))
                         val after30Days = formatter.format(today.plusMonths(1))
@@ -273,94 +272,102 @@ class WantedFilteringFragment : Fragment() {
                         val after30DaysDate = parseDate(after30Days)
                         val after60DaysDate = parseDate(after60Days)
 
-                        if(keyword == "today"){ // 오늘까지인 공고 찾기 => 공고 마감일 = 오늘 날짜
-                            for(i in wantedList){
+                        if (keyword == "today") { // 오늘까지인 공고 찾기 => 공고 마감일 = 오늘 날짜
+                            for (i in wantedList) {
                                 val a = i.closeDt
                                 // 한글과 공백을 제거하고 순수한 날짜 포맷만 추출
                                 val closeDt = a?.replace(Regex("[채용시까지\\s]"), "")
-                                if (closeDt != null){
+                                if (closeDt != null) {
                                     val closeDtDate = parseDate(closeDt)
-                                    if(closeDtDate == todayDate){
+                                    if (closeDtDate == todayDate) {
                                         println(i.closeDt)
                                         println(i.company)
                                         println(i.title)
                                         println("----------------")
-                                    }}
+                                    }
+                                }
                             }
-                        }
-                        else if(keyword == "tomorrow"){ // 내일까지인 공고 찾기 => 공고 마감일 < 오늘 날짜 + 1
-                            for(i in wantedList){
+                        } else if (keyword == "tomorrow") { // 내일까지인 공고 찾기 => 공고 마감일 < 오늘 날짜 + 1
+                            for (i in wantedList) {
                                 val a = i.closeDt
                                 // 한글과 공백을 제거하고 순수한 날짜 포맷만 추출
                                 val closeDt = a?.replace(Regex("[채용시까지\\s]"), "")
-                                if (closeDt != null){
+                                if (closeDt != null) {
                                     val closeDtDate = parseDate(closeDt)
-                                    if(closeDtDate == after1DayDate){
+                                    if (closeDtDate == after1DayDate) {
                                         println(i.closeDt)
                                         println(i.company)
                                         println(i.title)
                                         println("----------------")
-                                    }}
+                                    }
+                                }
                             }
-                        }
-                        else if(keyword == "7days"){ // 일주일 이내인 공고 찾기 => 공고 마감일 < 오늘 날짜 + 7
-                            for(i in wantedList){
+                        } else if (keyword == "7days") { // 일주일 이내인 공고 찾기 => 공고 마감일 < 오늘 날짜 + 7
+                            for (i in wantedList) {
                                 val a = i.closeDt
                                 // 한글과 공백을 제거하고 순수한 날짜 포맷만 추출
                                 val closeDt = a?.replace(Regex("[채용시까지\\s]"), "")
-                                if (closeDt != null){
+                                if (closeDt != null) {
                                     val closeDtDate = parseDate(closeDt)
                                     todayDate?.let { today ->
                                         after7DaysDate?.let { after7 ->
-                                            if(closeDtDate!! in todayDate..after7){
+                                            if (closeDtDate!! in todayDate..after7) {
                                                 println(i.closeDt)
                                                 println(i.company)
                                                 println(i.title)
                                                 println("----------------")
-                                            }}}}
+                                            }
+                                        }
+                                    }
+                                }
                             }
-                        }
-                        else if(keyword == "30days"){ // 한달 이내인 공고 찾기 => 공고 마감일 < 오늘 날짜 + 30
-                            for(i in wantedList){
+                        } else if (keyword == "30days") { // 한달 이내인 공고 찾기 => 공고 마감일 < 오늘 날짜 + 30
+                            for (i in wantedList) {
                                 val a = i.closeDt
                                 // 한글과 공백을 제거하고 순수한 날짜 포맷만 추출
                                 val closeDt = a?.replace(Regex("[채용시까지\\s]"), "")
-                                if (closeDt != null){
+                                if (closeDt != null) {
                                     val closeDtDate = parseDate(closeDt)
                                     todayDate?.let { today ->
                                         after30DaysDate?.let { after30 ->
-                                            if(closeDtDate!! in todayDate..after30){
+                                            if (closeDtDate!! in todayDate..after30) {
                                                 println(i.closeDt)
                                                 println(i.company)
                                                 println(i.title)
                                                 println("----------------")
-                                            }}}}
+                                            }
+                                        }
+                                    }
+                                }
                             }
-                        }
-                        else{ // 두달 이내인 공고 찾기 => 공고 마감일 < 오늘 날짜 + 30
-                            for(i in wantedList){
+                        } else { // 두달 이내인 공고 찾기 => 공고 마감일 < 오늘 날짜 + 30
+                            for (i in wantedList) {
                                 val a = i.closeDt
                                 // 한글과 공백을 제거하고 순수한 날짜 포맷만 추출
                                 val closeDt = a?.replace(Regex("[채용시까지\\s]"), "")
-                                if (closeDt != null){
+                                if (closeDt != null) {
                                     val closeDtDate = parseDate(closeDt)
                                     todayDate?.let { today ->
                                         after60DaysDate?.let { after60 ->
-                                            if(closeDtDate!! in todayDate..after60){
+                                            if (closeDtDate!! in todayDate..after60) {
                                                 println(i.closeDt)
                                                 println(i.company)
                                                 println(i.title)
                                                 println("----------------")
-                                            }}}}
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
-                    }
-
-                } else {
+                    } //if문 closeDt 종료
+                } // if 응답이 성공적일때
+                else {
                     showErrorToast()
-                }
-            }
-        })
+                } //if 응답 실패
+            } // onResponse 함수 종료
+
+        }) //callback
 
     }
 
@@ -440,6 +447,8 @@ class WantedFilteringFragment : Fragment() {
         } // while문 종료
         return wantedList
     }
+
+
 
     private fun showErrorToast() {
         Toast.makeText(requireContext(), "Failed to fetch wanted list.", Toast.LENGTH_SHORT).show()

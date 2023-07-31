@@ -28,13 +28,17 @@ class WantedResultFragment : Fragment() {
         return rootView
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        updateJobList()
+        updateWantedList()
     }
 
     // ListView에 표시될 채용공고 목록을 업데이트하는 함수
-    fun updateJobList() {
+    fun updateWantedList() {
+        // 리스트뷰 어댑터를 해제하여 초기화
+        listView.adapter = null
+
         val filteredList = mutableListOf<WantedFilteringFragment.Wanted>()
 
         filteredList.addAll(sharedSelectionViewModel.region_filteredList)

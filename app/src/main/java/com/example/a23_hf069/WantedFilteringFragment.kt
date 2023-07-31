@@ -36,8 +36,6 @@ class WantedFilteringFragment : Fragment() {
     lateinit var tv_regioncl_selected: TextView
     //학력
     lateinit var cbAllEdu: CheckBox // 학력무관
-    lateinit var cbElementaryEdu:CheckBox //초졸 = 학력무관
-    lateinit var cbMiddleEdu:CheckBox //중졸 = 학력무관
     lateinit var cbHighEdu: CheckBox // 고졸
     lateinit var cbUniv2: CheckBox // 대졸(2~3년)
     lateinit var cbUniv4: CheckBox // 대졸(4년)
@@ -118,8 +116,6 @@ class WantedFilteringFragment : Fragment() {
         cbExperienced = view.findViewById(R.id.cb_c_3)
 
         cbAllEdu = view.findViewById(R.id.cb_e_1)
-        cbElementaryEdu = view.findViewById(R.id.cb_e_2)
-        cbMiddleEdu = view.findViewById(R.id.cb_e_3)
         cbHighEdu = view.findViewById(R.id.cb_e_4)
         cbUniv2 = view.findViewById(R.id.cb_e_5)
         cbUniv4 = view.findViewById(R.id.cb_e_6)
@@ -158,14 +154,7 @@ class WantedFilteringFragment : Fragment() {
             if (isChecked) {
                 fetchWantedList("edu","학력무관")            }
         }
-        cbElementaryEdu.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                fetchWantedList("edu","학력무관")            }
-        }
-        cbMiddleEdu.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                fetchWantedList("edu","학력무관")            }
-        }
+
         cbHighEdu.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 fetchWantedList("edu","고졸")            }
@@ -221,6 +210,15 @@ class WantedFilteringFragment : Fragment() {
                     result = parseXmlResponse(xmlString) // parsing하기
                     wantedList = result
                     if (category == "region") {
+                        for(i in wantedList){
+                            if(keyword == i.region){
+                                println(i.region)
+                                println(i.company)
+                                println(i.title)
+                                println("______________________________")
+
+                            }
+                        }
                         val filteredList = wantedList.filter { it.region == keyword }
                         sharedSelectionViewModel.region_filteredList = filteredList // viewModel에 필터링된 리스트 저장
 
@@ -231,17 +229,28 @@ class WantedFilteringFragment : Fragment() {
 //
 //                    }
                     else if (category == "edu") {
-//                        for(i in wantedList){
-//                            if(keyword == i.minEdubg){
-//                                println(i.minEdubg)
-//                                println(i.company)
-//                                println(i.title)
-//                            }
-//                        }
+                        for(i in wantedList){
+                            if(keyword == i.minEdubg){
+                                println(i.minEdubg)
+                                println(i.company)
+                                println(i.title)
+                                println("______________________________")
+
+                            }
+                        }
                         val filteredList = wantedList.filter { it.minEdubg == keyword }
                         sharedSelectionViewModel.edu_filterdList = filteredList // viewModel에 필터링된 리스트 저장
                     }
                     else if (category == "career") {
+                        for(i in wantedList){
+                            if(keyword == i.career){
+                                println(i.career)
+                                println(i.company)
+                                println(i.title)
+                                println("______________________________")
+
+                            }
+                        }
                         val filteredList = wantedList.filter { it.career == keyword }
                         sharedSelectionViewModel.career_filterdList = filteredList // viewModel에 필터링된 리스트 저장
 
@@ -279,6 +288,15 @@ class WantedFilteringFragment : Fragment() {
                                 if (closeDt != null) {
                                     val closeDtDate = parseDate(closeDt)
                                     if (closeDtDate == todayDate) {
+                                        for(i in wantedList){
+                                            if(keyword == i.closeDt){
+                                                println(i.closeDt)
+                                                println(i.company)
+                                                println(i.title)
+                                                println("______________________________")
+
+                                            }
+                                        }
                                         val filteredList = wantedList.filter { it.closeDt == keyword }
                                         sharedSelectionViewModel.closeDt_filterdList = filteredList // viewModel에 필터링된 리스트 저장
                                     }
@@ -292,6 +310,15 @@ class WantedFilteringFragment : Fragment() {
                                 if (closeDt != null) {
                                     val closeDtDate = parseDate(closeDt)
                                     if (closeDtDate == after1DayDate) {
+                                        for(i in wantedList){
+                                            if(keyword == i.closeDt){
+                                                println(i.closeDt)
+                                                println(i.company)
+                                                println(i.title)
+                                                println("______________________________")
+
+                                            }
+                                        }
                                         val filteredList = wantedList.filter { it.closeDt == keyword }
                                         sharedSelectionViewModel.closeDt_filterdList = filteredList // viewModel에 필터링된 리스트 저장
                                     }
@@ -307,6 +334,15 @@ class WantedFilteringFragment : Fragment() {
                                     todayDate?.let { today ->
                                         after7DaysDate?.let { after7 ->
                                             if (closeDtDate!! in todayDate..after7) {
+                                                for(i in wantedList){
+                                                    if(keyword == i.closeDt){
+                                                        println(i.closeDt)
+                                                        println(i.company)
+                                                        println(i.title)
+                                                        println("______________________________")
+
+                                                    }
+                                                }
                                                 val filteredList = wantedList.filter { it.closeDt == keyword }
                                                 sharedSelectionViewModel.closeDt_filterdList = filteredList // viewModel에 필터링된 리스트 저장
                                             }
@@ -324,6 +360,15 @@ class WantedFilteringFragment : Fragment() {
                                     todayDate?.let { today ->
                                         after30DaysDate?.let { after30 ->
                                             if (closeDtDate!! in todayDate..after30) {
+                                                for(i in wantedList){
+                                                    if(keyword == i.closeDt){
+                                                        println(i.closeDt)
+                                                        println(i.company)
+                                                        println(i.title)
+                                                        println("______________________________")
+
+                                                    }
+                                                }
                                                 val filteredList = wantedList.filter { it.closeDt == keyword }
                                                 sharedSelectionViewModel.closeDt_filterdList = filteredList // viewModel에 필터링된 리스트 저장
                                             }
@@ -341,6 +386,14 @@ class WantedFilteringFragment : Fragment() {
                                     todayDate?.let { today ->
                                         after60DaysDate?.let { after60 ->
                                             if (closeDtDate!! in todayDate..after60) {
+                                                for(i in wantedList){
+                                                    if(keyword == i.closeDt){
+                                                        println(i.closeDt)
+                                                        println(i.company)
+                                                        println(i.title)
+                                                        println("______________________________")
+                                                    }
+                                                }
                                                 val filteredList = wantedList.filter { it.closeDt == keyword }
                                                 sharedSelectionViewModel.closeDt_filterdList = filteredList // viewModel에 필터링된 리스트 저장
                                             }

@@ -53,14 +53,14 @@ class MemberInfoEditActivity : AppCompatActivity() {
         edtID.text = userId
 
         btnSubmit.setOnClickListener {
-            val personal_id = edtID.toString()
-            val personal_birth = edtBirth.toString()
-            val personal_email = edtEmail.toString()
-            val personal_phonenum = edtPhone.toString()
-            val personal_address = edtAddress.toString()
-            val personal_address_detail = edtAddressDetail.toString()
+            val personal_id = edtID.text.toString()
+            val personal_birth = edtBirth.text.toString()
+            val personal_email = edtEmail.text.toString()
+            val personal_phonenum = edtPhone.text.toString()
+            val personal_address = edtAddress.text.toString()
+            val personal_address_detail = edtAddressDetail.text.toString()
 
-            if (personal_birth != null && personal_email != null && personal_phonenum != null && personal_address != null && personal_address_detail != null) {
+            //if (personal_birth != null && personal_email != null && personal_phonenum != null && personal_address != null && personal_address_detail != null) {
                 updatePersonalMemberinfoData(
                     personal_id,
                     personal_birth,
@@ -72,10 +72,10 @@ class MemberInfoEditActivity : AppCompatActivity() {
 
                 Toast.makeText(this, "수정이 완료되었습니다.", Toast.LENGTH_SHORT).show()
                 onBackPressed()
-            }
-            else {
-                Toast.makeText(this, "모든 항목을 입력하세요", Toast.LENGTH_SHORT)
-            }
+         //   }
+         //   else {
+          //      Toast.makeText(this, "모든 항목을 입력하세요", Toast.LENGTH_SHORT)
+         //   }
         }
 
         // 기존 저장 회원정보 불러오기

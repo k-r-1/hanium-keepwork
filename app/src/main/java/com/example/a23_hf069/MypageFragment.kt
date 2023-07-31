@@ -46,11 +46,6 @@ class MypageFragment : Fragment() {
 
         member_info = view.findViewById<Button>(R.id.edit_memberinfo_btn)
         member_info.setOnClickListener(){// 회원정보 수정 프래그먼트로 전환
-            val fragment_info = MemberInfoEditFragment()
-            requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.fl_container, fragment_info) // 프래그먼트 교체
-                .addToBackStack(null) // 이전 프래그먼트로 돌아가기
-                .commit()
 
             val intent = Intent(requireContext(), MemberInfoEditActivity::class.java)
             intent.putExtra("userId", userId)

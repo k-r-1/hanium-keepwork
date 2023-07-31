@@ -2,13 +2,14 @@ package com.example.a23_hf069
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.TextView
+import android.widget.*
+import okhttp3.*
+import org.json.JSONException
+import org.json.JSONObject
+import java.io.IOException
 
 class MemberInfoEditActivity : AppCompatActivity() {
-    private var IP_ADDRESS = "3.34.126.115" // Replace with your IP address.
+    private var IP_ADDRESS = "3.39.226.48" // Replace with your IP address.
     private var userId: String = "" // User ID
 
     private lateinit var edtID: TextView
@@ -50,5 +51,130 @@ class MemberInfoEditActivity : AppCompatActivity() {
 
         userId = intent.getStringExtra("userId") ?: ""
         edtID.text = userId
+
+        btnSubmit.setOnClickListener {
+            val personal_id = edtID.toString()
+            val personal_birth = edtBirth.toString()
+            val personal_email = edtEmail.toString()
+            val personal_phonenum = edtPhone.toString()
+            val personal_address = edtAddress.toString()
+            val personal_address_detail = edtAddressDetail.toString()
+
+            if (personal_birth != null && personal_email != null && personal_phonenum != null && personal_address != null && personal_address_detail != null) {
+                updatePersonalMemberinfoData(
+                    personal_id,
+                    personal_birth,
+                    personal_email,
+                    personal_phonenum,
+                    personal_address,
+                    personal_address_detail
+                )
+
+                Toast.makeText(this, "수정이 완료되었습니다.", Toast.LENGTH_SHORT).show()
+                onBackPressed()
+            }
+            else {
+                Toast.makeText(this, "모든 항목을 입력하세요", Toast.LENGTH_SHORT)
+            }
+        }
+
+        // 기존 저장 회원정보 불러오기
+        getPersonalMemberinfoData(userId)
+    }
+
+    private fun updatePersonalMemberinfoData(
+        personal_id: String,
+        personal_birth: String,
+        personal_email: String,
+        personal_phonenum: String,
+        personal_address: String,
+        personal_address_detail: String
+    ) {
+        val url =
+            "http://$IP_ADDRESS/(android_edit_memberinfo_save.php" // URL of the hosting server with PHP script
+
+        val client = OkHttpClient()
+
+        val formBody = FormBody.Builder()
+            .add("personal_id", personal_id) // Id
+            .add("personal_birth", personal_birth) // Birthday
+            .add("personal_email", personal_email) // Email
+            .add("personal_phonenum", personal_phonenum) // Phone number
+            .add("personal_address", personal_address) // Address
+            .add("personal_address_detail", personal_address_detail) // Detail Address
+            .build()
+
+        val request = Request.Builder()
+            .url(url)
+            .post(formBody)
+            .build()
+
+        client.newCall(request).enqueue(object : okhttp3.Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                // Handle request failure
+                e.printStackTrace()
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                // Handle request success
+                val responseData = response.body?.string()
+
+                // UI 업데이트를 위한 runOnUiThread 호출
+                runOnUiThread {
+                    Toast.makeText(this@MemberInfoEditActivity, responseData, Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
+    }
+
+    // 기존에 저장되어 있던 회원정보 불러오기
+    private fun getPersonalMemberinfoData(userId: String) {
+        val url =
+            "http://$IP_ADDRESS/android_edit_memberinfo_call.php?personal_id=$userId" // 데이터를 불러올 PHP 스크립트의 주소
+
+        val client = OkHttpClient()
+
+        val request = Request.Builder()
+            .url(url)
+            .get()
+            .build()
+
+        client.newCall(request).enqueue(object : okhttp3.Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                // Handle request failure
+                e.printStackTrace()
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                val responseData = response.body?.string()
+
+                // 개인회원 정보 데이터를 파싱하여 UI 업데이트
+                runOnUiThread {
+                    handlePersonalMemberinfoData(responseData)
+                }
+            }
+        })
+    }
+
+    // 이력서 아이템 데이터를 처리하는 함수 추가
+    private fun handlePersonalMemberinfoData(responseData: String?) {
+        try {
+            val jsonObject = JSONObject(responseData) // JSONObject로 파싱
+
+            // 이력서 아이템 데이터가 존재하는 경우에만 UI 업데이트
+            if (jsonObject.length() > 0) {
+                // 여기서 이력서 아이템 데이터를 파싱하여 UI에 표시하는 작업을 수행하면 됩니다.
+                // 예를 들어, 다음과 같이 각 EditText에 데이터를 설정할 수 있습니다.
+                edtName.setText(jsonObject.optString("personal_name", ""))
+                edtBirth.setText(jsonObject.optString("personal_birth", ""))
+                edtEmail.setText(jsonObject.optString("personal_email", ""))
+                edtPhone.setText(jsonObject.optString("personal_phonenum", ""))
+                edtAddress.setText(jsonObject.optString("personal_address", ""))
+                edtAddressDetail.setText(jsonObject.optString("personal_address_detail", ""))
+            }
+        } catch (e: JSONException) {
+            // JSON 파싱 오류 처리
+            e.printStackTrace()
+        }
     }
 }

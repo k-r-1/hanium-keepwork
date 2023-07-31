@@ -187,7 +187,8 @@ android:orientation="vertical">
                 android:layout_height="35dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="20dp"
-                android:background="@drawable/text_border2" />
+                android:background="@drawable/text_border2"
+                android:padding="5dp" />
 
             <Button
                 android:id="@+id/btnEdit_memberinfo_verify"
@@ -216,7 +217,8 @@ android:orientation="vertical">
                 android:layout_height="35dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="20dp"
-                android:background="@drawable/text_border2" />
+                android:background="@drawable/text_border2"
+                android:padding="5dp" />
 
             <Button
                 android:id="@+id/btnEdit_memberinfo_ok"
@@ -264,7 +266,8 @@ android:orientation="vertical">
             android:layout_marginLeft="10dp"
             android:layout_marginRight="20dp"
             android:layout_marginBottom="20dp"
-            android:background="@drawable/text_border2" />
+            android:background="@drawable/text_border2"
+            android:padding="5dp" />
         <!--주소-->
         <LinearLayout
             android:layout_width="match_parent"
@@ -305,7 +308,8 @@ android:orientation="vertical">
                 android:layout_marginRight="10dp"
                 android:background="@drawable/text_border2"
                 android:drawableRight="@drawable/ic_baseline_search2_24"
-                android:hint="   우편번호 검색" />
+                android:hint="   우편번호 검색"
+                android:padding="5dp" />
 
         </LinearLayout>
 
@@ -316,7 +320,8 @@ android:orientation="vertical">
             android:layout_marginStart="10dp"
             android:layout_marginBottom="20dp"
             android:background="@drawable/text_border2"
-            android:hint="    상세주소 작성" />
+            android:hint="    상세주소 작성"
+            android:padding="5dp" />
 
 
         <LinearLayout

@@ -79,7 +79,6 @@ class MemberInfoEditActivity : AppCompatActivity() {
                 onBackPressed()
             }
             else {
-                Log.d("MyApp", "else block executed")
                 Toast.makeText(this, "모든 항목을 입력하세요", Toast.LENGTH_SHORT).show()
             }
         }
@@ -97,7 +96,7 @@ class MemberInfoEditActivity : AppCompatActivity() {
         personal_address_detail: String
     ) {
         val url =
-            "http://$IP_ADDRESS/(android_edit_memberinfo_save.php" // URL of the hosting server with PHP script
+            "http://$IP_ADDRESS/android_edit_memberinfo_save.php" // URL of the hosting server with PHP script
 
         val client = OkHttpClient()
 

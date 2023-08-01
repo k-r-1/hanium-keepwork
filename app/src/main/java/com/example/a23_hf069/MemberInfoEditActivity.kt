@@ -2,6 +2,7 @@ package com.example.a23_hf069
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.*
 import okhttp3.*
 import org.json.JSONException
@@ -9,7 +10,7 @@ import org.json.JSONObject
 import java.io.IOException
 
 class MemberInfoEditActivity : AppCompatActivity() {
-    private var IP_ADDRESS = "3.39.226.48" // Replace with your IP address.
+    private var IP_ADDRESS = "54.180.113.179" // Replace with your IP address.
     private var userId: String = "" // User ID
 
     private lateinit var edtID: TextView
@@ -60,7 +61,12 @@ class MemberInfoEditActivity : AppCompatActivity() {
             val personal_address = edtAddress.text.toString()
             val personal_address_detail = edtAddressDetail.text.toString()
 
-            //if (personal_birth != null && personal_email != null && personal_phonenum != null && personal_address != null && personal_address_detail != null) {
+            if (personal_birth.isNotBlank() &&
+                personal_email.isNotBlank() &&
+                personal_phonenum.isNotBlank() &&
+                personal_address.isNotBlank() &&
+                personal_address_detail.isNotBlank()
+            ){
                 updatePersonalMemberinfoData(
                     personal_id,
                     personal_birth,
@@ -69,13 +75,13 @@ class MemberInfoEditActivity : AppCompatActivity() {
                     personal_address,
                     personal_address_detail
                 )
-
                 Toast.makeText(this, "수정이 완료되었습니다.", Toast.LENGTH_SHORT).show()
                 onBackPressed()
-         //   }
-         //   else {
-          //      Toast.makeText(this, "모든 항목을 입력하세요", Toast.LENGTH_SHORT)
-         //   }
+            }
+            else {
+                Log.d("MyApp", "else block executed")
+                Toast.makeText(this, "모든 항목을 입력하세요", Toast.LENGTH_SHORT).show()
+            }
         }
 
         // 기존 저장 회원정보 불러오기

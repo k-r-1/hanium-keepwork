@@ -14,6 +14,9 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+import okhttp3.FormBody
+import okhttp3.OkHttpClient
+import okhttp3.Request
 import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
@@ -23,7 +26,7 @@ import java.net.URL
 class PersonalSignUpActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
     // IP 주소와 태그를 초기화
-    private var IP_ADDRESS = "54.180.113.179" // 본인 IP주소를 넣으세요.
+    private var IP_ADDRESS = "54.180.24.74" // 본인 IP주소를 넣으세요.
     private var TAG = "phptest" // phptest log 찍으려는 용도
     private var checkID = false
 
@@ -246,83 +249,43 @@ class PersonalSignUpActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
     override fun onNothingSelected(parent: AdapterView<*>?) {}
 
     // AsyncTask를 상속받고, 서버로 아이디 중복 여부 확인을 위한 데이터를 전송
+    // CheckIdDuplicate 클래스에서 중복 여부를 받아와 처리하는 부분
     inner class CheckIdDuplicate : AsyncTask<String, Void, String>() {
-        private var progressDialog: ProgressDialog? = null
+        override fun doInBackground(vararg params: String?): String {
+            val url = params[0]?: ""
+            val id = params[1]?: ""
 
-        // 백그라운드 작업 실행 전 실행, 프로그레스 다이얼로그 표시
-        override fun onPreExecute() {
-            super.onPreExecute()
-            progressDialog = ProgressDialog.show(
-                this@PersonalSignUpActivity,
-                "Please Wait",
-                null,
-                true,
-                true
-            )
+            val client = OkHttpClient()
+
+            val formBody = FormBody.Builder()
+                .add("personal_id", id)
+                .build()
+
+            val request = Request.Builder()
+                .url(url)
+                .post(formBody)
+                .build()
+
+            val response = client.newCall(request).execute()
+            return response.body?.string() ?: ""
         }
 
-        // 백그라운드 작업 완료 후 실행, 결과를 처리하고 프로그레스 다이얼로그 종료
-        override fun onPostExecute(result: String) {
+        override fun onPostExecute(result: String?) {
             super.onPostExecute(result)
-            progressDialog?.dismiss()
+
+            // 중복 여부에 따라 처리
             if (result == "duplicate") {
-                Toast.makeText(this@PersonalSignUpActivity, "중복된 아이디입니다.", Toast.LENGTH_SHORT).show()
-                checkID = false
-            } else {
+                // 중복된 아이디가 존재하는 경우, 아이디 칸을 빈칸으로 만들기
+                id_text_input_edit_text.setText("")
+                Toast.makeText(this@PersonalSignUpActivity, "이미 사용 중인 아이디입니다.", Toast.LENGTH_SHORT).show()
+            } else if (result == "not_duplicate") {
                 Toast.makeText(this@PersonalSignUpActivity, "사용 가능한 아이디입니다.", Toast.LENGTH_SHORT).show()
-                checkID = true
-            }
-        }
-
-        // 백그라운드에서 수행될 작업 정의, 서버로 데이터 전송 & 응답을 받아 처리
-        // AsyncTask의 Params 매개변수로 가변 인자를 받아 String을 반환
-        override fun doInBackground(vararg params: String): String {
-            val serverURL = params[0]
-            val id = params[1]
-
-            // POST 요청으로 전송할 파라미터 문자열 구성
-            val postParameters = "personal_id=$id"
-
-            try {
-                val url = URL(serverURL)
-                val httpURLConnection = url.openConnection() as HttpURLConnection
-                httpURLConnection.readTimeout = 5000
-                httpURLConnection.connectTimeout = 5000
-                httpURLConnection.requestMethod = "POST"
-                httpURLConnection.connect()
-
-                val outputStream = httpURLConnection.outputStream
-                outputStream.write(postParameters.toByteArray(charset("UTF-8")))
-                outputStream.flush()
-                outputStream.close()
-
-                val responseStatusCode = httpURLConnection.responseCode
-                Log.d(TAG, "POST response code - $responseStatusCode")
-
-                val inputStream: InputStream
-                inputStream = if (responseStatusCode == HttpURLConnection.HTTP_OK) {
-                    httpURLConnection.inputStream
-                } else {
-                    httpURLConnection.errorStream
-                }
-
-                val inputStreamReader = InputStreamReader(inputStream, "UTF-8")
-                val bufferedReader = BufferedReader(inputStreamReader)
-                val sb = StringBuilder()
-                var line: String? = null
-
-                while (bufferedReader.readLine().also { line = it } != null) {
-                    sb.append(line)
-                }
-
-                bufferedReader.close()
-                Log.d(TAG, "php 값: ${sb.toString()}")
-                return sb.toString()
-            } catch (e: Exception) {
-                Log.d(TAG, "CheckIdDuplicate: Error", e)
-                return "Error " + e.message
+            } else {
+                // 오류 처리
+                Toast.makeText(this@PersonalSignUpActivity, "서버 응답 오류", Toast.LENGTH_SHORT).show()
             }
         }
     }
+
 
 }

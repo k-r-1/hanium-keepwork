@@ -10,7 +10,7 @@ import org.json.JSONObject
 import java.io.IOException
 
 class MemberInfoEditActivity : AppCompatActivity() {
-    private var IP_ADDRESS = "54.180.113.179" // Replace with your IP address.
+    private var IP_ADDRESS = "54.180.24.74" // Replace with your IP address.
     private var userId: String = "" // User ID
 
     private lateinit var edtID: TextView
@@ -75,7 +75,6 @@ class MemberInfoEditActivity : AppCompatActivity() {
                     personal_address,
                     personal_address_detail
                 )
-                Toast.makeText(this, "수정이 완료되었습니다.", Toast.LENGTH_SHORT).show()
                 onBackPressed()
             }
             else {

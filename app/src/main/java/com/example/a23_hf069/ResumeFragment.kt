@@ -1,4 +1,5 @@
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -250,48 +251,63 @@ class ResumeFragment : Fragment() {
             return
         }
 
-        val phpUrl = "http://$IP_ADDRESS/android_resume_delete.php"
-        val requestBody = FormBody.Builder()
-            .add("personal_id", userId)
-            .add("resume_listnum", resumeListNum.toString())
-            .build()
-        val request = Request.Builder()
-            .url(phpUrl)
-            .post(requestBody)
-            .build()
+        // 다이얼로그를 생성하고 설정
+        val alertDialogBuilder = AlertDialog.Builder(requireContext())
+        alertDialogBuilder.setMessage("정말로 삭제하시겠습니까?")
+        alertDialogBuilder.setPositiveButton("네") { _, _ ->
+            // "네"를 눌렀을 때 서버에서 이력서 데이터 삭제 요청
+            val phpUrl = "http://$IP_ADDRESS/android_resume_delete.php"
+            val requestBody = FormBody.Builder()
+                .add("personal_id", userId)
+                .add("resume_listnum", resumeListNum.toString())
+                .build()
+            val request = Request.Builder()
+                .url(phpUrl)
+                .post(requestBody)
+                .build()
 
-        val client = OkHttpClient()
-        client.newCall(request).enqueue(object : Callback {
-            override fun onResponse(call: Call, response: Response) {
-                // 서버로부터 응답을 받았을 때 호출되는 콜백 메서드
-                val responseData = response.body?.string()
-                Log.d("DeleteResponse", responseData ?: "No response data")
-                if (responseData != null && responseData.contains("Record deleted successfully")) {
-                    // 삭제 성공
-                    requireActivity().runOnUiThread {
-                        // RecyclerView에서 아이템 삭제
-                        dataAdapter.removeDataByListNum(resumeListNum)
-                        // 작성중 이력서 개수와 작성완료 이력서 개수 업데이트
-                        fetchDataFromServer()
-                        // 삭제 성공 메시지 출력
-                        Toast.makeText(view?.context, "이력서를 성공적으로 삭제했습니다.", Toast.LENGTH_SHORT).show()
-                    }
-                } else {
-                    // 삭제 실패 또는 응답 데이터 오류
-                    requireActivity().runOnUiThread {
-                        Toast.makeText(view?.context, "이력서를 삭제했습니다.", Toast.LENGTH_SHORT).show()
+            val client = OkHttpClient()
+            client.newCall(request).enqueue(object : Callback {
+                override fun onResponse(call: Call, response: Response) {
+                    // 서버로부터 응답을 받았을 때 호출되는 콜백 메서드
+                    val responseData = response.body?.string()
+                    Log.d("DeleteResponse", responseData ?: "No response data")
+                    if (responseData != null && responseData.contains("Record deleted successfully")) {
+                        // 삭제 성공
+                        requireActivity().runOnUiThread {
+                            // RecyclerView에서 아이템 삭제
+                            dataAdapter.removeDataByListNum(resumeListNum)
+                            // 작성중 이력서 개수와 작성완료 이력서 개수 업데이트
+                            fetchDataFromServer()
+                            // 삭제 성공 메시지 출력
+                            Toast.makeText(view?.context, "이력서를 성공적으로 삭제했습니다.", Toast.LENGTH_SHORT).show()
+                        }
+                    } else {
+                        // 삭제 실패 또는 응답 데이터 오류
+                        requireActivity().runOnUiThread {
+                            Toast.makeText(view?.context, "이력서를 삭제했습니다.", Toast.LENGTH_SHORT).show()
+                        }
                     }
                 }
-            }
 
-            override fun onFailure(call: Call, e: IOException) {
-                // 요청 실패 처리
-                e.printStackTrace()
-                requireActivity().runOnUiThread {
-                    Toast.makeText(view?.context, "서버와 연결할 수 없습니다.", Toast.LENGTH_SHORT).show()
+                override fun onFailure(call: Call, e: IOException) {
+                    // 요청 실패 처리
+                    e.printStackTrace()
+                    requireActivity().runOnUiThread {
+                        Toast.makeText(view?.context, "서버와 연결할 수 없습니다.", Toast.LENGTH_SHORT).show()
+                    }
                 }
-            }
-        })
+            })
+        }
+        alertDialogBuilder.setNegativeButton("아니오") { dialog, _ ->
+            // "아니오"를 눌렀을 때 다이얼로그를 닫고 아무 작업도 하지 않음
+            dialog.dismiss()
+        }
+
+        // 다이얼로그를 표시
+        val alertDialog = alertDialogBuilder.create()
+        alertDialog.show()
+
     }
 
     // 이력서 데이터 클래스

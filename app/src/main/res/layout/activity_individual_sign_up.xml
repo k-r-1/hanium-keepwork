@@ -73,6 +73,7 @@
                     android:id="@+id/id_text_input_edit_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:hint="작성 후 중복확인을 진행하세요"
                     android:textAppearance="@style/TextLabel" />
 
                 <Button
@@ -111,6 +112,7 @@
                     android:id="@+id/password_text_input_edit_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:hint="6자 이상 입력하세요"
                     android:inputType="textPassword"
                     android:textAppearance="@style/TextLabel" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -168,6 +170,7 @@
                     android:id="@+id/name_textview_input_edit_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:hint="예) 홍길동"
                     android:textAppearance="@style/TextLabel" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -195,6 +198,7 @@
                     android:id="@+id/email_textview_input_edit_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:hint="예) keepwork@naver.com"
                     android:textAppearance="@style/TextLabel" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -222,6 +226,7 @@
                     android:id="@+id/phoneNumber_textview_input_edit_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:hint="예) 01012345678"
                     android:textAppearance="@style/TextLabel" />
 
 <!--                <Button-->

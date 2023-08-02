@@ -113,11 +113,11 @@ class PersonalSignUpActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
                     if (password.length <= 5) {
                         Toast.makeText(this@PersonalSignUpActivity, "비밀번호를 6자리 이상 입력해주세요.", Toast.LENGTH_SHORT).show()
                     } else if (!email.contains("@")) {
-                        Toast.makeText(this@PersonalSignUpActivity, "아이디에 @ 및 .com을 포함시키세요.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@PersonalSignUpActivity, "이메일에 @를 포함시키세요.", Toast.LENGTH_SHORT).show()
                     } else if (phoneNumber.contains("-") || !(phoneNumber[1] == '1')) {
                         Toast.makeText(this@PersonalSignUpActivity, "올바른 전화번호 형식으로 입력해주세요.", Toast.LENGTH_SHORT).show()
                     } else if (checkID == false) {
-                        Toast.makeText(this@PersonalSignUpActivity, "아이디를 확인해주세요.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@PersonalSignUpActivity, "아이디를 중복확인을 진행하세요.", Toast.LENGTH_SHORT).show()
                     } else {
                         // 'InsertData' 클래스의 인스턴스인 'task'를 생성
                         val task = InsertData()
@@ -134,6 +134,7 @@ class PersonalSignUpActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
                             phoneNumber
                         )
                         Toast.makeText(this@PersonalSignUpActivity, "회원가입에 성공하셨습니다.", Toast.LENGTH_SHORT).show()
+                        checkID = false
                         finish()
                     }
                 } else {
@@ -280,6 +281,7 @@ class PersonalSignUpActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
                 Toast.makeText(this@PersonalSignUpActivity, "이미 사용 중인 아이디입니다.", Toast.LENGTH_SHORT).show()
             } else if (result == "not_duplicate") {
                 Toast.makeText(this@PersonalSignUpActivity, "사용 가능한 아이디입니다.", Toast.LENGTH_SHORT).show()
+                checkID = true
             } else {
                 // 오류 처리
                 Toast.makeText(this@PersonalSignUpActivity, "서버 응답 오류", Toast.LENGTH_SHORT).show()

@@ -253,7 +253,7 @@ class ResumeFragment : Fragment() {
 
         // 다이얼로그를 생성하고 설정
         val alertDialogBuilder = AlertDialog.Builder(requireContext())
-        alertDialogBuilder.setMessage("정말로 삭제하시겠습니까?")
+        alertDialogBuilder.setMessage("해당 이력서를\n삭제하시겠습니까?")
         alertDialogBuilder.setPositiveButton("네") { _, _ ->
             // "네"를 눌렀을 때 서버에서 이력서 데이터 삭제 요청
             val phpUrl = "http://$IP_ADDRESS/android_resume_delete.php"

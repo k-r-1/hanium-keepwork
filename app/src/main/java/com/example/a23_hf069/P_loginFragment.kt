@@ -19,14 +19,15 @@ import java.net.URL
 
 
 class P_loginFragment : Fragment() { //개인로그인
-    private var IP_ADDRESS = "54.180.24.74" // 본인 IP주소를 넣으세요.
+    private var IP_ADDRESS = "3.37.62.171" // 본인 IP주소를 넣으세요.
 
     private var TAG = "phptest" // phptest log 찍으려는 용도
     private lateinit var id_text_input_edit_text: EditText // id
     private lateinit var password_text_input_edit_text: EditText // password
     private lateinit var id: String // 사용자 아이디
-    lateinit var login : Button
-    lateinit var signUp : Button
+    lateinit var btnlogin : Button // 로그인 버튼
+    lateinit var btnFindId : Button // 아이디 찾기 버튼
+    lateinit var btnSignUp : Button // 회원가입 버튼
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,13 +39,14 @@ class P_loginFragment : Fragment() { //개인로그인
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        login = view.findViewById<Button>(R.id.login_btn)
-        signUp = view.findViewById<Button>(R.id.signUp_btn)
+        btnlogin = view.findViewById<Button>(R.id.login_btn)
+        btnFindId = view.findViewById<Button>(R.id.findID_btn)
+        btnSignUp = view.findViewById<Button>(R.id.signUp_btn)
 
         id_text_input_edit_text = view.findViewById<EditText>(R.id.id_text)
         password_text_input_edit_text = view.findViewById<EditText>(R.id.pw_text)
 
-        login.setOnClickListener() {
+        btnlogin.setOnClickListener() {
 
             id = id_text_input_edit_text.text.toString().trim()
             val password = password_text_input_edit_text.text.toString().trim()
@@ -57,7 +59,13 @@ class P_loginFragment : Fragment() { //개인로그인
             }
         }
 
-        signUp.setOnClickListener() {
+        btnFindId.setOnClickListener {
+            // findId 버튼을 클릭하면 FindPersonalIdActivity로 전환
+            val intent = Intent(getActivity(), FindPersonalIdActivity::class.java)
+            startActivity(intent)
+        }
+
+        btnSignUp.setOnClickListener() {
             // signUp버튼을 클릭하면 CorporateSignUpActivity로 전환
             val intent = Intent(getActivity(), PersonalSignUpActivity::class.java)
             startActivity(intent)

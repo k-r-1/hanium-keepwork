@@ -10,7 +10,7 @@ import org.json.JSONObject
 import java.io.IOException
 
 class MemberInfoEditActivity : AppCompatActivity() {
-    private var IP_ADDRESS = "54.180.24.74" // Replace with your IP address.
+    private var IP_ADDRESS = "3.37.62.171" // Replace with your IP address.
     private var userId: String = "" // User ID
 
     private lateinit var edtID: TextView

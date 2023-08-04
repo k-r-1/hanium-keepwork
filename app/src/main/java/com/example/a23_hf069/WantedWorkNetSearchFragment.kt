@@ -139,6 +139,7 @@ class WantedWorkNetSearchFragment : Fragment() {
             var closeDt: String? = null // 마감일자
             var wantedMobileInfoUrl: String? = null // 워크넷 모바일 채용정보 URL
             var jobsCd: String? = null // 직종코드
+            var infoSvc: String? = null // 정보제공처
 
             while (eventType != XmlPullParser.END_DOCUMENT) {
                 when (eventType) {
@@ -155,6 +156,7 @@ class WantedWorkNetSearchFragment : Fragment() {
                             "closeDt" -> closeDt = xpp.nextText()
                             "wantedMobileInfoUrl" -> wantedMobileInfoUrl = xpp.nextText()
                             "jobsCd" -> jobsCd = xpp.nextText()
+                            "infoSvc" -> infoSvc = xpp.nextText()
                         }
                     }
                     XmlPullParser.END_TAG -> {
@@ -164,7 +166,7 @@ class WantedWorkNetSearchFragment : Fragment() {
                                     jobList.add(
                                         Job(
                                             c, t, salTpNm, sal, region, holidayTpNm,
-                                            minEdubg, career, closeDt, wantedMobileInfoUrl, jobsCd
+                                            minEdubg, career, closeDt, wantedMobileInfoUrl, jobsCd, infoSvc
                                         )
                                     )
                                 }
@@ -180,6 +182,7 @@ class WantedWorkNetSearchFragment : Fragment() {
                             closeDt = null
                             wantedMobileInfoUrl = null
                             jobsCd = null
+                            infoSvc = null
                         }
                     }
                 }

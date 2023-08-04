@@ -119,6 +119,7 @@ class WantedWorkNetFragment : Fragment() {
             var closeDt: String? = null // 마감일자
             var wantedMobileInfoUrl: String? = null // 워크넷 모바일 채용정보 URL
             var jobsCd: String? = null // 직종코드
+            var infoSvc: String? = null // 정보제공처
 
             while (eventType != XmlPullParser.END_DOCUMENT) {
                 when (eventType) {
@@ -135,6 +136,7 @@ class WantedWorkNetFragment : Fragment() {
                             "closeDt" -> closeDt = xpp.nextText()
                             "wantedMobileInfoUrl" -> wantedMobileInfoUrl = xpp.nextText()
                             "jobsCd" -> jobsCd = xpp.nextText()
+                            "infoSvc" -> infoSvc = xpp.nextText()
                         }
                     }
                     XmlPullParser.END_TAG -> {
@@ -144,7 +146,7 @@ class WantedWorkNetFragment : Fragment() {
                                     jobList.add(
                                         Job(
                                             c, t, salTpNm, sal, region, holidayTpNm,
-                                            minEdubg, career, closeDt, wantedMobileInfoUrl, jobsCd
+                                            minEdubg, career, closeDt, wantedMobileInfoUrl, jobsCd, infoSvc
                                         )
                                     )
                                 }
@@ -160,6 +162,7 @@ class WantedWorkNetFragment : Fragment() {
                             closeDt = null
                             wantedMobileInfoUrl = null
                             jobsCd = null
+                            infoSvc = null
                         }
                     }
                 }
@@ -240,6 +243,7 @@ class JobDetailActivity : AppCompatActivity() {
         binding.closeDt.text = job?.closeDt
         binding.wantedMobileInfoUrl.text = job?.wantedMobileInfoUrl
         binding.jobsCd.text = job?.jobsCd
+        binding.infoSvc.text = job?.infoSvc
 
     }
 }
@@ -255,11 +259,13 @@ data class Job(
     val career: String?,
     val closeDt: String?,
     val wantedMobileInfoUrl: String?,
-    val jobsCd: String?
+    val jobsCd: String?,
+    val infoSvc: String?
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString() ?: "",
         parcel.readString() ?: "",
+        parcel.readString(),
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
@@ -283,6 +289,7 @@ data class Job(
         parcel.writeString(closeDt)
         parcel.writeString(wantedMobileInfoUrl)
         parcel.writeString(jobsCd)
+        parcel.writeString(infoSvc)
     }
 
     override fun describeContents(): Int {

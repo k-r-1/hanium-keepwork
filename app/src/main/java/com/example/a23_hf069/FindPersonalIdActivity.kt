@@ -1,14 +1,18 @@
 package com.example.a23_hf069
 
 import android.app.Activity
+import android.content.Intent
 import android.graphics.pdf.PdfDocument.Page
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageButton
 import com.example.a23_hf069.databinding.ActivityFindPersonalIdBinding
 
 class FindPersonalIdActivity : AppCompatActivity() {
     private lateinit var findPersonalIdBinding: ActivityFindPersonalIdBinding
+
+    private lateinit var backButton: ImageButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +30,13 @@ class FindPersonalIdActivity : AppCompatActivity() {
 
         findPersonalIdBinding.viewpagerFindPid.adapter = adapter
         findPersonalIdBinding.tablayoutFindPid.setupWithViewPager(findPersonalIdBinding.viewpagerFindPid)
+
+        backButton = findViewById(R.id.backButton_findPid)
+
+        backButton.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
     }
 
 }

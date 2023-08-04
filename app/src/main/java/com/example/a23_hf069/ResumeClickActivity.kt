@@ -10,7 +10,7 @@ import org.json.JSONObject
 import java.io.IOException
 
 class ResumeClickActivity : AppCompatActivity() {
-    private var IP_ADDRESS = "3.37.62.171" // Replace with your IP address.
+    private var IP_ADDRESS = "13.209.65.106" // Replace with your IP address.
     private var userId: String = "" // User ID
     private var resumeListNum: Int = -1
     private lateinit var editResumeTitle: TextView

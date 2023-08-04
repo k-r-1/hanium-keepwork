@@ -52,7 +52,7 @@
         app:counterEnabled="false">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/tiedtName_findpid"
+            android:id="@+id/tiedtPhone_findpid"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="40dp"

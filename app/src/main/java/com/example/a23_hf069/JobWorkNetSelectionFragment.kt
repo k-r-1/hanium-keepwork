@@ -1,5 +1,7 @@
 package com.example.a23_hf069
 
+import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -20,6 +22,7 @@ import okhttp3.*
 import org.xml.sax.InputSource
 import java.io.IOException
 import java.io.StringReader
+import java.util.Collections.addAll
 import javax.xml.parsers.DocumentBuilderFactory
 
 class JobWorkNetSelectionFragment : Fragment() {
@@ -27,7 +30,11 @@ class JobWorkNetSelectionFragment : Fragment() {
     private lateinit var binding: FragmentJobWorkNetSelectionBinding
     private lateinit var jobAdapter: ArrayAdapter<String>
     private lateinit var jobList: MutableList<String> // 직업 목록을 담을 리스트
+    private lateinit var jobCodeList: MutableList<String> //직종코드를 담을 리스트
     private lateinit var selectedJobList: MutableList<String> // 여러 개의 직종을 저장할 리스트
+    private lateinit var selectedJobCodeList: MutableList<String> // 여러 개의 직종코드를 저장할 리스트
+    private lateinit var combinedList: MutableList<String>
+    private lateinit var filteredCombinedList: MutableList<String>
 
     // ViewModel 생성
     private val sharedSelectionViewModel: SharedSelectionViewModel by activityViewModels()
@@ -36,6 +43,7 @@ class JobWorkNetSelectionFragment : Fragment() {
     private val baseUrl =
         "http://openapi.work.go.kr/opi/commonCode/commonCode.do?returnType=XML&target=CMCD&authKey=WNLJYZLM2VZXTT2TZA9XR2VR1HK&dtlGb=2"
 
+    @SuppressLint("SuspiciousIndentation")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -48,6 +56,9 @@ class JobWorkNetSelectionFragment : Fragment() {
         val jobListView = binding.lvJobs
         val jobSelectButton = binding.btnJobSelectComplete
         selectedJobList = mutableListOf()
+        jobCodeList = mutableListOf()
+        selectedJobCodeList = mutableListOf()
+        combinedList = mutableListOf()
 
         // ListView 초기화
         jobList = mutableListOf()
@@ -72,8 +83,23 @@ class JobWorkNetSelectionFragment : Fragment() {
                     if (!selectedJobList.contains(selectedJob)) {
                         selectedJobList.add(selectedJob)
                         updateSelectedJobTextView() // 선택된 직종 목록을 보여주는 TextView를 업데이트
+
+                        //선택된 직종만을 포함한 새로운 combinedList생성
+                        filteredCombinedList = combinedList.filter { combinedItem ->
+                            val a = combinedItem.split("-")[0] // combinedItem에서 jobName 값을 추출
+                            selectedJobList.contains(a) // 선택된 jobName 값들과 동일한지 비교
+                        } as MutableList<String>
+                    }
+                    //selectedJobCodeList에다가 직종코드만 저장하기
+                    for (item in filteredCombinedList) {
+                        val parts = item.split("-")
+                        if (parts.size == 2) {
+                            val b = parts[1]
+                            selectedJobCodeList.add(b)
+                        }
                     }
                 }
+
             }
 
         // drawableRight(검색 아이콘) 클릭 시 검색 이벤트 처리
@@ -93,12 +119,21 @@ class JobWorkNetSelectionFragment : Fragment() {
         jobSelectButton.setOnClickListener {
             val selectedJobs = selectedJobList.joinToString(", \n")
             sharedSelectionViewModel.selectedJob = selectedJobs // 선택된 직종 정보를 ViewModel에 저장
+            val selectedJobCodes=selectedJobCodeList.joinToString(", \n")
+            sharedSelectionViewModel.selectedJobCode= selectedJobCodes //선택된 직종코드 정보를 viewModel에 저장
 
+            // Bundle을 생성하여 데이터 추가
+            val bundle = Bundle()
+            bundle.putString("selectedJobs", selectedJobs)
+            bundle.putString("selectedJobCodes", selectedJobCodes)
+
+            // 다음 프래그먼트 생성 및 데이터 전달
             val wantedFilteringFragment = WantedFilteringFragment()
             requireActivity().supportFragmentManager.beginTransaction()
                 .replace(R.id.fl_container, wantedFilteringFragment)
                 .addToBackStack(null)
                 .commit()
+            wantedFilteringFragment.arguments = bundle //뷰모델 사용x, bundle로 값넘겨줄때 필요한 코드
         }
 
         return rootView
@@ -154,7 +189,16 @@ class JobWorkNetSelectionFragment : Fragment() {
                     val jobName = jobNodeList.item(i).textContent
                     jobList.add(jobName)
                 }
+                // XML에서 "jobsCd" 태그를 찾아서 직업 이름을 추출하여 직업 목록인 jobCodeList에 추가
+                val jobCodeNodeList = xmlDoc.getElementsByTagName("jobsCd")
+                for (i in 0 until jobCodeNodeList.length) {
+                    val jobCode = jobCodeNodeList.item(i).textContent
+                    jobCodeList.add(jobCode)
+                }
             }
+
+            //jobList와 jobCodeList를 서로 합치기(직종이름에 해당하는 직종코드 짝지어주기)
+            combinedList.addAll(jobList.zip(jobCodeList) { a, b -> "$a-$b" })
 
             // 파싱 결과를 어댑터에 알려서 리스트뷰를 갱신
             jobAdapter.notifyDataSetChanged()

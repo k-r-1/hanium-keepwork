@@ -34,6 +34,10 @@ class WantedFilteringFragment : Fragment() {
     lateinit var jobcl_btn: Button
     lateinit var tv_jobcl_selected: TextView
     lateinit var tv_regioncl_selected: TextView
+
+    //직종 코드
+    private lateinit var selectedJobCodes: String
+
     //학력
     lateinit var cbAllEdu: CheckBox // 학력무관
     lateinit var cbHighEdu: CheckBox // 고졸
@@ -71,6 +75,10 @@ class WantedFilteringFragment : Fragment() {
         regioncl_btn = view.findViewById<Button>(R.id.regioncl_btn)
         //직종 선택 초기화
         jobcl_btn = view.findViewById<Button>(R.id.jobcl_btn)
+
+        // 전달된 데이터를 받아서 사용
+        val selectedJobs = arguments?.getString("selectedJobs")
+        selectedJobCodes = arguments?.getString("selectedJobCodes").toString()
 
         complete_btn.setOnClickListener {
             val wantedResultFragment = WantedResultFragment()
@@ -110,6 +118,9 @@ class WantedFilteringFragment : Fragment() {
         val selectedJob = sharedSelectionViewModel.selectedJob
         tv_jobcl_selected.text = selectedJob
 
+        // ViewModel에서 직종코드 가져오기
+        val selectedJobCode = sharedSelectionViewModel.selectedJobCode
+
         // CheckBox 변수들을 초기화
         cbAllCareer = view.findViewById(R.id.cb_c_1)
         cbFresh = view.findViewById(R.id.cb_c_2)
@@ -131,7 +142,7 @@ class WantedFilteringFragment : Fragment() {
         fetchWantedList("region",selectedRegion)
 
         // ------ 직종 ----------------
-
+        fetchWantedList("job", selectedJobCode)
 
         // 각 CheckBox에 리스너를 등록하여 박스 선택시 이벤트를 처리
         // ------ 경력 ----------------
@@ -219,14 +230,17 @@ class WantedFilteringFragment : Fragment() {
 
                             }
                         }
-
-
                     }
-                    // if문 region 종료
-
-//                    else if(category == "job"){
-//
-//                    }
+                    else if (category == "job") {
+                        println(selectedJobCodes)
+                        for (i in wantedList) {
+                            if (selectedJobCodes?.contains(i.jobsCd?: "")==true) {
+                                println(i.jobsCd)
+                                println(i.company)
+                                println(i.title)
+                            }
+                        }
+                    }
                     else if (category == "edu") {
                         for(i in wantedList){
                             if(keyword == i.minEdubg){
@@ -405,7 +419,8 @@ class WantedFilteringFragment : Fragment() {
         var career: String? = null,
         var closeDt: String? = null,
         var basicAddr: String? = null,
-        var detailAddr: String? = null
+        var detailAddr: String? = null,
+        var jobsCd: String? = null
     )
 
     private fun parseXmlResponse(xmlResponse: String?): List<Wanted> {
@@ -427,6 +442,7 @@ class WantedFilteringFragment : Fragment() {
         var closeDt: String? = null
         var basicAddr: String? = null
         var detailAddr: String? = null
+        var jobsCd: String? = null
 
         while (eventType != XmlPullParser.END_DOCUMENT) {
             when (eventType) {
@@ -444,6 +460,7 @@ class WantedFilteringFragment : Fragment() {
                         "closeDt" -> closeDt = xpp.nextText()
                         "basicAddr" -> basicAddr = xpp.nextText()
                         "detailAddr" -> detailAddr = xpp.nextText()
+                        "jobsCd" -> jobsCd = xpp.nextText()
                     }
                 }
 
@@ -462,6 +479,7 @@ class WantedFilteringFragment : Fragment() {
                         closeDt = null
                         basicAddr = null
                         detailAddr = null
+                        jobsCd = null
                     }
                 }
             }

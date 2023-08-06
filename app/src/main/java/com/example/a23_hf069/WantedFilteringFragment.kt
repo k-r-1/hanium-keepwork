@@ -40,6 +40,8 @@ class WantedFilteringFragment : Fragment() {
 
     //학력
     lateinit var cbAllEdu: CheckBox // 학력무관
+    lateinit var cbElementaryEdu:CheckBox //초졸 = 학력무관
+    lateinit var cbMiddleEdu:CheckBox //중졸 = 학력무관
     lateinit var cbHighEdu: CheckBox // 고졸
     lateinit var cbUniv2: CheckBox // 대졸(2~3년)
     lateinit var cbUniv4: CheckBox // 대졸(4년)
@@ -165,7 +167,6 @@ class WantedFilteringFragment : Fragment() {
             if (isChecked) {
                 fetchWantedList("edu","학력무관")            }
         }
-
         cbHighEdu.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 fetchWantedList("edu","고졸")            }
@@ -203,7 +204,7 @@ class WantedFilteringFragment : Fragment() {
     }
 
     // 카테고리와 키워드에 해당하는 채용공고 가져오기
-    private fun fetchWantedList(category:String?,keyword: String?){
+    private fun fetchWantedList(category: String?, keyword: String?){
         val client = OkHttpClient()
         val request = Request.Builder()
             .url("$baseUrl")
@@ -221,29 +222,30 @@ class WantedFilteringFragment : Fragment() {
                     result = parseXmlResponse(xmlString) // parsing하기
                     wantedList = result
                     if (category == "region") {
-                        for(i in wantedList){
-                            if(keyword == i.region){
+                        for (i in wantedList) {
+                            if (keyword == i.region) {
                                 println(i.region)
                                 println(i.company)
                                 println(i.title)
                                 println("______________________________")
-
                             }
                         }
-                    }
-                    else if (category == "job") {
-                        println(selectedJobCodes)
+//                        val filteredList = wantedList.filter { it.region == keyword }
+//                        sharedSelectionViewModel.region_filterdList = filteredList // viewModel에 필터링된 리스트 저장
+                    } else if (category == "job") {
                         for (i in wantedList) {
-                            if (selectedJobCodes?.contains(i.jobsCd?: "")==true) {
+                            if (selectedJobCodes?.contains(i.jobsCd ?: "") == true) {
                                 println(i.jobsCd)
                                 println(i.company)
                                 println(i.title)
                             }
                         }
-                    }
-                    else if (category == "edu") {
-                        for(i in wantedList){
-                            if(keyword == i.minEdubg){
+                        val filteredList = wantedList.filter { it.jobsCd == keyword }
+                        sharedSelectionViewModel.selectedJobCode =
+                            filteredList.toString() // viewModel에 필터링된 리스트 저장
+                    } else if (category == "edu") {
+                        for (i in wantedList) {
+                            if (keyword == i.minEdubg) {
                                 println(i.minEdubg)
                                 println(i.company)
                                 println(i.title)
@@ -252,11 +254,11 @@ class WantedFilteringFragment : Fragment() {
                             }
                         }
                         val filteredList = wantedList.filter { it.minEdubg == keyword }
-                        sharedSelectionViewModel.edu_filterdList = filteredList // viewModel에 필터링된 리스트 저장
-                    }
-                    else if (category == "career") {
-                        for(i in wantedList){
-                            if(keyword == i.career){
+                        sharedSelectionViewModel.edu_filterdList =
+                            filteredList // viewModel에 필터링된 리스트 저장
+                    } else if (category == "career") {
+                        for (i in wantedList) {
+                            if (keyword == i.career) {
                                 println(i.career)
                                 println(i.company)
                                 println(i.title)
@@ -265,7 +267,8 @@ class WantedFilteringFragment : Fragment() {
                             }
                         }
                         val filteredList = wantedList.filter { it.career == keyword }
-                        sharedSelectionViewModel.career_filterdList = filteredList // viewModel에 필터링된 리스트 저장
+                        sharedSelectionViewModel.career_filterdList =
+                            filteredList // viewModel에 필터링된 리스트 저장
 
 
                     } else if (category == "closeDt") {
@@ -306,8 +309,10 @@ class WantedFilteringFragment : Fragment() {
                                         println(i.title)
                                         println("______________________________")
 
-                                        val filteredList = wantedList.filter { it.closeDt == keyword }
-                                        sharedSelectionViewModel.closeDt_filterdList = filteredList // viewModel에 필터링된 리스트 저장
+                                        val filteredList =
+                                            wantedList.filter { it.closeDt == keyword }
+                                        sharedSelectionViewModel.closeDt_filterdList =
+                                            filteredList // viewModel에 필터링된 리스트 저장
                                     }
                                 }
                             }
@@ -324,8 +329,10 @@ class WantedFilteringFragment : Fragment() {
                                         println(i.title)
                                         println("______________________________")
 
-                                        val filteredList = wantedList.filter { it.closeDt == keyword }
-                                        sharedSelectionViewModel.closeDt_filterdList = filteredList // viewModel에 필터링된 리스트 저장
+                                        val filteredList =
+                                            wantedList.filter { it.closeDt == keyword }
+                                        sharedSelectionViewModel.closeDt_filterdList =
+                                            filteredList // viewModel에 필터링된 리스트 저장
                                     }
                                 }
                             }
@@ -344,8 +351,10 @@ class WantedFilteringFragment : Fragment() {
                                                 println(i.title)
                                                 println("______________________________")
 
-                                                val filteredList = wantedList.filter { it.closeDt == keyword }
-                                                sharedSelectionViewModel.closeDt_filterdList = filteredList // viewModel에 필터링된 리스트 저장
+                                                val filteredList =
+                                                    wantedList.filter { it.closeDt == keyword }
+                                                sharedSelectionViewModel.closeDt_filterdList =
+                                                    filteredList // viewModel에 필터링된 리스트 저장
                                             }
                                         }
                                     }
@@ -366,8 +375,10 @@ class WantedFilteringFragment : Fragment() {
                                                 println(i.title)
                                                 println("______________________________")
 
-                                                val filteredList = wantedList.filter { it.closeDt == keyword }
-                                                sharedSelectionViewModel.closeDt_filterdList = filteredList // viewModel에 필터링된 리스트 저장
+                                                val filteredList =
+                                                    wantedList.filter { it.closeDt == keyword }
+                                                sharedSelectionViewModel.closeDt_filterdList =
+                                                    filteredList // viewModel에 필터링된 리스트 저장
                                             }
                                         }
                                     }
@@ -388,8 +399,10 @@ class WantedFilteringFragment : Fragment() {
                                                 println(i.title)
                                                 println("______________________________")
 
-                                                val filteredList = wantedList.filter { it.closeDt == keyword }
-                                                sharedSelectionViewModel.closeDt_filterdList = filteredList // viewModel에 필터링된 리스트 저장
+                                                val filteredList =
+                                                    wantedList.filter { it.closeDt == keyword }
+                                                sharedSelectionViewModel.closeDt_filterdList =
+                                                    filteredList // viewModel에 필터링된 리스트 저장
                                             }
                                         }
                                     }
@@ -466,7 +479,7 @@ class WantedFilteringFragment : Fragment() {
 
                 XmlPullParser.END_TAG -> {
                     if (xpp.name == "wanted") {
-                        wantedList.add(Wanted(wantedAuthNo,company,title,salTpNm,sal, region, holidayTpNm, minEdubg, career, closeDt, basicAddr, detailAddr))
+                        wantedList.add(Wanted(wantedAuthNo,company,title,salTpNm,sal, region, holidayTpNm, minEdubg, career, closeDt, basicAddr, detailAddr, jobsCd))
                         wantedAuthNo = null
                         company = null
                         title = null
@@ -487,8 +500,6 @@ class WantedFilteringFragment : Fragment() {
         } // while문 종료
         return wantedList
     }
-
-
 
     private fun showErrorToast() {
         Toast.makeText(requireContext(), "Failed to fetch wanted list.", Toast.LENGTH_SHORT).show()

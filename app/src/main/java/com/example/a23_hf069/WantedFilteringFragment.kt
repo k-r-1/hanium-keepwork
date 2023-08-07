@@ -21,9 +21,8 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 
 class WantedFilteringFragment : Fragment() {
-
     private val baseUrl =
-        "http://openapi.work.go.kr/opi/opi/opia/wantedApi.do?authKey=WNLJYZLM2VZXTT2TZA9XR2VR1HK&callTp=L&returnType=XML&startPage=1&display=10"
+        "http://openapi.work.go.kr/opi/opi/opia/wantedApi.do?authKey=WNLJYZLM2VZXTT2TZA9XR2VR1HK&callTp=L&returnType=XML&display=100"
     //완료 버튼
     lateinit var complete_btn: Button
     //지역,직종
@@ -45,8 +44,8 @@ class WantedFilteringFragment : Fragment() {
     lateinit var cbTomorrow : CheckBox//내일까지
     lateinit var cb7days : CheckBox//일주일 이내
     lateinit var cb30days : CheckBox//한달 이내
-    lateinit var cb60days : CheckBox//두달 이내
 
+    lateinit var cb60days : CheckBox//두달 이내
     private lateinit var wantedList: List<Wanted>
     private val sharedSelectionViewModel: SharedSelectionViewModel by activityViewModels() // 필터링된 리스트를 전달하는 viewModel 객체 생성
     lateinit var selectedRegion : String
@@ -181,10 +180,10 @@ class WantedFilteringFragment : Fragment() {
     }
 
     // 카테고리와 키워드에 해당하는 채용공고 가져와서 sharedSelectionViewModel의 리스트에 저장
-    private fun fetchWantedList(category:String?,keyword: String?){
+    private fun fetchWantedList(category:String?,keyword: String?, page: Int = 1){
         val client = OkHttpClient()
         val request = Request.Builder()
-            .url("$baseUrl")
+            .url("$baseUrl&startPage=$page")
             .build()
         var result: List<Wanted> = emptyList()
         client.newCall(request).enqueue(object : Callback {
@@ -198,6 +197,7 @@ class WantedFilteringFragment : Fragment() {
                     val xmlString = response.body?.string()
                     result = parseXmlResponse(xmlString) // parsing하기
                     wantedList = result
+
                     if (category == "region") {
                         for(i in wantedList){
                             if(keyword == i.region){
@@ -371,6 +371,27 @@ class WantedFilteringFragment : Fragment() {
                             }
                         }
                     } //if문 closeDt 종료
+
+                    // 더 많은 페이지가 있는지 확인합니다.
+                    val factory = XmlPullParserFactory.newInstance()
+                    val xpp = factory.newPullParser()
+                    xpp.setInput(StringReader(xmlString))
+
+                    var eventType = xpp.eventType
+                    var totalPages = 0
+
+                    while (eventType != XmlPullParser.END_DOCUMENT) {
+                        if (eventType == XmlPullParser.START_TAG && xpp.name == "total") { // total 태그는 총 아이템의 개수를 의미함
+                            totalPages = xpp.nextText().toInt() / 100 // 총 아이템의 개수 / display한 아이템수 => 총 페이지 개수
+                            break
+                        }
+                        eventType = xpp.next()
+                    }
+//                    // 더 많은 페이지가 있다면 다음 페이지를 가져옵니다.
+//                    if (totalPages > page) {
+//                        fetchWantedList(category, keyword, page + 1)
+//                    }
+
                 } // if 응답이 성공적일때
                 else {
                     showErrorToast()
@@ -457,7 +478,6 @@ class WantedFilteringFragment : Fragment() {
         } // while문 종료
         return wantedList
     }
-
 
 
     private fun showErrorToast() {

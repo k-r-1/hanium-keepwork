@@ -37,6 +37,21 @@ class WantedResultFragment : Fragment() {
             listView.adapter = adapter
             adapter.notifyDataSetChanged()
         })
+        sharedSelectionViewModel.edu_filteredList.observe(viewLifecycleOwner, Observer { filteredList ->
+            val adapter = WantedListAdapter(requireContext(), filteredList)
+            listView.adapter = adapter
+            adapter.notifyDataSetChanged()
+        })
+        sharedSelectionViewModel.career_filteredList.observe(viewLifecycleOwner, Observer { filteredList ->
+            val adapter = WantedListAdapter(requireContext(), filteredList)
+            listView.adapter = adapter
+            adapter.notifyDataSetChanged()
+        })
+        sharedSelectionViewModel.closeDt_filteredList.observe(viewLifecycleOwner, Observer { filteredList ->
+            val adapter = WantedListAdapter(requireContext(), filteredList)
+            listView.adapter = adapter
+            adapter.notifyDataSetChanged()
+        })
     }
 
     class WantedListAdapter(context: Context, private val wantedList: List<WantedFilteringFragment.Wanted>) :

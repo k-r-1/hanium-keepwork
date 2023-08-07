@@ -120,7 +120,7 @@ class JobWorkNetSelectionFragment : Fragment() {
             val selectedJobs = selectedJobList.joinToString(", \n")
             sharedSelectionViewModel.selectedJob = selectedJobs // 선택된 직종 정보를 ViewModel에 저장
             val selectedJobCodes=selectedJobCodeList.joinToString(", \n")
-            sharedSelectionViewModel.selectedJobCode= selectedJobCodes //선택된 직종코드 정보를 viewModel에 저장
+            //sharedSelectionViewModel.selectedJobCode= selectedJobCodes //선택된 직종코드 정보를 viewModel에 저장
 
             // Bundle을 생성하여 데이터 추가
             val bundle = Bundle()

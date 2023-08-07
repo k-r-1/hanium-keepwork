@@ -241,18 +241,18 @@ class WantedFilteringFragment : Fragment() {
         } // fetchWantedList 함수 종료
 
     data class Wanted(
-        var wantedAuthNo: String? = null,
-        var company: String? = null,
-        var title: String? = null,
-        var salTpNm: String? = null,
-        var sal: String? = null,
-        var region: String? = null,
-        var holidayTpNm: String? = null,
-        var minEdubg: String? = null,
-        var career: String? = null,
-        var closeDt: String? = null,
-        var basicAddr: String? = null,
-        var detailAddr: String? = null
+        val company: String? = null,
+        val title: String? = null,
+        val salTpNm: String? = null,
+        val sal: String? = null,
+        val region: String? = null,
+        val holidayTpNm: String? = null,
+        val minEdubg: String? = null,
+        val career: String? = null,
+        val closeDt: String? = null,
+        val wantedMobileInfoUrl: String? = null,
+        val jobsCd: String? = null,
+        val infoSvc: String? = null
     )
 
     private fun parseXmlResponse(xmlResponse: String?): List<Wanted> {
@@ -262,24 +262,23 @@ class WantedFilteringFragment : Fragment() {
         xpp.setInput(StringReader(xmlResponse))
 
         var eventType = xpp.eventType
-        var wantedAuthNo: String? = null
-        var company: String? = null
-        var title: String? = null
-        var salTpNm: String? = null
-        var sal: String? = null
-        var region: String? = null
-        var holidayTpNm: String? = null
-        var minEdubg: String? = null
-        var career: String? = null
-        var closeDt: String? = null
-        var basicAddr: String? = null
-        var detailAddr: String? = null
+        var company: String? = null // 회사명
+        var title: String? = null // 채용제목
+        var salTpNm: String? = null // 임금형태
+        var sal: String? = null // 급여
+        var region: String? = null // 근무지역
+        var holidayTpNm: String? = null // 근무형태
+        var minEdubg: String? = null // 최소학력
+        var career: String? = null // 경력
+        var closeDt: String? = null // 마감일자
+        var wantedMobileInfoUrl: String? = null // 워크넷 모바일 채용정보 URL
+        var jobsCd: String? = null // 직종코드
+        var infoSvc: String? = null // 정보제공처
 
         while (eventType != XmlPullParser.END_DOCUMENT) {
             when (eventType) {
                 XmlPullParser.START_TAG -> {
                     when (xpp.name) {
-                        "wantedAuthNo" -> wantedAuthNo = xpp.nextText()
                         "company" -> company = xpp.nextText()
                         "title" -> title = xpp.nextText()
                         "salTpNm" -> salTpNm = xpp.nextText()
@@ -289,15 +288,23 @@ class WantedFilteringFragment : Fragment() {
                         "minEdubg" -> minEdubg = xpp.nextText()
                         "career" -> career = xpp.nextText()
                         "closeDt" -> closeDt = xpp.nextText()
-                        "basicAddr" -> basicAddr = xpp.nextText()
-                        "detailAddr" -> detailAddr = xpp.nextText()
+                        "wantedMobileInfoUrl" -> wantedMobileInfoUrl = xpp.nextText()
+                        "jobsCd" -> jobsCd = xpp.nextText()
+                        "infoSvc" -> infoSvc = xpp.nextText()
                     }
                 }
-
                 XmlPullParser.END_TAG -> {
                     if (xpp.name == "wanted") {
-                        wantedList.add(Wanted(wantedAuthNo,company,title,salTpNm,sal, region, holidayTpNm, minEdubg, career, closeDt, basicAddr, detailAddr))
-                        wantedAuthNo = null
+                        company?.let { c ->
+                            title?.let { t ->
+                                wantedList.add(
+                                    Wanted(
+                                        c, t, salTpNm, sal, region, holidayTpNm,
+                                        minEdubg, career, closeDt, wantedMobileInfoUrl, jobsCd, infoSvc
+                                    )
+                                )
+                            }
+                        }
                         company = null
                         title = null
                         salTpNm = null
@@ -307,8 +314,9 @@ class WantedFilteringFragment : Fragment() {
                         minEdubg = null
                         career = null
                         closeDt = null
-                        basicAddr = null
-                        detailAddr = null
+                        wantedMobileInfoUrl = null
+                        jobsCd = null
+                        infoSvc = null
                     }
                 }
             }

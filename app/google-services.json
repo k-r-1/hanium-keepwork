@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "690907773251",
+    "project_id": "keepwork-c58a3",
+    "storage_bucket": "keepwork-c58a3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:690907773251:android:d80dc5ed36dd92b0c157f6",
+        "android_client_info": {
+          "package_name": "com.example.a23_hf069"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "690907773251-lsoc0e0vchbq076r29cedmsapbfhn9e8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCAIWgNEMOuuEl9Lgd60dkkLjlEspO_Cjo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "690907773251-lsoc0e0vchbq076r29cedmsapbfhn9e8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

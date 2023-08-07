@@ -10,6 +10,7 @@ import android.widget.ListView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 
 
 class WantedResultFragment : Fragment() {
@@ -24,30 +25,18 @@ class WantedResultFragment : Fragment() {
     ): View? {
         // ListView를 보여줄 레이아웃 파일을 연결
         val rootView = inflater.inflate(R.layout.fragment_wanted_result, container, false)
-        listView = rootView.findViewById(R.id.listView)
         return rootView
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        updateWantedList()
-    }
-
-    // ListView에 표시될 채용공고 목록을 업데이트하는 함수
-    fun updateWantedList() {
-        // 리스트뷰 어댑터를 해제하여 초기화
-        listView.adapter = null
-
-        val filteredList = mutableListOf<WantedFilteringFragment.Wanted>()
-
-        filteredList.addAll(sharedSelectionViewModel.region_filteredList)
-        filteredList.addAll(sharedSelectionViewModel.edu_filterdList)
-        filteredList.addAll(sharedSelectionViewModel.career_filterdList)
-        filteredList.addAll(sharedSelectionViewModel.closeDt_filterdList)
-
-        val adapter = WantedListAdapter(requireContext(), filteredList)
-        listView.adapter = adapter
+        listView = view.findViewById(R.id.listView)
+        // LiveData를 관찰하여 데이터 변경이 있을 때마다 UI 업데이트를 수행합니다.
+        sharedSelectionViewModel.region_filteredList.observe(viewLifecycleOwner, Observer { filteredList ->
+            val adapter = WantedListAdapter(requireContext(), filteredList)
+            listView.adapter = adapter
+            adapter.notifyDataSetChanged()
+        })
     }
 
     class WantedListAdapter(context: Context, private val wantedList: List<WantedFilteringFragment.Wanted>) :
@@ -62,7 +51,7 @@ class WantedResultFragment : Fragment() {
 
             val titleTextView: TextView = itemView?.findViewById(R.id.tv_title) ?: throw NullPointerException("tv_title not found in the layout")
             val companyTextView: TextView = itemView?.findViewById(R.id.tv_company) ?: throw NullPointerException("tv_company not found in the layout")
-            val closeDtTextView: TextView = itemView?.findViewById(R.id.tv_any) ?: throw NullPointerException("tv_any not found in the layout")
+            val closeDtTextView: TextView = itemView?.findViewById(R.id.tv_closeDt) ?: throw NullPointerException("tv_any not found in the layout")
 
             val currentItem = wantedList[position]
             titleTextView.text = currentItem.title

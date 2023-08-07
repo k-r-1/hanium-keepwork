@@ -38,10 +38,28 @@ class WantedResultFragment : Fragment() {
             val adapter = WantedListAdapter(requireContext(), filteredList)
             listView.adapter = adapter
             adapter.notifyDataSetChanged()
+            // 리스트 아이템 클릭 이벤트 처리
+            listView.setOnItemClickListener { _, _, position, _ ->
+                val wanted = filteredList[position]
+                val job = Job(
+                    wanted.company,
+                    wanted.title,
+                    wanted.salTpNm,
+                    wanted.sal,
+                    wanted.region,
+                    wanted.holidayTpNm,
+                    wanted.minEdubg,
+                    wanted.career,
+                    wanted.closeDt,
+                    wanted.wantedMobileInfoUrl,
+                    wanted.jobsCd,
+                    wanted.infoSvc
+                )
+                val intent = JobDetailActivity.newIntent(requireContext(), job)
+                startActivity(intent)
+            }
         })
-
     }
-
     class WantedListAdapter(context: Context, private val wantedList: List<WantedFilteringFragment.Wanted>) :
         ArrayAdapter<WantedFilteringFragment.Wanted>(context, R.layout.wanted_list_item, wantedList) {
 

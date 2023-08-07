@@ -241,18 +241,18 @@ class WantedFilteringFragment : Fragment() {
         } // fetchWantedList 함수 종료
 
     data class Wanted(
-        val company: String? = null,
-        val title: String? = null,
-        val salTpNm: String? = null,
-        val sal: String? = null,
-        val region: String? = null,
-        val holidayTpNm: String? = null,
-        val minEdubg: String? = null,
-        val career: String? = null,
-        val closeDt: String? = null,
-        val wantedMobileInfoUrl: String? = null,
-        val jobsCd: String? = null,
-        val infoSvc: String? = null
+        val company: String,
+        val title: String,
+        val salTpNm: String?,
+        val sal: String?,
+        val region: String?,
+        val holidayTpNm: String?,
+        val minEdubg: String?,
+        val career: String?,
+        val closeDt: String?,
+        val wantedMobileInfoUrl: String?,
+        val jobsCd: String?,
+        val infoSvc: String?
     )
 
     private fun parseXmlResponse(xmlResponse: String?): List<Wanted> {

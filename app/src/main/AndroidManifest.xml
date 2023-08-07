@@ -26,15 +26,6 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".FindIdActivity"
-            android:exported="false"
-            android:label="@string/title_activity_find_id"
-            android:theme="@style/Theme.23_HF069.NoActionBar">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
             android:name=".MemberInfoEditActivity"
             android:exported="false">
             <meta-data

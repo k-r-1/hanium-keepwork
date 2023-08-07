@@ -34,38 +34,12 @@ class WantedResultFragment : Fragment() {
         listView = view.findViewById(R.id.listView)
 
         // LiveData를 관찰하여 데이터 변경이 있을 때마다 UI 업데이트를 수행합니다.
-        sharedSelectionViewModel.region_filteredList.observe(viewLifecycleOwner, Observer { filteredList ->
-            val adapter = WantedListAdapter(requireContext(), filteredList)
-            listView.adapter = adapter
-            adapter.notifyDataSetChanged()
-        })
-        sharedSelectionViewModel.edu_filteredList.observe(viewLifecycleOwner, Observer { filteredList ->
-            val adapter = WantedListAdapter(requireContext(), filteredList)
-            listView.adapter = adapter
-            adapter.notifyDataSetChanged()
-        })
-        sharedSelectionViewModel.career_filteredList.observe(viewLifecycleOwner, Observer { filteredList ->
-            val adapter = WantedListAdapter(requireContext(), filteredList)
-            listView.adapter = adapter
-            adapter.notifyDataSetChanged()
-        })
-        sharedSelectionViewModel.closeDt_filteredList.observe(viewLifecycleOwner, Observer { filteredList ->
+        sharedSelectionViewModel._filteredList.observe(viewLifecycleOwner, Observer { filteredList ->
             val adapter = WantedListAdapter(requireContext(), filteredList)
             listView.adapter = adapter
             adapter.notifyDataSetChanged()
         })
 
-//        listView.setOnScrollListener(object : AbsListView.OnScrollListener {
-//            override fun onScrollStateChanged(view: AbsListView?, scrollState: Int) {}
-//
-//            override fun onScroll(view: AbsListView?, firstVisibleItem: Int, visibleItemCount: Int, totalItemCount: Int) {
-//                val lastItemIndex = firstVisibleItem + visibleItemCount
-//                // 스크롤이 마지막에 도달하면 추가 데이터를 가져오도록 처리
-//                if (lastItemIndex == totalItemCount) {
-//
-//                }
-//            }
-//        })
     }
 
     class WantedListAdapter(context: Context, private val wantedList: List<WantedFilteringFragment.Wanted>) :

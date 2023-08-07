@@ -32,7 +32,7 @@ class RegionSelectionFragment : Fragment() {
     private val regionList1: MutableList<String> = mutableListOf() // 대분류 지역명을 담을 리스트
     private val regionList2: MutableList<String> = mutableListOf() // 중분류 지역명을 담을 리스트
     // 전체 카테고리에 표시될 지역 이름 리스트
-    private val wholeRegionList: List<String> = listOf("전체", "서울 전체", "부산 전체", "대구 전체","인천 전체", "광주 전체", "대전 전체", "울산 전체", "세종 전체", "경기 전체", "충북 전체", "충남 전체", "전북 전체", "전남 전체", "경북 전체", "경남 전체", "제주 전체", "강원 전체" )
+    private val wholeRegionList: List<String> = listOf("서울 전체", "부산 전체", "대구 전체","인천 전체", "광주 전체", "대전 전체", "울산 전체", "세종 전체", "경기 전체", "충북 전체", "충남 전체", "전북 전체", "전남 전체", "경북 전체", "경남 전체", "제주 전체", "강원 전체" )
     private var selectedOneDepthRegion: String? = null// 선택한 oneDepth 지역명을 저장할 변수
     private val selectedRegionList: MutableList<String> =  mutableListOf() // 선택된 지역들을 저장할 리스트
 

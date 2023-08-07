@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.a23_hf069.*
@@ -30,26 +31,36 @@ class WantedFilteringFragment : Fragment() {
     lateinit var jobcl_btn: Button
     lateinit var tv_jobcl_selected: TextView
     lateinit var tv_regioncl_selected: TextView
-    //학력
+    //학력 -> 체크박스가 아닌 라디오 버튼으로 바꾸기
     lateinit var cbAllEdu: CheckBox // 학력무관
     lateinit var cbHighEdu: CheckBox // 고졸
     lateinit var cbUniv2: CheckBox // 대졸(2~3년)
     lateinit var cbUniv4: CheckBox // 대졸(4년)
-    //경력
+    //경력 > 체크박스가 아닌 라디오 버튼으로 바꾸기
     lateinit var cbAllCareer : CheckBox // 경력무관
     lateinit var cbFresh : CheckBox // 신입
     lateinit var cbExperienced : CheckBox // 경력
-    //마감일
+    //마감일 > 체크박스가 아닌 라디오 버튼으로 바꾸기
     lateinit var cbToday : CheckBox//오늘까지
     lateinit var cbTomorrow : CheckBox//내일까지
     lateinit var cb7days : CheckBox//일주일 이내
     lateinit var cb30days : CheckBox//한달 이내
-
     lateinit var cb60days : CheckBox//두달 이내
+
     private lateinit var wantedList: List<Wanted>
     private val sharedSelectionViewModel: SharedSelectionViewModel by activityViewModels() // 필터링된 리스트를 전달하는 viewModel 객체 생성
-    lateinit var selectedRegion : String
     lateinit var selectedJob : String
+    lateinit var selectedRegion : String
+
+    // 필터링 키워드
+    private var keywordRegion = ""
+    private var keywordJob = ""
+    private var keywordEdu = ""
+    private var keywordCareer= ""
+    private var keywordCloseDt = ""
+
+
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -104,53 +115,56 @@ class WantedFilteringFragment : Fragment() {
         complete_btn.setOnClickListener {
 
 
-            // 선택한 지역이 있을 경우 필터링하기
+            // 선택한 지역이 있을 경우 키워드에 해당 지역이름 넣기
             if(selectedRegion != ""){
-                fetchWantedList("region","$selectedRegion")
+                keywordRegion = selectedRegion
             }
             // 선택한 직종이 있을 경우 필터링하기
 
             // 학력 중 선택한 체크박스가 있을 경우 필터링하기
             if(cbAllEdu.isChecked){
-                fetchWantedList("edu","학력무관")
+                keywordEdu = "학력무관"
             }
-            if(cbHighEdu.isChecked){
-                fetchWantedList("edu","고졸")
+            else if(cbHighEdu.isChecked){
+                keywordEdu = "고졸"
             }
-            if(cbUniv2.isChecked){
-                fetchWantedList("edu","대졸(2~3년)")
+            else if(cbUniv2.isChecked){
+                keywordEdu = "대졸(2~3년)"
             }
-            if(cbUniv4.isChecked){
-                fetchWantedList("edu","대졸4년")
+            else if(cbUniv4.isChecked){
+                keywordEdu = "대졸4년"
             }
 
             // 경력 중 선택한 체크박스가 있을 경우 필터링하기
             if(cbAllCareer.isChecked){
-                fetchWantedList("career","관계없음")
+                keywordCareer = "관계없음"
             }
-            if(cbFresh.isChecked){
-                fetchWantedList("career","신입")
+            else if(cbFresh.isChecked){
+                keywordCareer = "신입"
             }
-            if(cbExperienced.isChecked){
-                fetchWantedList("career","경력")
+            else if(cbExperienced.isChecked){
+                keywordCareer = "경력"
             }
 
             // 마감일 중 선택한 체크박스가 있을 경우 필터링하기
             if(cbToday.isChecked){
-                fetchWantedList("closeDt","today")
+                keywordCloseDt = "today"
             }
-            if(cbTomorrow.isChecked){
-                fetchWantedList("closeDt","tomorrow")
+            else if(cbTomorrow.isChecked){
+                keywordCloseDt = "tomorrow"
             }
-            if(cb7days.isChecked){
-                fetchWantedList("closeDt","7days")
+            else if(cb7days.isChecked){
+                keywordCloseDt = "7days"
             }
-            if(cb30days.isChecked){
-                fetchWantedList("closeDt","30days")
+            else if(cb30days.isChecked){
+                keywordCloseDt = "30days"
             }
-            if(cb60days.isChecked){
-                fetchWantedList("closeDt","60days")
+            else if(cb60days.isChecked){
+                keywordCloseDt = "60days"
             }
+
+            //채용정보 불러오기
+            fetchWantedList()
 
             // 선택된 조건들을 반영한 sharedSelectionViewModel 속 리스트들을 반영한 리스트뷰 화면으로 전환
             val wantedResultFragment = WantedResultFragment()
@@ -177,15 +191,17 @@ class WantedFilteringFragment : Fragment() {
                 .addToBackStack(null)
                 .commit()
         }
+
     }
 
-    // 카테고리와 키워드에 해당하는 채용공고 가져와서 sharedSelectionViewModel의 리스트에 저장
-    private fun fetchWantedList(category:String?,keyword: String?, page: Int = 1){
+    // 키워드에 해당하는 채용공고 가져와서 sharedSelectionViewModel의 리스트에 저장
+    private fun fetchWantedList(page: Int = 1){
         val client = OkHttpClient()
         val request = Request.Builder()
             .url("$baseUrl&startPage=$page")
             .build()
         var result: List<Wanted> = emptyList()
+
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 println(e.printStackTrace())
@@ -194,213 +210,35 @@ class WantedFilteringFragment : Fragment() {
             @RequiresApi(Build.VERSION_CODES.O)
             override fun onResponse(call: Call, response: Response) {
                 if (response.isSuccessful) {
-                    val xmlString = response.body?.string()
-                    result = parseXmlResponse(xmlString) // parsing하기
+                    val xmlString = response.body?.string() // url에 있는 모든 글자 다가져오기
+                    result = parseXmlResponse(xmlString) // parsing한 후 리스트화 하기
                     wantedList = result
 
-                    if (category == "region") {
-                        for(i in wantedList){
-                            if(keyword == i.region){
-                                println(i.region)
-                                println(i.company)
-                                println(i.title)
-                                println("______________________________")
-
-                            }
-                        }
-                        val filteredList = wantedList.filter { it.region == keyword }
-                        sharedSelectionViewModel.updateFilteredList(category, filteredList)
+                    val filteredList = wantedList.filter { // 리스트 필터링하기 -> 모든 조건을 동시에 만족하는 채용공고 가져오기
+                        it.region == keywordRegion && it.minEdubg == keywordEdu
+                                && it.career == keywordCareer
                     }
-                    // if문 region 종료
+                    //출력해서 확인하기
+                    for(i in filteredList){
+                        println("${i.title}")
+                        println("${i.minEdubg}")
+                        println("${i.career}")
+                        println("${i.closeDt}")
+                        println("${i.region}")
+                        println("------------------------------")
 
-//                    else if(category == "job"){
-//
-//                    }
-                    else if (category == "edu") {
-                        for(i in wantedList){
-                            if(keyword == i.minEdubg){
-                                println(i.minEdubg)
-                                println(i.company)
-                                println(i.title)
-                                println("______________________________")
-
-                            }
-                        }
-                        val filteredList = wantedList.filter { it.minEdubg == keyword }
-                        sharedSelectionViewModel.updateFilteredList(category, filteredList)
                     }
-                    else if (category == "career") {
-                        for(i in wantedList){
-                            if(keyword == i.career){
-                                println(i.career)
-                                println(i.company)
-                                println(i.title)
-                                println("______________________________")
+                    //UI 업데이트할 수 있도록 뷰모델에 업데이트
+                    sharedSelectionViewModel.updateFilteredList(filteredList)
+                }// if 응답이 성공적일때
 
-                            }
-                        }
-                        val filteredList = wantedList.filter { it.career == keyword }
-                        sharedSelectionViewModel.updateFilteredList(category, filteredList)
-                    }
-                    else if (category == "closeDt") {
-                        val formatter = DateTimeFormatter.ofPattern("yy-MM-dd")
-
-                        val today = LocalDate.now()
-                        val formattedToday = formatter.format(today)
-                        val after1Day = formatter.format(today.plusDays(1))
-                        val after7Days = formatter.format(today.plusDays(7))
-                        val after30Days = formatter.format(today.plusMonths(1))
-                        val after60Days = formatter.format(today.plusMonths(2))
-
-                        fun parseDate(dateString: String): LocalDate? {
-                            return try {
-                                LocalDate.parse(dateString, formatter)
-                            } catch (e: Exception) {
-                                e.printStackTrace()
-                                null
-                            }
-                        }
-
-                        val todayDate = parseDate(formattedToday)
-                        val after1DayDate = parseDate(after1Day)
-                        val after7DaysDate = parseDate(after7Days)
-                        val after30DaysDate = parseDate(after30Days)
-                        val after60DaysDate = parseDate(after60Days)
-
-                        if (keyword == "today") { // 오늘까지인 공고 찾기 => 공고 마감일 = 오늘 날짜
-                            for (i in wantedList) {
-                                val a = i.closeDt
-                                // 한글과 공백을 제거하고 순수한 날짜 포맷만 추출
-                                val closeDt = a?.replace(Regex("[채용시까지\\s]"), "")
-                                if (closeDt != null) {
-                                    val closeDtDate = parseDate(closeDt)
-                                    if (closeDtDate == todayDate) {
-                                        println(i.closeDt)
-                                        println(i.company)
-                                        println(i.title)
-                                        println("______________________________")
-
-                                        val filteredList = wantedList.filter { it.closeDt == keyword }
-                                        sharedSelectionViewModel.updateFilteredList(category, filteredList)
-                                    }
-                                }
-                            }
-                        } else if (keyword == "tomorrow") { // 내일까지인 공고 찾기 => 공고 마감일 < 오늘 날짜 + 1
-                            for (i in wantedList) {
-                                val a = i.closeDt
-                                // 한글과 공백을 제거하고 순수한 날짜 포맷만 추출
-                                val closeDt = a?.replace(Regex("[채용시까지\\s]"), "")
-                                if (closeDt != null) {
-                                    val closeDtDate = parseDate(closeDt)
-                                    if (closeDtDate == after1DayDate) {
-                                        println(i.closeDt)
-                                        println(i.company)
-                                        println(i.title)
-                                        println("______________________________")
-
-                                        val filteredList = wantedList.filter { it.closeDt == keyword }
-                                        sharedSelectionViewModel.updateFilteredList(category, filteredList)
-                                    }
-                                }
-                            }
-                        } else if (keyword == "7days") { // 일주일 이내인 공고 찾기 => 공고 마감일 < 오늘 날짜 + 7
-                            for (i in wantedList) {
-                                val a = i.closeDt
-                                // 한글과 공백을 제거하고 순수한 날짜 포맷만 추출
-                                val closeDt = a?.replace(Regex("[채용시까지\\s]"), "")
-                                if (closeDt != null) {
-                                    val closeDtDate = parseDate(closeDt)
-                                    todayDate?.let { today ->
-                                        after7DaysDate?.let { after7 ->
-                                            if (closeDtDate!! in todayDate..after7) {
-                                                println(i.closeDt)
-                                                println(i.company)
-                                                println(i.title)
-                                                println("______________________________")
-
-                                                val filteredList = wantedList.filter { it.closeDt == keyword }
-                                                sharedSelectionViewModel.updateFilteredList(category, filteredList)
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        } else if (keyword == "30days") { // 한달 이내인 공고 찾기 => 공고 마감일 < 오늘 날짜 + 30
-                            for (i in wantedList) {
-                                val a = i.closeDt
-                                // 한글과 공백을 제거하고 순수한 날짜 포맷만 추출
-                                val closeDt = a?.replace(Regex("[채용시까지\\s]"), "")
-                                if (closeDt != null) {
-                                    val closeDtDate = parseDate(closeDt)
-                                    todayDate?.let { today ->
-                                        after30DaysDate?.let { after30 ->
-                                            if (closeDtDate!! in todayDate..after30) {
-                                                println(i.closeDt)
-                                                println(i.company)
-                                                println(i.title)
-                                                println("______________________________")
-
-                                                val filteredList = wantedList.filter { it.closeDt == keyword }
-                                                sharedSelectionViewModel.updateFilteredList(category, filteredList)
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        } else { // 두달 이내인 공고 찾기 => 공고 마감일 < 오늘 날짜 + 30
-                            for (i in wantedList) {
-                                val a = i.closeDt
-                                // 한글과 공백을 제거하고 순수한 날짜 포맷만 추출
-                                val closeDt = a?.replace(Regex("[채용시까지\\s]"), "")
-                                if (closeDt != null) {
-                                    val closeDtDate = parseDate(closeDt)
-                                    todayDate?.let { today ->
-                                        after60DaysDate?.let { after60 ->
-                                            if (closeDtDate!! in todayDate..after60) {
-                                                println(i.closeDt)
-                                                println(i.company)
-                                                println(i.title)
-                                                println("______________________________")
-
-                                                val filteredList = wantedList.filter { it.closeDt == keyword }
-                                                sharedSelectionViewModel.updateFilteredList(category, filteredList)
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    } //if문 closeDt 종료
-
-                    // 더 많은 페이지가 있는지 확인합니다.
-                    val factory = XmlPullParserFactory.newInstance()
-                    val xpp = factory.newPullParser()
-                    xpp.setInput(StringReader(xmlString))
-
-                    var eventType = xpp.eventType
-                    var totalPages = 0
-
-                    while (eventType != XmlPullParser.END_DOCUMENT) {
-                        if (eventType == XmlPullParser.START_TAG && xpp.name == "total") { // total 태그는 총 아이템의 개수를 의미함
-                            totalPages = xpp.nextText().toInt() / 100 // 총 아이템의 개수 / display한 아이템수 => 총 페이지 개수
-                            break
-                        }
-                        eventType = xpp.next()
-                    }
-//                    // 더 많은 페이지가 있다면 다음 페이지를 가져옵니다.
-//                    if (totalPages > page) {
-//                        fetchWantedList(category, keyword, page + 1)
-//                    }
-
-                } // if 응답이 성공적일때
                 else {
                     showErrorToast()
                 } //if 응답 실패일때
-            } // onResponse 함수 종료
-
+            } //onResponse 함수 종료
         }) //callback 종료
 
-    } // fetchWantedList 함수 종료
+        } // fetchWantedList 함수 종료
 
     data class Wanted(
         var wantedAuthNo: String? = null,

@@ -23,7 +23,8 @@ import java.util.*
 
 class WantedFilteringFragment : Fragment() {
     private val baseUrl =
-        "http://openapi.work.go.kr/opi/opi/opia/wantedApi.do?authKey=WNLJYZLM2VZXTT2TZA9XR2VR1HK&callTp=L&returnType=XML&display=500"
+        "http://openapi.work.go.kr/opi/opi/opia/wantedApi.do?authKey=WNLJYZLM2VZXTT2TZA9XR2VR1HK&callTp=L&returnType=XML&display=100"
+    private var page = 1
 
     //완료 버튼
     lateinit var complete_btn: Button
@@ -155,7 +156,7 @@ class WantedFilteringFragment : Fragment() {
             }
             // 지역조건을 선택한 경우
             else {
-                // 키워드에 해당하는 채용공고 가져와서 sharedSelectionViewModel의 리스트에 저장 -> UI에 반영
+                // 필터링 후 UI에 반영
                 fetchWantedList()
 
                 // 화면전환
@@ -190,10 +191,10 @@ class WantedFilteringFragment : Fragment() {
     }
 
     // 키워드에 해당하는 채용공고 가져와서 sharedSelectionViewModel의 리스트에 저장 -> UI에 반영
-    private fun fetchWantedList(page: Int = 1) {
+    private fun fetchWantedList() {
         val client = OkHttpClient()
         val request = Request.Builder()
-            .url("$baseUrl&startPage=$page")
+            .url("$baseUrl&startPage=$page&keyword=$keywordRegion") // &keyword로 지역 필터링하기
             .build()
         var result: List<Wanted> = emptyList()
 
@@ -209,16 +210,52 @@ class WantedFilteringFragment : Fragment() {
                     result = parseXmlResponse(xmlString) // parsing한 후 리스트화 하기
                     wantedList = result
 
-
-                    val filteredList1 = wantedList.filter { it.region == keywordRegion } // 지역 필터링하기
-                    val filteredList2 = filteredList1.filter {
-                        it.minEdubg == keywordEdu && it.career == keywordCareer // 그외 조건 필터링하기
+                    if(keywordEdu =="" && keywordCareer == ""){ // 지역만 선택
+                        sharedSelectionViewModel.updateFilteredList(wantedList)
                     }
-                    //UI 업데이트할 수 있도록 뷰모델에 업데이트
-                    sharedSelectionViewModel.updateFilteredList(filteredList2)
+                    else if (keywordCareer.isNotEmpty() && keywordEdu == "") { // 경력만 선택
+                        val filteredList1 = wantedList.filter {// 경력 필터링
+                            it.career == keywordCareer
+                        }
+                        sharedSelectionViewModel.updateFilteredList(filteredList1)
+                    } else if (keywordEdu.isNotEmpty() && keywordCareer == "") { // 학력만 선택
+                        val filteredList1 = wantedList.filter { // 학력 필터링
+                            it.minEdubg == keywordEdu
+                        }
+                        sharedSelectionViewModel.updateFilteredList(filteredList1)
+                    } else { // 경력, 학력 모두 선택
+                        val filteredList1 = wantedList.filter { // 경력, 학력 필터링
+                            it.minEdubg == keywordEdu && it.career == keywordCareer
+                        }
+                        sharedSelectionViewModel.updateFilteredList(filteredList1)
+                    }
+
+
+                    // 더 많은 페이지가 있는지 확인합니다.
+                    val factory = XmlPullParserFactory.newInstance()
+                    val xpp = factory.newPullParser()
+                    xpp.setInput(StringReader(xmlString))
+
+                    var eventType = xpp.eventType
+                    var totalItems = 0
+                    var totalPages = 0
+
+                    while (eventType != XmlPullParser.END_DOCUMENT) {
+                        if (eventType == XmlPullParser.START_TAG && xpp.name == "total") {
+                            totalItems = xpp.nextText().toInt()
+                            totalPages = totalItems / 100
+                            println("totalpages: $totalPages")
+                            break
+                        }
+                        eventType = xpp.next()
+                    }
+                    // 더 많은 페이지가 있다면 다음 페이지를 가져옵니다.
+                    while (totalPages > page) {
+                        page += 1
+                        fetchWantedList()
+                    }
 
                 }// if 응답이 성공적일때
-
                 else {
                     showErrorToast()
                 } //if 응답 실패일때

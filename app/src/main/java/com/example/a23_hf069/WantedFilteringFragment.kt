@@ -24,41 +24,33 @@ import java.util.*
 class WantedFilteringFragment : Fragment() {
     private val baseUrl =
         "http://openapi.work.go.kr/opi/opi/opia/wantedApi.do?authKey=WNLJYZLM2VZXTT2TZA9XR2VR1HK&callTp=L&returnType=XML&display=100"
+
     //완료 버튼
     lateinit var complete_btn: Button
+
     //지역,직종
     lateinit var regioncl_btn: Button
     lateinit var jobcl_btn: Button
     lateinit var tv_jobcl_selected: TextView
     lateinit var tv_regioncl_selected: TextView
-    //학력 -> 체크박스가 아닌 라디오 버튼으로 바꾸기
-    lateinit var cbAllEdu: CheckBox // 학력무관
-    lateinit var cbHighEdu: CheckBox // 고졸
-    lateinit var cbUniv2: CheckBox // 대졸(2~3년)
-    lateinit var cbUniv4: CheckBox // 대졸(4년)
-    //경력 > 체크박스가 아닌 라디오 버튼으로 바꾸기
-    lateinit var cbAllCareer : CheckBox // 경력무관
-    lateinit var cbFresh : CheckBox // 신입
-    lateinit var cbExperienced : CheckBox // 경력
-    //마감일 > 체크박스가 아닌 라디오 버튼으로 바꾸기
-    lateinit var cbToday : CheckBox//오늘까지
-    lateinit var cbTomorrow : CheckBox//내일까지
-    lateinit var cb7days : CheckBox//일주일 이내
-    lateinit var cb30days : CheckBox//한달 이내
-    lateinit var cb60days : CheckBox//두달 이내
+    lateinit var selectedJob: String
+    lateinit var selectedRegion: String
+
+    //라디오 그룹
+    lateinit var rgEdu: RadioGroup // 학력 라디오그룹
+    lateinit var rgCareer: RadioGroup // 경력 라디오그룹
+    lateinit var rgCloseDt: RadioGroup // 마감일 라디오그룹
 
     private lateinit var wantedList: List<Wanted>
     private val sharedSelectionViewModel: SharedSelectionViewModel by activityViewModels() // 필터링된 리스트를 전달하는 viewModel 객체 생성
-    lateinit var selectedJob : String
-    lateinit var selectedRegion : String
+
 
     // 필터링 키워드
     private var keywordRegion = ""
     private var keywordJob = ""
     private var keywordEdu = ""
-    private var keywordCareer= ""
+    private var keywordCareer = ""
     private var keywordCloseDt = ""
-
 
 
     override fun onCreateView(
@@ -80,90 +72,84 @@ class WantedFilteringFragment : Fragment() {
         //직종 선택 초기화
         jobcl_btn = view.findViewById<Button>(R.id.jobcl_btn)
 
-        // 선택된 지역 정보를 나타낼 TextView 초기화
-        tv_regioncl_selected = view.findViewById(R.id.tv_regioncl_selected)
 
-        // 선택된 직종 정보를 나타낼 TextView 초기화
-        tv_jobcl_selected = view.findViewById(R.id.tv_jobcl_selected)
+        tv_regioncl_selected =
+            view.findViewById(R.id.tv_regioncl_selected) // 선택된 지역 정보를 나타낼 TextView 초기화
+        tv_jobcl_selected = view.findViewById(R.id.tv_jobcl_selected) // 선택된 직종 정보를 나타낼 TextView 초기화
+        selectedRegion =
+            sharedSelectionViewModel.selectedRegion.toString() // ViewModel에서 선택된 지역 정보를 가져와서 TextView에 설정
+        tv_regioncl_selected.text = selectedRegion //화면에 textView 나타내기
+        selectedJob =
+            sharedSelectionViewModel.selectedJob.toString() // ViewModel에서 선택된 직종 정보를 가져와서 TextView에 설정
+        tv_jobcl_selected.text = selectedJob //화면에 textView 나타내기
 
-        // ViewModel에서 선택된 지역 정보를 가져와서 TextView에 설정
-        selectedRegion = sharedSelectionViewModel.selectedRegion.toString()
-        tv_regioncl_selected.text = selectedRegion
+        // 라디오 그룹을 초기화
+        rgEdu = view.findViewById(R.id.rg_edu)
+        rgCareer = view.findViewById(R.id.rg_career)
+        rgCloseDt = view.findViewById(R.id.rg_closeDt)
 
-        // ViewModel에서 선택된 직종 정보를 가져와서 TextView에 설정
-        selectedJob = sharedSelectionViewModel.selectedJob.toString()
-        tv_jobcl_selected.text = selectedJob
+        // 해당 라디오 그룹에서 선택된 Id를 가져오기
+        val checkEduId = rgEdu.checkedRadioButtonId
+        val checkCareerId = rgCareer.checkedRadioButtonId
+        val checkCloseDtId = rgCloseDt.checkedRadioButtonId
 
-
-        // CheckBox 변수들을 초기화
-        cbAllCareer = view.findViewById(R.id.cb_c_1)
-        cbFresh = view.findViewById(R.id.cb_c_2)
-        cbExperienced = view.findViewById(R.id.cb_c_3)
-
-        cbAllEdu = view.findViewById(R.id.cb_e_1)
-        cbHighEdu = view.findViewById(R.id.cb_e_4)
-        cbUniv2 = view.findViewById(R.id.cb_e_5)
-        cbUniv4 = view.findViewById(R.id.cb_e_6)
-
-        cbToday = view.findViewById(R.id.cb_d_2)
-        cbTomorrow = view.findViewById(R.id.cb_d_3)
-        cb7days = view.findViewById(R.id.cb_d_4)
-        cb30days = view.findViewById(R.id.cb_d_5)
-        cb60days = view.findViewById(R.id.cb_d_6)
-
-        // 완료 버튼이 눌렸을 때 지역,직종 변수 및 학력,경력,마감일 체크박스 확인 -> 선택된 조건에 해당하는 공고목록 가져와서 UI에 업데이트
+        // 완료 버튼이 눌렸을 때 지역,직종 변수 및 학력,경력,마감일 라디오버튼 확인 -> 선택된 조건에 해당하는 공고목록 가져와서 UI에 업데이트
         complete_btn.setOnClickListener {
 
 
             // 선택한 지역이 있을 경우 키워드에 해당 지역이름 넣기
-            if(selectedRegion != ""){
+            if (selectedRegion != "") {
                 keywordRegion = selectedRegion
             }
             // 선택한 직종이 있을 경우 필터링하기
-
-            // 학력 중 선택한 체크박스가 있을 경우 필터링하기
-            if(cbAllEdu.isChecked){
-                keywordEdu = "학력무관"
-            }
-            else if(cbHighEdu.isChecked){
-                keywordEdu = "고졸"
-            }
-            else if(cbUniv2.isChecked){
-                keywordEdu = "대졸(2~3년)"
-            }
-            else if(cbUniv4.isChecked){
-                keywordEdu = "대졸4년"
+            if (selectedJob != "") {
+                keywordJob = selectedJob
             }
 
-            // 경력 중 선택한 체크박스가 있을 경우 필터링하기
-            if(cbAllCareer.isChecked){
-                keywordCareer = "관계없음"
-            }
-            else if(cbFresh.isChecked){
-                keywordCareer = "신입"
-            }
-            else if(cbExperienced.isChecked){
-                keywordCareer = "경력"
-            }
-
-            // 마감일 중 선택한 체크박스가 있을 경우 필터링하기
-            if(cbToday.isChecked){
-                keywordCloseDt = "today"
-            }
-            else if(cbTomorrow.isChecked){
-                keywordCloseDt = "tomorrow"
-            }
-            else if(cb7days.isChecked){
-                keywordCloseDt = "7days"
-            }
-            else if(cb30days.isChecked){
-                keywordCloseDt = "30days"
-            }
-            else if(cb60days.isChecked){
-                keywordCloseDt = "60days"
+            // 학력 라디오 그룹중 선택된 라디오 버튼이 있을때 처리
+            when (checkEduId) {
+                R.id.rb_e_1 -> {
+                    keywordEdu = "학력무관"
+                }
+                R.id.rb_e_2 -> {
+                    keywordEdu = "고졸"
+                }
+                R.id.rb_e_3 -> {
+                    keywordEdu = "대학(2년제)"
+                }
+                R.id.rb_e_4 -> {
+                    keywordEdu = "대학(4년제)"
+                }
             }
 
-            //채용정보 불러오기
+            // 경력 라디오 그룹중 선택된 라디오 버튼이 있을때 처리
+            when (checkCareerId) {
+                R.id.rb_c_1 -> {
+                    keywordCareer = "관계없음"
+                }
+                R.id.rb_c_2 -> {
+                    // 고등학교 졸 라디오 버튼이 선택되었을 때
+                    keywordCareer = "신입"
+                }
+                R.id.rb_c_3 -> {
+                    // 대학(2년제) 라디오 버튼이 선택되었을 때
+                    keywordCareer = "경력"
+                }
+            }
+            // 마감일 라디오 그룹중 선택된 라디오 버튼이 있을때 처리
+            when (checkCloseDtId) {
+                R.id.rb_d_1 -> {
+                    keywordCloseDt = "7days"
+                }
+                R.id.rb_d_2 -> {
+                    keywordCloseDt = "30days"
+                }
+                R.id.rb_d_3 -> {
+                    keywordCloseDt = "60days"
+                }
+            }
+
+            //API에서 채용정보 불러오기
             fetchWantedList()
 
             // 선택된 조건들을 반영한 sharedSelectionViewModel 속 리스트들을 반영한 리스트뷰 화면으로 전환
@@ -172,7 +158,8 @@ class WantedFilteringFragment : Fragment() {
                 .replace(R.id.fl_container, wantedResultFragment)
                 .addToBackStack(null)
                 .commit()
-        } // complete_btn 리스너 종료
+        }
+        // complete_btn 리스너 종료
 
         // 지역선택 버튼 눌렸을 때 지역선택 화면으로 전환
         regioncl_btn.setOnClickListener {
@@ -194,8 +181,8 @@ class WantedFilteringFragment : Fragment() {
 
     }
 
-    // 키워드에 해당하는 채용공고 가져와서 sharedSelectionViewModel의 리스트에 저장
-    private fun fetchWantedList(page: Int = 1){
+    // 키워드에 해당하는 채용공고 가져와서 sharedSelectionViewModel의 리스트에 저장 -> UI에 반영
+    private fun fetchWantedList(page: Int = 1) {
         val client = OkHttpClient()
         val request = Request.Builder()
             .url("$baseUrl&startPage=$page")
@@ -218,8 +205,9 @@ class WantedFilteringFragment : Fragment() {
                         it.region == keywordRegion && it.minEdubg == keywordEdu
                                 && it.career == keywordCareer
                     }
+
                     //출력해서 확인하기
-                    for(i in filteredList){
+                    for (i in filteredList) {
                         println("${i.title}")
                         println("${i.minEdubg}")
                         println("${i.career}")
@@ -238,7 +226,7 @@ class WantedFilteringFragment : Fragment() {
             } //onResponse 함수 종료
         }) //callback 종료
 
-        } // fetchWantedList 함수 종료
+    } // fetchWantedList 함수 종료
 
     data class Wanted(
         val company: String,
@@ -299,8 +287,18 @@ class WantedFilteringFragment : Fragment() {
                             title?.let { t ->
                                 wantedList.add(
                                     Wanted(
-                                        c, t, salTpNm, sal, region, holidayTpNm,
-                                        minEdubg, career, closeDt, wantedMobileInfoUrl, jobsCd, infoSvc
+                                        c,
+                                        t,
+                                        salTpNm,
+                                        sal,
+                                        region,
+                                        holidayTpNm,
+                                        minEdubg,
+                                        career,
+                                        closeDt,
+                                        wantedMobileInfoUrl,
+                                        jobsCd,
+                                        infoSvc
                                     )
                                 )
                             }

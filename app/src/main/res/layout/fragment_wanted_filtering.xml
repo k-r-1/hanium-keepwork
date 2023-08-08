@@ -129,73 +129,75 @@
 
     </LinearLayout>
 
-    <LinearLayout
+    <RadioGroup
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:id="@+id/rg_edu"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="40dp"
+        android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tv_education_title"
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="40dp"
-            android:text="학력"
-            android:textColor="@color/black"
-            android:textSize="14sp"
-            android:textStyle="bold" />
+            android:orientation="horizontal">
 
-        <CheckBox
-            android:id="@+id/cb_e_1"
+            <TextView
+                android:id="@+id/tv_education_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="학력"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <RadioButton
+                android:id="@+id/rb_e_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="학력무관"
+                android:layout_marginLeft="10dp"
+
+                />
+
+            <RadioButton
+                android:id="@+id/rb_e_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="고등학교 졸"
+
+                />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="40dp"
-            android:text="학력무관"
+            android:orientation="horizontal"
+            android:layout_marginLeft="35dp"
+            >
 
-            />
+            <RadioButton
+                android:id="@+id/rb_e_3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="대학(2년제)"
 
-    </LinearLayout>
+                />
 
-    <LinearLayout
+            <RadioButton
+                android:id="@+id/rb_e_4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="대학(4년제)" />
+        </LinearLayout>
+    </RadioGroup>
+
+    <RadioGroup
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <CheckBox
-            android:id="@+id/cb_e_4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="45dp"
-            android:layout_marginTop="10dp"
-            android:text="고등학교 졸"
-
-            />
-
-        <CheckBox
-            android:id="@+id/cb_e_5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:text="대학(2년제)"
-
-            />
-
-        <CheckBox
-            android:id="@+id/cb_e_6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:text="대학(4년제)"
-
-            />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/rg_career"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="30dp"
         android:orientation="horizontal">
@@ -209,8 +211,8 @@
             android:textSize="14sp"
             android:textStyle="bold" />
 
-        <CheckBox
-            android:id="@+id/cb_c_1"
+        <RadioButton
+            android:id="@+id/rb_c_1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
@@ -218,24 +220,23 @@
 
             />
 
-        <CheckBox
-            android:id="@+id/cb_c_2"
+        <RadioButton
+            android:id="@+id/rb_c_2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="신입"
-            />
+            android:text="신입" />
 
-        <CheckBox
-            android:id="@+id/cb_c_3"
+        <RadioButton
+            android:id="@+id/rb_c_3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="경력"
-            />
-    </LinearLayout>
+            android:text="경력" />
+    </RadioGroup>
 
-    <LinearLayout
+    <RadioGroup
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/rg_closeDt"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="30dp"
         android:orientation="horizontal">
@@ -249,38 +250,17 @@
             android:textSize="14sp"
             android:textStyle="bold" />
 
-        <CheckBox
-            android:id="@+id/cb_d_2"
+        <RadioButton
+            android:id="@+id/rb_d_1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="오늘"
-            />
-
-        <CheckBox
-            android:id="@+id/cb_d_3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="내일"
-            />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal">
-
-        <CheckBox
-            android:id="@+id/cb_d_4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="60dp"
+            android:layout_marginLeft="10dp"
             android:text="1주 이내"
 
             />
 
-        <CheckBox
-            android:id="@+id/cb_d_5"
+        <RadioButton
+            android:id="@+id/rb_d_2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
@@ -288,16 +268,16 @@
 
             />
 
-        <CheckBox
-            android:id="@+id/cb_d_6"
+        <RadioButton
+            android:id="@+id/rb_d_3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:text="두달 이내"
 
             />
-    </LinearLayout>
 
 
+    </RadioGroup>
 
 </LinearLayout>

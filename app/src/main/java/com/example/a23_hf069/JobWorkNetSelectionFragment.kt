@@ -98,6 +98,16 @@ class JobWorkNetSelectionFragment : Fragment() {
                             selectedJobCodeList.add(b)
                         }
                     }
+//                    //selectedJobList에다가 직종이름만 저장하기
+//                    for (item in filteredCombinedList) {
+//                        val parts = item.split("-")
+//                        if (parts.size == 2) {
+//                            val b = parts[0]
+//                            selectedJobList.add(b)
+//                        }
+//                    }
+                    
+                    
                 }
 
             }

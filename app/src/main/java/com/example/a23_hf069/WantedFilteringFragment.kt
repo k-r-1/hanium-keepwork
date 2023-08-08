@@ -37,6 +37,9 @@ class WantedFilteringFragment : Fragment() {
     lateinit var selectedJob: String
     lateinit var selectedRegion: String
 
+    //직종 코드
+    private lateinit var selectedJobCodes: String
+
     //라디오 그룹
     lateinit var rgEdu: RadioGroup // 학력 라디오그룹
     lateinit var rgCareer: RadioGroup // 경력 라디오그룹
@@ -84,6 +87,9 @@ class WantedFilteringFragment : Fragment() {
             sharedSelectionViewModel.selectedJob.toString() // ViewModel에서 선택된 직종 정보를 가져와서 TextView에 설정
         tv_jobcl_selected.text = selectedJob //화면에 textView 나타내기
 
+        // 전달된 직종코드 데이터를 받아서 사용
+        selectedJobCodes = arguments?.getString("selectedJobCodes").toString()
+
         // 라디오 그룹을 초기화
         rgEdu = view.findViewById(R.id.rg_edu)
         rgCareer = view.findViewById(R.id.rg_career)
@@ -103,7 +109,7 @@ class WantedFilteringFragment : Fragment() {
 
             // 선택한 직종이 있을 경우 필터링하기
             if (selectedJob != "") {
-                keywordJob = selectedJob
+                keywordJob = selectedJobCodes
             }
 
             // 학력 라디오 그룹중 선택된 라디오 버튼이 있을때 처리
@@ -223,13 +229,35 @@ class WantedFilteringFragment : Fragment() {
                             it.minEdubg == keywordEdu
                         }
                         sharedSelectionViewModel.updateFilteredList(filteredList1)
-                    } else { // 경력, 학력 모두 선택
+                    } else if(keywordEdu.isNotEmpty()&&keywordCareer.isNotEmpty()){ // 경력, 학력 모두 선택
                         val filteredList1 = wantedList.filter { // 경력, 학력 필터링
                             it.minEdubg == keywordEdu && it.career == keywordCareer
                         }
                         sharedSelectionViewModel.updateFilteredList(filteredList1)
+                    }else if(keywordEdu =="" && keywordCareer == "" && keywordJob.isNotEmpty()){ //지역+직종
+                        val filteredList1 = wantedList.filter {
+                            it.jobsCd == keywordJob
+                        }
+                        sharedSelectionViewModel.updateFilteredList(filteredList1)
                     }
-
+                    else if(keywordEdu =="" && keywordCareer.isNotEmpty() && keywordJob.isNotEmpty()){ //지역+직종+경력
+                        val filteredList1 = wantedList.filter {
+                            it.jobsCd == keywordJob && it.career == keywordCareer
+                        }
+                        sharedSelectionViewModel.updateFilteredList(filteredList1)
+                    }
+                    else if(keywordEdu.isNotEmpty() && keywordCareer =="" && keywordJob.isNotEmpty()){ //지역+직종+학력
+                        val filteredList1 = wantedList.filter {
+                            it.minEdubg == keywordEdu && it.jobsCd == keywordJob
+                        }
+                        sharedSelectionViewModel.updateFilteredList(filteredList1)
+                    }
+                    else { //지역+직종+경력+학력
+                        val filteredList1 = wantedList.filter {
+                            it.minEdubg == keywordEdu && it.career == keywordCareer && it.jobsCd == keywordJob
+                        }
+                        sharedSelectionViewModel.updateFilteredList(filteredList1)
+                    }
 
                     // 더 많은 페이지가 있는지 확인합니다.
                     val factory = XmlPullParserFactory.newInstance()

@@ -23,7 +23,7 @@ import java.util.*
 
 class WantedFilteringFragment : Fragment() {
     private val baseUrl =
-        "http://openapi.work.go.kr/opi/opi/opia/wantedApi.do?authKey=WNLJYZLM2VZXTT2TZA9XR2VR1HK&callTp=L&returnType=XML&display=100"
+        "http://openapi.work.go.kr/opi/opi/opia/wantedApi.do?authKey=WNLJYZLM2VZXTT2TZA9XR2VR1HK&callTp=L&returnType=XML&display=500"
 
     //완료 버튼
     lateinit var complete_btn: Button
@@ -88,19 +88,18 @@ class WantedFilteringFragment : Fragment() {
         rgCareer = view.findViewById(R.id.rg_career)
         rgCloseDt = view.findViewById(R.id.rg_closeDt)
 
-        // 해당 라디오 그룹에서 선택된 Id를 가져오기
-        val checkEduId = rgEdu.checkedRadioButtonId
-        val checkCareerId = rgCareer.checkedRadioButtonId
-        val checkCloseDtId = rgCloseDt.checkedRadioButtonId
-
         // 완료 버튼이 눌렸을 때 지역,직종 변수 및 학력,경력,마감일 라디오버튼 확인 -> 선택된 조건에 해당하는 공고목록 가져와서 UI에 업데이트
         complete_btn.setOnClickListener {
-
+            // 해당 라디오 그룹에서 선택된 Id를 가져오기
+            val checkEduId = rgEdu.checkedRadioButtonId
+            val checkCareerId = rgCareer.checkedRadioButtonId
+            val checkCloseDtId = rgCloseDt.checkedRadioButtonId
 
             // 선택한 지역이 있을 경우 키워드에 해당 지역이름 넣기
             if (selectedRegion != "") {
                 keywordRegion = selectedRegion
             }
+
             // 선택한 직종이 있을 경우 필터링하기
             if (selectedJob != "") {
                 keywordJob = selectedJob
@@ -115,10 +114,10 @@ class WantedFilteringFragment : Fragment() {
                     keywordEdu = "고졸"
                 }
                 R.id.rb_e_3 -> {
-                    keywordEdu = "대학(2년제)"
+                    keywordEdu = "대졸(2~3년)"
                 }
                 R.id.rb_e_4 -> {
-                    keywordEdu = "대학(4년제)"
+                    keywordEdu = "대졸(4년)"
                 }
             }
 
@@ -149,15 +148,24 @@ class WantedFilteringFragment : Fragment() {
                 }
             }
 
-            //API에서 채용정보 불러오기
-            fetchWantedList()
 
-            // 선택된 조건들을 반영한 sharedSelectionViewModel 속 리스트들을 반영한 리스트뷰 화면으로 전환
-            val wantedResultFragment = WantedResultFragment()
-            requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.fl_container, wantedResultFragment)
-                .addToBackStack(null)
-                .commit()
+            // 지역 조건은 필수 선택 조건으로 무조건 선택해야 함
+            if (keywordRegion == "") {
+                showWarningToast1() // 지역 조건을 선택하지 않은 경우 토스트창 띄우기
+            }
+            // 지역조건을 선택한 경우
+            else {
+                // 키워드에 해당하는 채용공고 가져와서 sharedSelectionViewModel의 리스트에 저장 -> UI에 반영
+                fetchWantedList()
+
+                // 화면전환
+                val wantedResultFragment = WantedResultFragment()
+                requireActivity().supportFragmentManager.beginTransaction()
+                    .replace(R.id.fl_container, wantedResultFragment)
+                    .addToBackStack(null)
+                    .commit()
+            }
+
         }
         // complete_btn 리스너 종료
 
@@ -201,23 +209,14 @@ class WantedFilteringFragment : Fragment() {
                     result = parseXmlResponse(xmlString) // parsing한 후 리스트화 하기
                     wantedList = result
 
-                    val filteredList = wantedList.filter { // 리스트 필터링하기 -> 모든 조건을 동시에 만족하는 채용공고 가져오기
-                        it.region == keywordRegion && it.minEdubg == keywordEdu
-                                && it.career == keywordCareer
-                    }
 
-                    //출력해서 확인하기
-                    for (i in filteredList) {
-                        println("${i.title}")
-                        println("${i.minEdubg}")
-                        println("${i.career}")
-                        println("${i.closeDt}")
-                        println("${i.region}")
-                        println("------------------------------")
-
+                    val filteredList1 = wantedList.filter { it.region == keywordRegion } // 지역 필터링하기
+                    val filteredList2 = filteredList1.filter {
+                        it.minEdubg == keywordEdu && it.career == keywordCareer // 그외 조건 필터링하기
                     }
                     //UI 업데이트할 수 있도록 뷰모델에 업데이트
-                    sharedSelectionViewModel.updateFilteredList(filteredList)
+                    sharedSelectionViewModel.updateFilteredList(filteredList2)
+
                 }// if 응답이 성공적일때
 
                 else {
@@ -225,7 +224,6 @@ class WantedFilteringFragment : Fragment() {
                 } //if 응답 실패일때
             } //onResponse 함수 종료
         }) //callback 종료
-
     } // fetchWantedList 함수 종료
 
     data class Wanted(
@@ -326,5 +324,9 @@ class WantedFilteringFragment : Fragment() {
 
     private fun showErrorToast() {
         Toast.makeText(requireContext(), "Failed to fetch wanted list.", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun showWarningToast1() {
+        Toast.makeText(requireContext(), "지역은 필수 선택 조건입니다.", Toast.LENGTH_SHORT).show()
     }
 }

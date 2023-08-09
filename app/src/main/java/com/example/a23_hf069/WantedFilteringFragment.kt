@@ -29,9 +29,10 @@ class WantedFilteringFragment : Fragment() {
     //완료 버튼
     lateinit var complete_btn: Button
 
-    //지역,직종
+    //지역,직종 선택 버튼
     lateinit var regioncl_btn: Button
     lateinit var jobcl_btn: Button
+
     lateinit var tv_jobcl_selected: TextView
     lateinit var tv_regioncl_selected: TextView
     lateinit var selectedJob: String
@@ -73,7 +74,6 @@ class WantedFilteringFragment : Fragment() {
         complete_btn = view.findViewById<Button>(R.id.complete_btn1)
         //지역 선택 초기화
         regioncl_btn = view.findViewById<Button>(R.id.regioncl_btn)
-        //직종 선택 초기화
         jobcl_btn = view.findViewById<Button>(R.id.jobcl_btn)
 
 
@@ -104,7 +104,8 @@ class WantedFilteringFragment : Fragment() {
 
             // 선택한 지역이 있을 경우 키워드에 해당 지역이름 넣기
             if (selectedRegion != "") {
-                keywordRegion = selectedRegion
+                keywordRegion = sharedSelectionViewModel.keywordRegions
+                println(keywordRegion)
             }
 
             // 선택한 직종이 있을 경우 필터링하기
@@ -200,7 +201,7 @@ class WantedFilteringFragment : Fragment() {
     private fun fetchWantedList() {
         val client = OkHttpClient()
         val request = Request.Builder()
-            .url("$baseUrl&startPage=$page&keyword=$keywordRegion") // &keyword로 지역 필터링하기
+            .url("$baseUrl&startPage=$page&keyword=$keywordRegion") // &keyword로 지역 1차 필터링하기 (이렇게 안하면 traffic 터져서 아무것도 안나옴)
             .build()
         var result: List<Wanted> = emptyList()
 
@@ -216,21 +217,26 @@ class WantedFilteringFragment : Fragment() {
                     result = parseXmlResponse(xmlString) // parsing한 후 리스트화 하기
                     wantedList = result
 
+                    // 지역 2차 필터링하기
+                    val regionsToFilter = keywordRegion.replace(" ", "").split("|")
+                    val filteredList = wantedList.filter { it.region?.replace(" ","") in regionsToFilter }
+
+
                     if(keywordEdu =="" && keywordCareer == ""){ // 지역만 선택
-                        sharedSelectionViewModel.updateFilteredList(wantedList)
+                        sharedSelectionViewModel.updateFilteredList(filteredList)
                     }
                     else if (keywordCareer.isNotEmpty() && keywordEdu == "") { // 경력만 선택
-                        val filteredList1 = wantedList.filter {// 경력 필터링
+                        val filteredList1 = filteredList.filter {// 경력 필터링
                             it.career == keywordCareer
                         }
                         sharedSelectionViewModel.updateFilteredList(filteredList1)
                     } else if (keywordEdu.isNotEmpty() && keywordCareer == "") { // 학력만 선택
-                        val filteredList1 = wantedList.filter { // 학력 필터링
+                        val filteredList1 = filteredList.filter { // 학력 필터링
                             it.minEdubg == keywordEdu
                         }
                         sharedSelectionViewModel.updateFilteredList(filteredList1)
                     } else if(keywordEdu.isNotEmpty()&&keywordCareer.isNotEmpty()){ // 경력, 학력 모두 선택
-                        val filteredList1 = wantedList.filter { // 경력, 학력 필터링
+                        val filteredList1 = filteredList.filter { // 경력, 학력 필터링
                             it.minEdubg == keywordEdu && it.career == keywordCareer
                         }
                         sharedSelectionViewModel.updateFilteredList(filteredList1)

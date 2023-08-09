@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.ListView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -31,10 +32,12 @@ class RegionSelectionFragment : Fragment() {
     private lateinit var regionListView2: ListView // 좌측의 중분류 지역 리스트뷰
     private val regionList1: MutableList<String> = mutableListOf() // 대분류 지역명을 담을 리스트
     private val regionList2: MutableList<String> = mutableListOf() // 중분류 지역명을 담을 리스트
+
     // 전체 카테고리에 표시될 지역 이름 리스트
     private val wholeRegionList: List<String> = listOf("서울 전체", "부산 전체", "대구 전체","인천 전체", "광주 전체", "대전 전체", "울산 전체", "세종 전체", "경기 전체", "충북 전체", "충남 전체", "전북 전체", "전남 전체", "경북 전체", "경남 전체", "제주 전체", "강원 전체" )
     private var selectedOneDepthRegion: String? = null// 선택한 oneDepth 지역명을 저장할 변수
-    private val selectedRegionList: MutableList<String> =  mutableListOf() // 선택된 지역들을 저장할 리스트
+    private var selectedRegionList: MutableList<String> =  mutableListOf() // 선택된 지역들을 저장할 리스트
+
 
     // ViewModel 생성
     private val sharedSelectionViewModel: SharedSelectionViewModel by activityViewModels()
@@ -113,6 +116,9 @@ class RegionSelectionFragment : Fragment() {
         regionSelcetButton.setOnClickListener {
             val selectedRegions = selectedRegionList.joinToString(", \n")
             sharedSelectionViewModel.selectedRegion = selectedRegions // 선택된 지역 정보를 ViewModel에 저장
+            // &keyword= 로 검색할 지역들을 |로 연결
+            val regionKeyword = selectedRegionList.joinToString ("|")
+            sharedSelectionViewModel.keywordRegions = regionKeyword
 
             val wantedFilteringFragment = WantedFilteringFragment()
             requireActivity().supportFragmentManager.beginTransaction()

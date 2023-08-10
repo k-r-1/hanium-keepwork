@@ -245,6 +245,11 @@ class JobDetailActivity : AppCompatActivity() {
         binding.jobsCd.text = job?.jobsCd
         binding.infoSvc.text = job?.infoSvc
 
+        // 뒤로가기 버튼 클릭 시 액티비티 종료
+        binding.backButton.setOnClickListener {
+            finish()
+        }
+
     }
 }
 

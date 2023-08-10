@@ -22,6 +22,19 @@ import java.io.InputStream
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import com.amazonaws.auth.BasicAWSCredentials
+import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceClient
+import com.amazonaws.services.simpleemail.model.*
+import java.util.UUID
+import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+
 
 class PersonalSignUpActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
@@ -39,13 +52,13 @@ class PersonalSignUpActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
     private lateinit var name_textview_input_edit_text: EditText // name
     private lateinit var email_textview_input_edit_text: EditText // email
     private lateinit var phoneNumber_textview_input_edit_text: EditText // phone number
-    private lateinit var phoneNumber_button: Button // identification
-    private lateinit var phoneNumberCheck_textview_input_edit_text: EditText // identification number
-    private lateinit var phoneNumberCheck_button: Button // identification check button
+    private lateinit var btnEmailCertify: Button // email certification button
     private lateinit var signUp_button: Button // sign up button
 
     // TextView 요소인 mTextViewResult 선언
     private lateinit var mTextViewResult: TextView
+
+    private lateinit var emailViewModel: EmailViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,10 +79,8 @@ class PersonalSignUpActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
         name_textview_input_edit_text = findViewById(R.id.name_textview_input_edit_text) // personal name
         email_textview_input_edit_text = findViewById(R.id.email_textview_input_edit_text) // personal email
         phoneNumber_textview_input_edit_text = findViewById(R.id.phoneNumber_textview_input_edit_text) // personal phonenum
-        // phoneNumber_button = findViewById(R.id.phoneNumber_button) // identification
-        // phoneNumberCheck_textview_input_edit_text = findViewById(R.id.phoneNumberCheck_textview_input_edit_text) // identification number
-        // phoneNumberCheck_button = findViewById(R.id.phoneNumberCheck_button) // identification check button
-        signUp_button = findViewById(R.id.signUp_button) // sign up button
+        btnEmailCertify = findViewById(R.id.btnEmailCertify)
+        signUp_button = findViewById(R.id.signUp_button)
 
         // mTextViewResult를 스크롤 가능하도록 설정
         mTextViewResult = findViewById(R.id.textView_main_result)
@@ -93,6 +104,21 @@ class PersonalSignUpActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
 
                 // 'task'의 'execute' 메서드를 호출해 백그라운드에서 아이디 중복 여부 확인
                 task.execute("http://$IP_ADDRESS/android_id_check.php", id)
+            }
+        }
+
+        // 버튼 클릭시 이메일 인증과정 진행
+        btnEmailCertify.setOnClickListener {
+            val emailAddress = email_textview_input_edit_text.text.toString()
+            if (isValidEmail(emailAddress)) {
+                // Amazon SES 인증 정보 설정
+                val credentials = BasicAWSCredentials("AKIA3TFEOQMXM7LIFFWS", "abiuY2bRi7iBXvuuDLvYkQ4bhMtmAAIMCvQOR35/")
+                val sesClient = AmazonSimpleEmailServiceClient(credentials)
+
+                // 이메일 전송 작업 실행
+                SendEmailTask(sesClient, emailAddress).execute()
+            } else {
+                Toast.makeText(this@PersonalSignUpActivity, "유효한 이메일 주소를 입력해주세요.", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -285,6 +311,102 @@ class PersonalSignUpActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
             } else {
                 // 오류 처리
                 Toast.makeText(this@PersonalSignUpActivity, "서버 응답 오류", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun initRetrofit(): ApiService {
+        val retrofit = Retrofit.Builder()
+            .baseUrl("http://54.180.186.168/") // 탄력적 IP 주소를 여기에 입력
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        return retrofit.create(ApiService::class.java)
+    }
+
+    private fun requestEmailVerification(email: String) {
+        val apiService = initRetrofit()
+        val call = apiService.requestEmailVerification(email)
+
+        call.enqueue(object : Callback<ApiResponse> {
+            override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
+                if (response.isSuccessful && response.body()?.success == true) {
+                    // 인증 요청 성공
+                    btnEmailCertify.text = "인증완료"
+                    btnEmailCertify.isEnabled = false
+                } else {
+                    // 인증 요청 실패
+                }
+            }
+
+            override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
+                // 통신 실패
+            }
+        })
+    }
+
+    private inner class SendEmailTask(val sesClient: AmazonSimpleEmailServiceClient, val toEmail: String) :
+        AsyncTask<Void, Void, Boolean>() {
+
+        override fun doInBackground(vararg params: Void?): Boolean {
+            val subject = "이메일 인증을 완료해주세요"
+            // UUID 생성 예시
+            val verificationToken = UUID.randomUUID().toString()
+            val message = "이메일 인증을 완료하려면 다음 링크를 클릭하세요: http://54.180.186.168/android_email_certify_complete.php?token=$verificationToken"
+
+            val sendEmailRequest = SendEmailRequest()
+                .withSource("yelly0104@naver.com") // 발신자 이메일 주소
+                .withDestination(Destination().withToAddresses(toEmail)) // 수신자 이메일 주소
+                .withMessage(Message().withSubject(Content().withCharset("UTF-8").withData(subject))
+                    .withBody(Body().withText(Content().withCharset("UTF-8").withData(message))))
+
+            try {
+                sesClient.sendEmail(sendEmailRequest)
+                return true
+            } catch (e: Exception) {
+                e.printStackTrace()
+                return false
+            }
+        }
+
+        override fun onPostExecute(result: Boolean) {
+            super.onPostExecute(result)
+            if (result) {
+                Toast.makeText(this@PersonalSignUpActivity, "이메일이 전송되었습니다.", Toast.LENGTH_SHORT).show()
+                btnEmailCertify.text = "인증완료"
+                btnEmailCertify.isEnabled = false
+            } else {
+                Toast.makeText(this@PersonalSignUpActivity, "이메일 전송 실패", Toast.LENGTH_SHORT).show()
+                Log.d("email fail", "email send fail")
+            }
+        }
+    }
+
+    private fun isValidEmail(email: String): Boolean {
+        // 이메일 주소 유효성 검사 로직 추가
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    }
+
+    class EmailViewModel : ViewModel() {
+        suspend fun sendEmail(sesClient: AmazonSimpleEmailServiceClient, toEmail: String): Boolean {
+            return withContext(Dispatchers.IO) {
+                val subject = "이메일 인증을 완료해주세요"
+                val verificationToken = UUID.randomUUID().toString()
+                val message = "이메일 인증을 완료하려면 다음 링크를 클릭하세요: http://54.180.186.168/android_email_certify_complete.php?token=$verificationToken"
+
+                val sendEmailRequest = SendEmailRequest()
+                    .withSource("yelly0104@naver.com")
+                    .withDestination(Destination().withToAddresses(toEmail))
+                    .withMessage(Message().withSubject(Content().withCharset("UTF-8").withData(subject))
+                        .withBody(Body().withText(Content().withCharset("UTF-8").withData(message))))
+
+                try {
+                    sesClient.sendEmail(sendEmailRequest)
+                    true
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    false
+                }
             }
         }
     }

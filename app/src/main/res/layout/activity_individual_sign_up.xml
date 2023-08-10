@@ -200,6 +200,14 @@
                     android:layout_height="wrap_content"
                     android:hint="예) keepwork@naver.com"
                     android:textAppearance="@style/TextLabel" />
+
+                <Button
+                    android:id="@+id/btnEmailCertify"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginTop="5dp"
+                    android:text="이메일 인증" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <!--전화번호-->

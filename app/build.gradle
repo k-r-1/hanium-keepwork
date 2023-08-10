@@ -104,6 +104,11 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.'
 
+    // amazon ses 설정
+    implementation 'com.amazonaws:aws-android-sdk-ses:2.73.0'  // AWS SES 라이브러리
+    implementation 'com.amazonaws:aws-android-sdk-core:2.73.0' // AWS Core 라이브러리
+
+
 }
 
 // Kotlin Android Extensions 플러그인 적용

@@ -11,7 +11,7 @@ import org.json.JSONObject
 import java.io.IOException
 
 class NoticeContentActivity : AppCompatActivity() {
-    private var IP_ADDRESS = "13.209.65.106" // Replace with your IP address.
+    private var IP_ADDRESS = "54.180.186.168" // Replace with your IP address.
     private var noticeListNum: Int = -1
     private lateinit var noticeTitle: TextView
     private lateinit var noticeContent: TextView

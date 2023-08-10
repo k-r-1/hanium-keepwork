@@ -116,6 +116,7 @@ class WantedFilteringFragment : Fragment() {
             // 선택한 직종이 있을 경우 필터링하기
             if (selectedJob != "") {
                 keywordJob = selectedJobCodes
+                println(keywordJob)
             }
 
             // 학력 라디오 그룹중 선택된 라디오 버튼이 있을때 처리
@@ -204,7 +205,11 @@ class WantedFilteringFragment : Fragment() {
 
     // 키워드에 해당하는 채용공고 가져와서 sharedSelectionViewModel의 리스트에 저장 -> UI에 반영
     private fun fetchWantedList() {
+        //네트워크 연결
         val client = OkHttpClient()
+        if(keywordRegion2.contains("전체")){ // ex) 서울 전체인 경우 -> 서울로 변경
+            keywordRegion2.replace("전체","").trim()
+        }
         val request = Request.Builder()
             .url("$baseUrl&startPage=$page&keyword=$keywordRegion2") // &keyword로 지역 1차 필터링하기 (이렇게 안하면 traffic 터져서 아무것도 안나옴)
             .build()
@@ -281,7 +286,6 @@ class WantedFilteringFragment : Fragment() {
                         if (eventType == XmlPullParser.START_TAG && xpp.name == "total") {
                             totalItems = xpp.nextText().toInt()
                             totalPages = totalItems / 100
-                            println("totalpages: $totalPages")
                             break
                         }
                         eventType = xpp.next()

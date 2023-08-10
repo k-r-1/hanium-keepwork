@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 class SharedSelectionViewModel : ViewModel() {
     var selectedJob: String? = ""
     var selectedRegion: String? = ""
-    var selectedJobCode: String?=null
+    var selectedJobCode: String?= ""
     var keywordRegions: String =""
 
     private val __filteredList = MutableLiveData<List<WantedFilteringFragment.Wanted>>()

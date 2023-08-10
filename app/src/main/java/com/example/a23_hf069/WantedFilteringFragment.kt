@@ -3,6 +3,7 @@ package com.example.a23_hf069
 
 import android.os.Build
 import android.os.Bundle
+import android.text.TextUtils.split
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,6 +21,7 @@ import java.io.StringReader
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
+import kotlin.collections.ArrayList
 
 class WantedFilteringFragment : Fragment() {
     private val baseUrl =
@@ -52,11 +54,12 @@ class WantedFilteringFragment : Fragment() {
 
     // 필터링 키워드
     private var keywordRegion = ""
+    private var keywordRegion2 = ""
     private var keywordJob = ""
     private var keywordEdu = ""
     private var keywordCareer = ""
     private var keywordCloseDt = ""
-
+    private var regionList: MutableList<String> = mutableListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -104,8 +107,10 @@ class WantedFilteringFragment : Fragment() {
 
             // 선택한 지역이 있을 경우 키워드에 해당 지역이름 넣기
             if (selectedRegion != "") {
-                keywordRegion = sharedSelectionViewModel.keywordRegions
-                println(keywordRegion)
+                keywordRegion = sharedSelectionViewModel.keywordRegions // ex) "서울 성동구|서울 종로구"
+                keywordRegion2 = keywordRegion.replace(" ","") // ex) "서울성동구|서울종로구"
+                regionList = keywordRegion.split("|").map{it.trim()}.toMutableList() //ex) [서울 성동구, 서울 종로구]
+
             }
 
             // 선택한 직종이 있을 경우 필터링하기
@@ -201,7 +206,7 @@ class WantedFilteringFragment : Fragment() {
     private fun fetchWantedList() {
         val client = OkHttpClient()
         val request = Request.Builder()
-            .url("$baseUrl&startPage=$page&keyword=$keywordRegion") // &keyword로 지역 1차 필터링하기 (이렇게 안하면 traffic 터져서 아무것도 안나옴)
+            .url("$baseUrl&startPage=$page&keyword=$keywordRegion2") // &keyword로 지역 1차 필터링하기 (이렇게 안하면 traffic 터져서 아무것도 안나옴)
             .build()
         var result: List<Wanted> = emptyList()
 
@@ -218,9 +223,7 @@ class WantedFilteringFragment : Fragment() {
                     wantedList = result
 
                     // 지역 2차 필터링하기
-                    val regionsToFilter = keywordRegion.replace(" ", "").split("|")
-                    val filteredList = wantedList.filter { it.region?.replace(" ","") in regionsToFilter }
-
+                    val filteredList = wantedList.filter { it.region?.trim() in regionList }
 
                     if(keywordEdu =="" && keywordCareer == ""){ // 지역만 선택
                         sharedSelectionViewModel.updateFilteredList(filteredList)

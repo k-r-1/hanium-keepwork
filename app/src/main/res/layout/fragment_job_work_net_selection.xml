@@ -98,9 +98,45 @@
 
     </LinearLayout>
 
-    <ListView
-        android:id="@+id/lv_jobs"
+    <!-- 기존 LinearLayout 안에 아래 코드를 추가하세요. -->
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_major_category"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="대분류" />
+
+        <Button
+            android:id="@+id/btn_middle_category"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="중분류"
+            android:layout_marginStart="16dp" />
+
+    </LinearLayout>
+
+    <!-- 각 버튼에 해당하는 리스트뷰를 아래에 추가하세요. -->
+
+    <!-- 대분류용 ListView -->
+    <ListView
+        android:id="@+id/listview_major_category"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+
+    <!-- 중분류용 ListView -->
+    <ListView
+        android:id="@+id/listview_middle_category"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+
 
 </LinearLayout>

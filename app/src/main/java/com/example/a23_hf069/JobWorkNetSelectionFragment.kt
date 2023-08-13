@@ -3,12 +3,14 @@ package com.example.a23_hf069
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.util.Xml
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.ListView
 import android.widget.Toast
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
@@ -19,7 +21,9 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.*
+import org.w3c.dom.Element
 import org.xml.sax.InputSource
+import org.xmlpull.v1.XmlPullParser
 import java.io.IOException
 import java.io.StringReader
 import java.util.Collections.addAll
@@ -29,12 +33,26 @@ class JobWorkNetSelectionFragment : Fragment() {
 
     private lateinit var binding: FragmentJobWorkNetSelectionBinding
     private lateinit var jobAdapter: ArrayAdapter<String>
-    private lateinit var jobList: MutableList<String> // 직업 목록을 담을 리스트
     private lateinit var jobCodeList: MutableList<String> //직종코드를 담을 리스트
     private lateinit var selectedJobList: MutableList<String> // 여러 개의 직종을 저장할 리스트
+
     private lateinit var selectedJobCodeList: MutableList<String> // 여러 개의 직종코드를 저장할 리스트
     private lateinit var combinedList: MutableList<String>
-    private lateinit var filteredCombinedList: MutableList<String>
+
+    private lateinit var jobAdapter1: ArrayAdapter<String> // 대분류 지역 리스트뷰에 대한 어댑터
+    private lateinit var jobAdapter2: ArrayAdapter<String> // 중분류 지역 리스트뷰에 대한 어댑터
+
+    private lateinit var joblistView1: ListView // 대분류 직종 리스트뷰
+    private lateinit var joblistView2: ListView // 중분류 직종 리스트뷰
+
+    private val jobList1: MutableList<String> = mutableListOf() // 대분류 직종을 담을 리스트
+    private val jobList2: MutableList<String> = mutableListOf() // 중분류 직종을 담을 리스트
+
+    private var selectedMajorCode: String? = null
+
+    // 클래스 내에 맵을 선언합니다.
+    private val majorToMiddleMap: MutableMap<String, List<String>> = mutableMapOf()
+
 
     // ViewModel 생성
     private val sharedSelectionViewModel: SharedSelectionViewModel by activityViewModels()
@@ -53,19 +71,43 @@ class JobWorkNetSelectionFragment : Fragment() {
 
         // View 초기화
         val searchEditText = binding.tvSelectJob
-        val jobListView = binding.lvJobs
+        //val jobListView = binding.listviewMajorCategory
         val jobSelectButton = binding.btnJobSelectComplete
+
+        joblistView1 = binding.listviewMajorCategory
+        joblistView2 = binding.listviewMiddleCategory
+
         selectedJobList = mutableListOf()
         jobCodeList = mutableListOf()
         selectedJobCodeList = mutableListOf()
         combinedList = mutableListOf()
 
         // ListView 초기화
-        jobList = mutableListOf()
-        jobAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, jobList)
-        jobListView.adapter = jobAdapter
+        jobAdapter1 = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, jobList1)
+        jobAdapter2 = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, jobList2)
+        joblistView1.adapter = jobAdapter1
+        joblistView2.adapter = jobAdapter2
 
         fetchJobList() // 직업 목록 API 호출 및 결과 처리 함수를 호출
+
+
+        binding.btnMajorCategory.setOnClickListener {
+            selectedMajorCode = null // 선택된 대분류 초기화
+            joblistView1.visibility = View.VISIBLE
+            joblistView2.visibility = View.VISIBLE
+
+            // 중분류 목록 초기화 및 갱신
+            jobList2.clear()
+            jobAdapter2.clear() // 중분류 어댑터에도 데이터를 클리어해야 함
+            jobAdapter2.addAll(jobList2) // 초기 중분류 목록을 추가
+            jobAdapter2.notifyDataSetChanged()
+        }
+
+
+        binding.btnMiddleCategory.setOnClickListener {
+            joblistView1.visibility = View.GONE
+            joblistView2.visibility = View.VISIBLE
+        }
 
         // EditText에서 검색어 입력 시 이벤트 처리
         searchEditText.setOnEditorActionListener { _, _, _ ->
@@ -74,43 +116,26 @@ class JobWorkNetSelectionFragment : Fragment() {
             true // "완료" 버튼을 눌렀을 때만 필터링이 수행되고, 다른 동작으로 전환되지 않도록 함
         }
 
-        // ListView에서 아이템 선택 시 이벤트 처리
-        jobListView.onItemClickListener =
-            AdapterView.OnItemClickListener { _, _, position, _ ->
-                val selectedJob = jobAdapter.getItem(position) // 클릭된 아이템의 위치(position)을 기반으로 해당 아이템의 직업명을 가져옴
-                if (selectedJob != null) {
-                    // 선택된 직종이 리스트에 이미 포함되어 있지 않은 경우에만 추가
-                    if (!selectedJobList.contains(selectedJob)) {
-                        selectedJobList.add(selectedJob)
-                        updateSelectedJobTextView() // 선택된 직종 목록을 보여주는 TextView를 업데이트
-
-                        //선택된 직종만을 포함한 새로운 combinedList생성
-                        filteredCombinedList = combinedList.filter { combinedItem ->
-                            val a = combinedItem.split("-")[0] // combinedItem에서 jobName 값을 추출
-                            selectedJobList.contains(a) // 선택된 jobName 값들과 동일한지 비교
-                        } as MutableList<String>
-                    }
-                    //selectedJobCodeList에다가 직종코드만 저장하기
-                    for (item in filteredCombinedList) {
-                        val parts = item.split("-")
-                        if (parts.size == 2) {
-                            val b = parts[1]
-                            selectedJobCodeList.add(b)
-                        }
-                    }
-//                    //selectedJobList에다가 직종이름만 저장하기
-//                    for (item in filteredCombinedList) {
-//                        val parts = item.split("-")
-//                        if (parts.size == 2) {
-//                            val b = parts[0]
-//                            selectedJobList.add(b)
-//                        }
-//                    }
-                    
-                    
-                }
-
+        joblistView1.setOnItemClickListener { _, _, position, _ ->
+            val selectedJob = jobList1[position]
+            val parts = selectedJob.split("-")
+            if (parts.size == 2) {
+                selectedMajorCode = parts[1]
+                updateMiddleJobList(selectedJob) // 중분류 목록 업데이트
+                // 중분류 버튼 자동 클릭
+                binding.btnMiddleCategory.performClick()
             }
+        }
+
+        // 중분류 직종 선택 시
+        joblistView2.setOnItemClickListener { _, _, position, _ ->
+            val selectedJob = jobList2[position]
+            if (selectedJob.contains("전체")) {
+                handleAllMiddleJobs() // "전체" 선택 시 모든 중분류 아이템 처리
+            } else {
+                handleJobItemClick(selectedJob) // 일반적인 아이템 선택 시 처리
+            }
+        }
 
         // drawableRight(검색 아이콘) 클릭 시 검색 이벤트 처리
         searchEditText.setOnTouchListener { _, event ->
@@ -149,6 +174,33 @@ class JobWorkNetSelectionFragment : Fragment() {
         return rootView
     }
 
+    // 선택된 직업 아이템을 처리하는 함수
+    private fun handleJobItemClick(selectedJobItem: String) {
+        val parts = selectedJobItem.split("-")
+        if (parts.size == 2) {
+            val jobName = parts[0]
+            val jobCode = parts[1]
+
+            if (!selectedJobList.contains(jobName)) {
+                selectedJobList.add(jobName)
+                updateSelectedJobTextView()
+
+                selectedJobCodeList.add(jobCode)
+            }
+        }
+    }
+
+    private fun handleAllMiddleJobs() {
+        val selectedMajorName = jobList1.find { it.split("-")[1] == selectedMajorCode }?.split("-")?.get(0) ?: ""
+        val allOption = "${selectedMajorName} 전체"
+
+        if (!selectedJobList.contains(allOption)) {
+            selectedJobList.add(allOption)
+            selectedJobCodeList.add("전체")
+            updateSelectedJobTextView()
+        }
+    }
+
     // TextView 업데이트 함수 추가
     private fun updateSelectedJobTextView() {
         val selectedJobs = selectedJobList.joinToString(", \n") // selectedJobList의 모든 항목을 하나의 문자열로 합침
@@ -182,38 +234,116 @@ class JobWorkNetSelectionFragment : Fragment() {
         })
     }
 
-    // XML 형태의 데이터를 파싱하여 직업 목록을 갱신하는 함수
     private fun parseJobList(xmlString: String?) {
         GlobalScope.launch(Dispatchers.Main) {
-            // 백그라운드 스레드에서 XML 파싱
-            withContext(Dispatchers.Default) {
-                // XML 파서를 이용하여 문자열로 받은 XML 데이터를 파싱
-                val xmlDoc = DocumentBuilderFactory.newInstance()
-                    .newDocumentBuilder()
-                    .parse(InputSource(StringReader(xmlString)))
-                xmlDoc.documentElement.normalize()
+            val jobList1Temp = mutableListOf<String>()
+            val jobList2Temp = mutableListOf<String>()
 
-                // XML에서 "jobsNm" 태그를 찾아서 직업 이름을 추출하여 직업 목록인 jobList에 추가
-                val jobNodeList = xmlDoc.getElementsByTagName("jobsNm")
-                for (i in 0 until jobNodeList.length) {
-                    val jobName = jobNodeList.item(i).textContent
-                    jobList.add(jobName)
+            val xmlPullParser: XmlPullParser = Xml.newPullParser()
+            xmlPullParser.setInput(StringReader(xmlString))
+
+            var eventType = xmlPullParser.eventType
+            var isOneDepth = false
+            var isTwoDepth = false
+            var isJobsNm = false
+            var jobsName = ""
+            var jobsCode = ""
+
+            while (eventType != XmlPullParser.END_DOCUMENT) {
+                when (eventType) {
+                    XmlPullParser.START_TAG -> {
+                        when (xmlPullParser.name) {
+                            "oneDepth" -> {
+                                isOneDepth = true
+                                isTwoDepth = false
+                            }
+                            "twoDepth" -> {
+                                isOneDepth = false
+                                isTwoDepth = true
+                            }
+                            "jobsNm" -> {
+                                isJobsNm = true
+                            }
+                            "jobsCd" -> {
+                                jobsCode = xmlPullParser.nextText().trim()
+                            }
+                        }
+                    }
+                    XmlPullParser.TEXT -> {
+                        if ((isOneDepth || isTwoDepth) && isJobsNm && xmlPullParser.text.trim().isNotEmpty()) {
+                            jobsName = xmlPullParser.text.trim().replace("-", "/")
+                        }
+                    }
+                    XmlPullParser.END_TAG -> {
+                        if (isTwoDepth) {
+                            if (jobsName.isNotEmpty() && jobsCode.isNotEmpty()) {
+                                jobList2Temp.add("$jobsName-$jobsCode")
+                            }
+                            isTwoDepth = false
+                        } else if (isOneDepth) {
+                            if (jobsName.isNotEmpty() && jobsCode.isNotEmpty()) {
+                                jobList1Temp.add("$jobsName-$jobsCode")
+                            }
+                            isOneDepth = false
+                        }
+                        jobsName = ""
+                        jobsCode = ""
+                    }
                 }
-                // XML에서 "jobsCd" 태그를 찾아서 직업 이름을 추출하여 직업 목록인 jobCodeList에 추가
-                val jobCodeNodeList = xmlDoc.getElementsByTagName("jobsCd")
-                for (i in 0 until jobCodeNodeList.length) {
-                    val jobCode = jobCodeNodeList.item(i).textContent
-                    jobCodeList.add(jobCode)
-                }
+
+                eventType = xmlPullParser.next()
             }
 
-            //jobList와 jobCodeList를 서로 합치기(직종이름에 해당하는 직종코드 짝지어주기)
-            combinedList.addAll(jobList.zip(jobCodeList) { a, b -> "$a-$b" })
+            // 중분류 목록을 majorToMiddleMap에 저장합니다.
+            majorToMiddleMap.clear()
+            jobList1Temp.forEach { majorJob ->
+                val majorCode = majorJob.split("-")[1]
+                val middleJobs = jobList2Temp.filter { it.contains("-$majorCode") }
+                majorToMiddleMap[majorCode] = middleJobs
+            }
 
-            // 파싱 결과를 어댑터에 알려서 리스트뷰를 갱신
-            jobAdapter.notifyDataSetChanged()
+            // 백그라운드 작업 결과를 UI 업데이트를 위한 메인 스레드 블록으로 전달
+            withContext(Dispatchers.Main) {
+                jobList1.clear()
+                jobList2.clear()
+                jobList1.addAll(jobList1Temp)
+                jobList2.addAll(jobList2Temp)
+                jobAdapter1.notifyDataSetChanged()
+                jobAdapter2.notifyDataSetChanged()
+            }
         }
     }
+
+
+    private fun updateMiddleJobList(selectedJob: String) {
+        val parts = selectedJob.split("-")
+        if (parts.size == 2) {
+            val selectedMajorCode = parts[1]
+
+            // 선택된 대분류 직종과 "전체" 옵션을 만듭니다.
+            val allOption = "${parts[0]} 전체"
+
+            // 선택된 대분류 직종과 관련된 중분류 직종 리스트를 가져옵니다.
+            val filteredMiddleJobs = majorToMiddleMap[selectedMajorCode] ?: emptyList()
+
+            // "전체" 옵션을 중분류 직종 리스트 맨 위에 추가하여 새로운 리스트를 생성합니다.
+            val updatedMiddleJobs = mutableListOf<String>().apply {
+                add(allOption)
+                addAll(filteredMiddleJobs)
+            }
+
+            // 중분류 리스트 어댑터를 갱신하여 변경된 리스트를 화면에 표시합니다.
+            jobAdapter2.clear()
+            jobAdapter2.addAll(updatedMiddleJobs)
+            jobAdapter2.notifyDataSetChanged()
+        }
+    }
+
+
+
+
+
+
 
     // 직업 목록을 필터링하는 함수
     private fun filterJobList(searchText: String) {

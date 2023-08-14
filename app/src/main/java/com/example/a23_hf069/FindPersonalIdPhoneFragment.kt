@@ -24,7 +24,7 @@ import okhttp3.Request
 
 class FindPersonalIdPhoneFragment : Fragment() {
 
-    private var IP_ADDRESS = "13.209.65.106" // 실행중인 인스턴스의 IP 주소
+    private var IP_ADDRESS = "54.180.186.168" // 실행중인 인스턴스의 IP 주소
 
     private lateinit var tiedtName: TextInputEditText
     private lateinit var tiedtPhone: TextInputEditText

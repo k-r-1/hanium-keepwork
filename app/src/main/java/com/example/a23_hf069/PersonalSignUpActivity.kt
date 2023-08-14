@@ -39,7 +39,7 @@ import kotlinx.coroutines.withContext
 class PersonalSignUpActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
     // IP 주소와 태그를 초기화
-    private var IP_ADDRESS = "13.209.65.106" // 본인 IP주소를 넣으세요.
+    private var IP_ADDRESS = "54.180.186.168" // 본인 IP주소를 넣으세요.
     private var TAG = "phptest" // phptest log 찍으려는 용도
     private var checkID = false
 

@@ -31,6 +31,19 @@
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
+            <ImageButton
+                android:id="@+id/backButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:background="@null"
+                android:src="@drawable/ic_baseline_arrow_back_ios_24" />
+
+            <View
+                android:layout_width="25dp"
+                android:layout_height="1dp"
+                android:background="@android:color/transparent" />
+
             <EditText
                 android:id="@+id/tv_select_job"
                 android:layout_width="0dp"
@@ -45,6 +58,7 @@
                 android:minHeight="48dp"
                 android:textColor="#35B891"
                 android:textColorHint="#9E9E9E"
+                android:focusable="true"
                 android:textSize="15sp" />
 
             <View
@@ -101,43 +115,13 @@
 
     <!-- 기존 LinearLayout 안에 아래 코드를 추가하세요. -->
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/btn_major_category"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="대분류" />
-
-        <Button
-            android:id="@+id/btn_middle_category"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="중분류"
-            android:visibility="gone"
-            android:layout_marginStart="16dp" />
-
-    </LinearLayout>
 
     <!-- 각 버튼에 해당하는 리스트뷰를 아래에 추가하세요. -->
 
-    <!-- 대분류용 ListView -->
+    <!-- 검색용 ListView -->
     <ListView
-        android:id="@+id/listview_major_category"
+        android:id="@+id/lvJobs"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        />
-
-    <!-- 중분류용 ListView -->
-    <ListView
-        android:id="@+id/listview_middle_category"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone" />
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

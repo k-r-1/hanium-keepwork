@@ -2,12 +2,14 @@ package com.example.a23_hf069
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Xml
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ListView
@@ -49,6 +51,7 @@ class JobWorkNetSelectionFragment : Fragment() {
     private val jobList2: MutableList<String> = mutableListOf() // 중분류 직종을 담을 리스트
 
     private var selectedMajorCode: String? = null
+    lateinit var selectedJob: String
 
     // 클래스 내에 맵을 선언합니다.
     private val majorToMiddleMap: MutableMap<String, List<String>> = mutableMapOf()
@@ -88,6 +91,9 @@ class JobWorkNetSelectionFragment : Fragment() {
         joblistView1.adapter = jobAdapter1
         joblistView2.adapter = jobAdapter2
 
+        selectedJob = sharedSelectionViewModel.selectedJob.toString() // ViewModel에서 선택된 직종 정보를 가져와서 TextView에 설정
+        binding.tvSelectedJob.text = selectedJob //화면에 textView 나타내기
+
         fetchJobList() // 직업 목록 API 호출 및 결과 처리 함수를 호출
 
 
@@ -95,12 +101,16 @@ class JobWorkNetSelectionFragment : Fragment() {
             selectedMajorCode = null // 선택된 대분류 초기화
             joblistView1.visibility = View.VISIBLE
             joblistView2.visibility = View.VISIBLE
+            binding.btnMajorCategory.setBackgroundColor(Color.parseColor("#35B891"))
+            // 중분류 버튼을 안 보이도록 설정
+            binding.btnMiddleCategory.visibility = View.GONE
 
             // 중분류 목록 초기화 및 갱신
             jobList2.clear()
             jobAdapter2.clear() // 중분류 어댑터에도 데이터를 클리어해야 함
             jobAdapter2.addAll(jobList2) // 초기 중분류 목록을 추가
             jobAdapter2.notifyDataSetChanged()
+
         }
 
 
@@ -109,11 +119,16 @@ class JobWorkNetSelectionFragment : Fragment() {
             joblistView2.visibility = View.VISIBLE
         }
 
-        // EditText에서 검색어 입력 시 이벤트 처리
-        searchEditText.setOnEditorActionListener { _, _, _ ->
-            val searchText = searchEditText.text.toString() // EditText에 입력된 텍스트를 가져와서 문자열로 변환
-            filterJobList(searchText) // 가져온 검색어를 사용하여 직업 목록을 필터링하고, 결과를 ListView에 반영
-            true // "완료" 버튼을 눌렀을 때만 필터링이 수행되고, 다른 동작으로 전환되지 않도록 함
+        // EditText을 클릭하면 검색 화면 JobWorkNetSelectionSearchFragment로 전환
+        searchEditText.setOnFocusChangeListener { _, hasFocus -> // EditText의 포커스 변화를 감지하는 리스너를 설정
+            if (hasFocus) {
+                val searchFragment = JobWorkNetSelectionSearchFragment()
+                requireActivity().supportFragmentManager.beginTransaction() // 프래그먼트 간 전환 수행
+                    .replace(R.id.fl_container, searchFragment) // 프래그먼트 교체
+                    .addToBackStack(null) // 이전 프래그먼트로 돌아가기
+                    .commit()
+                hideKeyboard() // 키보드 숨김 처리
+            }
         }
 
         joblistView1.setOnItemClickListener { _, _, position, _ ->
@@ -124,6 +139,10 @@ class JobWorkNetSelectionFragment : Fragment() {
                 updateMiddleJobList(selectedJob) // 중분류 목록 업데이트
                 // 중분류 버튼 자동 클릭
                 binding.btnMiddleCategory.performClick()
+                // 중분류 버튼을 보이도록 설정
+                binding.btnMiddleCategory.visibility = View.VISIBLE
+                // 대분류 버튼 색상 변경
+                binding.btnMajorCategory.setBackgroundColor(resources.getColor(android.R.color.darker_gray))
             }
         }
 
@@ -134,20 +153,6 @@ class JobWorkNetSelectionFragment : Fragment() {
                 handleAllMiddleJobs() // "전체" 선택 시 모든 중분류 아이템 처리
             } else {
                 handleJobItemClick(selectedJob) // 일반적인 아이템 선택 시 처리
-            }
-        }
-
-        // drawableRight(검색 아이콘) 클릭 시 검색 이벤트 처리
-        searchEditText.setOnTouchListener { _, event ->
-            val drawableRight = 2 // 검색 아이콘의 위치를 나타내는 인덱스
-            if (event.action == MotionEvent.ACTION_UP &&
-                event.rawX >= (searchEditText.right - searchEditText.compoundDrawables[drawableRight].bounds.width())
-            ) {
-                val searchText = searchEditText.text.toString()
-                filterJobList(searchText) // 가져온 검색어를 이용하여 직업 목록을 필터링하고 업데이트
-                true // 이벤트 처리가 끝났음을
-            } else {
-                false// 이벤트 처리가 끝나지 않았음
             }
         }
 
@@ -192,14 +197,17 @@ class JobWorkNetSelectionFragment : Fragment() {
 
     private fun handleAllMiddleJobs() {
         val selectedMajorName = jobList1.find { it.split("-")[1] == selectedMajorCode }?.split("-")?.get(0) ?: ""
+        val majorCode = selectedMajorCode ?: ""
+
         val allOption = "${selectedMajorName} 전체"
 
         if (!selectedJobList.contains(allOption)) {
             selectedJobList.add(allOption)
-            selectedJobCodeList.add("전체")
+            selectedJobCodeList.add(majorCode) // 선택된 대분류 직종 코드 추가
             updateSelectedJobTextView()
         }
     }
+
 
     // TextView 업데이트 함수 추가
     private fun updateSelectedJobTextView() {
@@ -321,7 +329,7 @@ class JobWorkNetSelectionFragment : Fragment() {
             val selectedMajorCode = parts[1]
 
             // 선택된 대분류 직종과 "전체" 옵션을 만듭니다.
-            val allOption = "${parts[0]} 전체"
+            val allOption = "${parts[0]} 전체-$selectedMajorCode"
 
             // 선택된 대분류 직종과 관련된 중분류 직종 리스트를 가져옵니다.
             val filteredMiddleJobs = majorToMiddleMap[selectedMajorCode] ?: emptyList()
@@ -339,16 +347,12 @@ class JobWorkNetSelectionFragment : Fragment() {
         }
     }
 
-
-
-
-
-
-
-    // 직업 목록을 필터링하는 함수
-    private fun filterJobList(searchText: String) {
-        // ArrayAdapter에서 제공하는 filter를 이용하여 입력된 검색어를 포함하는 직종만 표시
-        jobAdapter.filter.filter(searchText)
+    private fun hideKeyboard() {
+        // 키보드 숨김 처리를 수행
+        val imm =
+            requireContext().getSystemService(android.content.Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(view?.windowToken, 0)
+        view?.clearFocus()
     }
 
     // API 요청 실패 시 에러 메시지를 보여주는 함수

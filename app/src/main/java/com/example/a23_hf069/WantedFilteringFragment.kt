@@ -46,7 +46,6 @@ class WantedFilteringFragment : Fragment() {
     //라디오 그룹
     lateinit var rgEdu: RadioGroup // 학력 라디오그룹
     lateinit var rgCareer: RadioGroup // 경력 라디오그룹
-    lateinit var rgCloseDt: RadioGroup // 마감일 라디오그룹
 
     private lateinit var wantedList: List<Wanted>
     private val sharedSelectionViewModel: SharedSelectionViewModel by activityViewModels() // 필터링된 리스트를 전달하는 viewModel 객체 생성
@@ -96,14 +95,12 @@ class WantedFilteringFragment : Fragment() {
         // 라디오 그룹을 초기화
         rgEdu = view.findViewById(R.id.rg_edu)
         rgCareer = view.findViewById(R.id.rg_career)
-        rgCloseDt = view.findViewById(R.id.rg_closeDt)
 
         // 완료 버튼이 눌렸을 때 지역,직종 변수 및 학력,경력,마감일 라디오버튼 확인 -> 선택된 조건에 해당하는 공고목록 가져와서 UI에 업데이트
         complete_btn.setOnClickListener {
             // 해당 라디오 그룹에서 선택된 Id를 가져오기
             val checkEduId = rgEdu.checkedRadioButtonId
             val checkCareerId = rgCareer.checkedRadioButtonId
-            val checkCloseDtId = rgCloseDt.checkedRadioButtonId
 
             // 선택한 지역이 있을 경우 키워드에 해당 지역이름 넣기
             if (selectedRegion != "") {
@@ -147,18 +144,6 @@ class WantedFilteringFragment : Fragment() {
                 R.id.rb_c_3 -> {
                     // 대학(2년제) 라디오 버튼이 선택되었을 때
                     keywordCareer = "경력"
-                }
-            }
-            // 마감일 라디오 그룹중 선택된 라디오 버튼이 있을때 처리
-            when (checkCloseDtId) {
-                R.id.rb_d_1 -> {
-                    keywordCloseDt = "7days"
-                }
-                R.id.rb_d_2 -> {
-                    keywordCloseDt = "30days"
-                }
-                R.id.rb_d_3 -> {
-                    keywordCloseDt = "60days"
                 }
             }
 

@@ -57,7 +57,6 @@ class WantedFilteringFragment : Fragment() {
     private var keywordJob = ""
     private var keywordEdu = ""
     private var keywordCareer = ""
-    private var keywordCloseDt = ""
     private var regionList: MutableList<String> = mutableListOf()
 
     override fun onCreateView(
@@ -192,8 +191,11 @@ class WantedFilteringFragment : Fragment() {
     private fun fetchWantedList() {
         //네트워크 연결
         val client = OkHttpClient()
+        //전체
+        var wholeRegion = false
         if(keywordRegion2.contains("전체")){ // ex) 서울 전체인 경우 -> 서울로 변경
-            keywordRegion2.replace("전체","").trim()
+            keywordRegion2 = keywordRegion2.replace("전체","").trim()
+            wholeRegion = true
         }
         val request = Request.Builder()
             .url("$baseUrl&startPage=$page&keyword=$keywordRegion2") // &keyword로 지역 1차 필터링하기 (이렇게 안하면 traffic 터져서 아무것도 안나옴)
@@ -210,11 +212,16 @@ class WantedFilteringFragment : Fragment() {
                 if (response.isSuccessful) {
                     val xmlString = response.body?.string() // url에 있는 모든 글자 다가져오기
                     result = parseXmlResponse(xmlString) // parsing한 후 리스트화 하기
+                    // 지역 1차 필터링만 한 리스트
                     wantedList = result
 
                     // 지역 2차 필터링하기
-                    val filteredList = wantedList.filter { it.region?.trim() in regionList }
+                    var filteredList = wantedList.filter { it.region?.trim() in regionList }
 
+                    // 전체 지역이 선택된 경우
+                    if(wholeRegion){
+                        filteredList = wantedList.filter { it.region != null && checkCommonPrefix(it.region, keywordRegion2) }
+                    }
                     if(keywordEdu =="" && keywordCareer == ""){ // 지역만 선택
                         sharedSelectionViewModel.updateFilteredList(filteredList)
                     }
@@ -384,6 +391,21 @@ class WantedFilteringFragment : Fragment() {
         return wantedList
     }
 
+    // 앞의 두 글자가 연속적으로 일치하는지 확인하는 함수
+    fun checkCommonPrefix(str1: String, str2: String): Boolean {
+        val minLength = minOf(str1.length, str2.length)
+        var commonPrefix = ""
+
+        for (i in 0 until minLength) {
+            if (str1[i] == str2[i]) {
+                commonPrefix += str1[i]
+            } else {
+                break
+            }
+        }
+
+        return commonPrefix.length >= 2
+    }
 
     private fun showErrorToast() {
         Toast.makeText(requireContext(), "Failed to fetch wanted list.", Toast.LENGTH_SHORT).show()

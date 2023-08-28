@@ -1,0 +1,321 @@
+Index: app/src/main/java/com/example/a23_hf069/WantedFilteringFragment.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.a23_hf069\r\n\r\n\r\nimport android.os.Build\r\nimport android.os.Bundle\r\nimport android.text.TextUtils.split\r\nimport android.view.LayoutInflater\r\nimport android.view.View\r\nimport android.view.ViewGroup\r\nimport android.widget.*\r\nimport androidx.annotation.RequiresApi\r\nimport androidx.core.content.ContentProviderCompat.requireContext\r\nimport androidx.fragment.app.Fragment\r\nimport androidx.fragment.app.activityViewModels\r\nimport com.example.a23_hf069.*\r\nimport okhttp3.*\r\nimport org.xmlpull.v1.XmlPullParser\r\nimport org.xmlpull.v1.XmlPullParserFactory\r\nimport java.io.IOException\r\nimport java.io.StringReader\r\nimport java.time.LocalDate\r\nimport java.time.format.DateTimeFormatter\r\nimport java.util.*\r\nimport kotlin.collections.ArrayList\r\n\r\nclass WantedFilteringFragment : Fragment() {\r\n    private val baseUrl =\r\n        \"http://openapi.work.go.kr/opi/opi/opia/wantedApi.do?authKey=WNLJYZLM2VZXTT2TZA9XR2VR1HK&callTp=L&returnType=XML&display=100\"\r\n    private var page = 1\r\n\r\n    //완료 버튼\r\n    lateinit var complete_btn: Button\r\n\r\n    //지역,직종 선택 버튼\r\n    lateinit var regioncl_btn: Button\r\n    lateinit var jobcl_btn: Button\r\n\r\n    lateinit var tv_jobcl_selected: TextView\r\n    lateinit var tv_regioncl_selected: TextView\r\n    lateinit var selectedJob: String\r\n    lateinit var selectedRegion: String\r\n\r\n    //직종 코드\r\n    private lateinit var selectedJobCodes: String\r\n\r\n    //라디오 그룹\r\n    lateinit var rgEdu: RadioGroup // 학력 라디오그룹\r\n    lateinit var rgCareer: RadioGroup // 경력 라디오그룹\r\n    lateinit var rgCloseDt: RadioGroup // 마감일 라디오그룹\r\n\r\n    private lateinit var wantedList: List<Wanted>\r\n    private val sharedSelectionViewModel: SharedSelectionViewModel by activityViewModels() // 필터링된 리스트를 전달하는 viewModel 객체 생성\r\n\r\n\r\n    // 필터링 키워드\r\n    private var keywordRegion = \"\"\r\n    private var keywordRegion2 = \"\"\r\n    private var keywordJob = \"\"\r\n    private var keywordEdu = \"\"\r\n    private var keywordCareer = \"\"\r\n    private var keywordCloseDt = \"\"\r\n    private var regionList: MutableList<String> = mutableListOf()\r\n\r\n    override fun onCreateView(\r\n        inflater: LayoutInflater,\r\n        container: ViewGroup?,\r\n        savedInstanceState: Bundle?\r\n    ): View? {\r\n        val rootView = inflater.inflate(R.layout.fragment_wanted_filtering, container, false)\r\n        return rootView\r\n    }\r\n\r\n    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {\r\n        super.onViewCreated(view, savedInstanceState)\r\n\r\n        //완료 버튼 초기화\r\n        complete_btn = view.findViewById<Button>(R.id.complete_btn1)\r\n        //지역 선택 초기화\r\n        regioncl_btn = view.findViewById<Button>(R.id.regioncl_btn)\r\n        jobcl_btn = view.findViewById<Button>(R.id.jobcl_btn)\r\n\r\n\r\n        tv_regioncl_selected =\r\n            view.findViewById(R.id.tv_regioncl_selected) // 선택된 지역 정보를 나타낼 TextView 초기화\r\n        tv_jobcl_selected = view.findViewById(R.id.tv_jobcl_selected) // 선택된 직종 정보를 나타낼 TextView 초기화\r\n        selectedRegion =\r\n            sharedSelectionViewModel.selectedRegion.toString() // ViewModel에서 선택된 지역 정보를 가져와서 TextView에 설정\r\n        tv_regioncl_selected.text = selectedRegion //화면에 textView 나타내기\r\n        selectedJob =\r\n            sharedSelectionViewModel.selectedJob.toString() // ViewModel에서 선택된 직종 정보를 가져와서 TextView에 설정\r\n        tv_jobcl_selected.text = selectedJob //화면에 textView 나타내기\r\n\r\n        // 전달된 직종코드 데이터를 받아서 사용\r\n        selectedJobCodes = arguments?.getString(\"selectedJobCodes\").toString()\r\n\r\n        // 라디오 그룹을 초기화\r\n        rgEdu = view.findViewById(R.id.rg_edu)\r\n        rgCareer = view.findViewById(R.id.rg_career)\r\n        rgCloseDt = view.findViewById(R.id.rg_closeDt)\r\n\r\n        // 완료 버튼이 눌렸을 때 지역,직종 변수 및 학력,경력,마감일 라디오버튼 확인 -> 선택된 조건에 해당하는 공고목록 가져와서 UI에 업데이트\r\n        complete_btn.setOnClickListener {\r\n            // 해당 라디오 그룹에서 선택된 Id를 가져오기\r\n            val checkEduId = rgEdu.checkedRadioButtonId\r\n            val checkCareerId = rgCareer.checkedRadioButtonId\r\n            val checkCloseDtId = rgCloseDt.checkedRadioButtonId\r\n\r\n            // 선택한 지역이 있을 경우 키워드에 해당 지역이름 넣기\r\n            if (selectedRegion != \"\") {\r\n                keywordRegion = sharedSelectionViewModel.keywordRegions // ex) \"서울 성동구|서울 종로구\"\r\n                keywordRegion2 = keywordRegion.replace(\" \",\"\") // ex) \"서울성동구|서울종로구\"\r\n                regionList = keywordRegion.split(\"|\").map{it.trim()}.toMutableList() //ex) [서울 성동구, 서울 종로구]\r\n\r\n            }\r\n\r\n            // 선택한 직종이 있을 경우 필터링하기\r\n            if (selectedJob != \"\") {\r\n                keywordJob = selectedJobCodes\r\n                println(keywordJob)\r\n            }\r\n\r\n            // 학력 라디오 그룹중 선택된 라디오 버튼이 있을때 처리\r\n            when (checkEduId) {\r\n                R.id.rb_e_1 -> {\r\n                    keywordEdu = \"학력무관\"\r\n                }\r\n                R.id.rb_e_2 -> {\r\n                    keywordEdu = \"고졸\"\r\n                }\r\n                R.id.rb_e_3 -> {\r\n                    keywordEdu = \"대졸(2~3년)\"\r\n                }\r\n                R.id.rb_e_4 -> {\r\n                    keywordEdu = \"대졸(4년)\"\r\n                }\r\n            }\r\n\r\n            // 경력 라디오 그룹중 선택된 라디오 버튼이 있을때 처리\r\n            when (checkCareerId) {\r\n                R.id.rb_c_1 -> {\r\n                    keywordCareer = \"관계없음\"\r\n                }\r\n                R.id.rb_c_2 -> {\r\n                    // 고등학교 졸 라디오 버튼이 선택되었을 때\r\n                    keywordCareer = \"신입\"\r\n                }\r\n                R.id.rb_c_3 -> {\r\n                    // 대학(2년제) 라디오 버튼이 선택되었을 때\r\n                    keywordCareer = \"경력\"\r\n                }\r\n            }\r\n            // 마감일 라디오 그룹중 선택된 라디오 버튼이 있을때 처리\r\n            when (checkCloseDtId) {\r\n                R.id.rb_d_1 -> {\r\n                    keywordCloseDt = \"7days\"\r\n                }\r\n                R.id.rb_d_2 -> {\r\n                    keywordCloseDt = \"30days\"\r\n                }\r\n                R.id.rb_d_3 -> {\r\n                    keywordCloseDt = \"60days\"\r\n                }\r\n            }\r\n\r\n\r\n            // 지역 조건은 필수 선택 조건으로 무조건 선택해야 함\r\n            if (keywordRegion == \"\") {\r\n                showWarningToast1() // 지역 조건을 선택하지 않은 경우 토스트창 띄우기\r\n            }\r\n            // 지역조건을 선택한 경우\r\n            else {\r\n                // 필터링 후 UI에 반영\r\n                fetchWantedList()\r\n\r\n                // 화면전환\r\n                val wantedResultFragment = WantedResultFragment()\r\n                requireActivity().supportFragmentManager.beginTransaction()\r\n                    .replace(R.id.fl_container, wantedResultFragment)\r\n                    .addToBackStack(null)\r\n                    .commit()\r\n            }\r\n\r\n        }\r\n        // complete_btn 리스너 종료\r\n\r\n        // 지역선택 버튼 눌렸을 때 지역선택 화면으로 전환\r\n        regioncl_btn.setOnClickListener {\r\n            val regionSelectionFragment = RegionSelectionFragment()\r\n            requireActivity().supportFragmentManager.beginTransaction()\r\n                .replace(R.id.fl_container, regionSelectionFragment)\r\n                .addToBackStack(null)\r\n                .commit()\r\n        }\r\n\r\n        // 직종선택 버튼 눌렸을 때 직종선택 화면으로 전환\r\n        jobcl_btn.setOnClickListener {\r\n            val jobSelectionFragment = JobWorkNetSelectionFragment()\r\n            requireActivity().supportFragmentManager.beginTransaction()\r\n                .replace(R.id.fl_container, jobSelectionFragment)\r\n                .addToBackStack(null)\r\n                .commit()\r\n        }\r\n\r\n    }\r\n\r\n    // 키워드에 해당하는 채용공고 가져와서 sharedSelectionViewModel의 리스트에 저장 -> UI에 반영\r\n    private fun fetchWantedList() {\r\n        //네트워크 연결\r\n        val client = OkHttpClient()\r\n        if(keywordRegion2.contains(\"전체\")){ // ex) 서울 전체인 경우 -> 서울로 변경\r\n            keywordRegion2.replace(\"전체\",\"\").trim()\r\n        }\r\n        val request = Request.Builder()\r\n            .url(\"$baseUrl&startPage=$page&keyword=$keywordRegion2\") // &keyword로 지역 1차 필터링하기 (이렇게 안하면 traffic 터져서 아무것도 안나옴)\r\n            .build()\r\n        var result: List<Wanted> = emptyList()\r\n\r\n        client.newCall(request).enqueue(object : Callback {\r\n            override fun onFailure(call: Call, e: IOException) {\r\n                println(e.printStackTrace())\r\n            }\r\n\r\n            @RequiresApi(Build.VERSION_CODES.O)\r\n            override fun onResponse(call: Call, response: Response) {\r\n                if (response.isSuccessful) {\r\n                    val xmlString = response.body?.string() // url에 있는 모든 글자 다가져오기\r\n                    result = parseXmlResponse(xmlString) // parsing한 후 리스트화 하기\r\n                    wantedList = result\r\n\r\n                    // 지역 2차 필터링하기\r\n                    val filteredList = wantedList.filter { it.region?.trim() in regionList }\r\n\r\n                    if(keywordEdu ==\"\" && keywordCareer == \"\"){ // 지역만 선택\r\n                        sharedSelectionViewModel.updateFilteredList(filteredList)\r\n                    }\r\n                    else if (keywordCareer.isNotEmpty() && keywordEdu == \"\") { // 경력만 선택\r\n                        val filteredList1 = filteredList.filter {// 경력 필터링\r\n                            it.career == keywordCareer\r\n                        }\r\n                        sharedSelectionViewModel.updateFilteredList(filteredList1)\r\n                    } else if (keywordEdu.isNotEmpty() && keywordCareer == \"\") { // 학력만 선택\r\n                        val filteredList1 = filteredList.filter { // 학력 필터링\r\n                            it.minEdubg == keywordEdu\r\n                        }\r\n                        sharedSelectionViewModel.updateFilteredList(filteredList1)\r\n                    } else if(keywordEdu.isNotEmpty()&&keywordCareer.isNotEmpty()){ // 경력, 학력 모두 선택\r\n                        val filteredList1 = filteredList.filter { // 경력, 학력 필터링\r\n                            it.minEdubg == keywordEdu && it.career == keywordCareer\r\n                        }\r\n                        sharedSelectionViewModel.updateFilteredList(filteredList1)\r\n                    }else if(keywordEdu ==\"\" && keywordCareer == \"\" && keywordJob.isNotEmpty()){ //지역+직종\r\n                        val filteredList1 = wantedList.filter {\r\n                            it.jobsCd == keywordJob\r\n                        }\r\n                        sharedSelectionViewModel.updateFilteredList(filteredList1)\r\n                    }\r\n                    else if(keywordEdu ==\"\" && keywordCareer.isNotEmpty() && keywordJob.isNotEmpty()){ //지역+직종+경력\r\n                        val filteredList1 = wantedList.filter {\r\n                            it.jobsCd == keywordJob && it.career == keywordCareer\r\n                        }\r\n                        sharedSelectionViewModel.updateFilteredList(filteredList1)\r\n                    }\r\n                    else if(keywordEdu.isNotEmpty() && keywordCareer ==\"\" && keywordJob.isNotEmpty()){ //지역+직종+학력\r\n                        val filteredList1 = wantedList.filter {\r\n                            it.minEdubg == keywordEdu && it.jobsCd == keywordJob\r\n                        }\r\n                        sharedSelectionViewModel.updateFilteredList(filteredList1)\r\n                    }\r\n                    else { //지역+직종+경력+학력\r\n                        val filteredList1 = wantedList.filter {\r\n                            it.minEdubg == keywordEdu && it.career == keywordCareer && it.jobsCd == keywordJob\r\n                        }\r\n                        sharedSelectionViewModel.updateFilteredList(filteredList1)\r\n                    }\r\n\r\n                    // 더 많은 페이지가 있는지 확인합니다.\r\n                    val factory = XmlPullParserFactory.newInstance()\r\n                    val xpp = factory.newPullParser()\r\n                    xpp.setInput(StringReader(xmlString))\r\n\r\n                    var eventType = xpp.eventType\r\n                    var totalItems = 0\r\n                    var totalPages = 0\r\n\r\n                    while (eventType != XmlPullParser.END_DOCUMENT) {\r\n                        if (eventType == XmlPullParser.START_TAG && xpp.name == \"total\") {\r\n                            totalItems = xpp.nextText().toInt()\r\n                            totalPages = totalItems / 100\r\n                            break\r\n                        }\r\n                        eventType = xpp.next()\r\n                    }\r\n                    // 더 많은 페이지가 있다면 다음 페이지를 가져옵니다.\r\n                    while (totalPages > page) {\r\n                        page += 1\r\n                        fetchWantedList()\r\n                    }\r\n\r\n                }// if 응답이 성공적일때\r\n                else {\r\n                    showErrorToast()\r\n                } //if 응답 실패일때\r\n            } //onResponse 함수 종료\r\n        }) //callback 종료\r\n    } // fetchWantedList 함수 종료\r\n\r\n    data class Wanted(\r\n        val company: String,\r\n        val title: String,\r\n        val salTpNm: String?,\r\n        val sal: String?,\r\n        val region: String?,\r\n        val holidayTpNm: String?,\r\n        val minEdubg: String?,\r\n        val career: String?,\r\n        val closeDt: String?,\r\n        val wantedMobileInfoUrl: String?,\r\n        val jobsCd: String?,\r\n        val infoSvc: String?\r\n    )\r\n\r\n    private fun parseXmlResponse(xmlResponse: String?): List<Wanted> {\r\n        val wantedList = mutableListOf<Wanted>()\r\n        val factory = XmlPullParserFactory.newInstance()\r\n        val xpp = factory.newPullParser()\r\n        xpp.setInput(StringReader(xmlResponse))\r\n\r\n        var eventType = xpp.eventType\r\n        var company: String? = null // 회사명\r\n        var title: String? = null // 채용제목\r\n        var salTpNm: String? = null // 임금형태\r\n        var sal: String? = null // 급여\r\n        var region: String? = null // 근무지역\r\n        var holidayTpNm: String? = null // 근무형태\r\n        var minEdubg: String? = null // 최소학력\r\n        var career: String? = null // 경력\r\n        var closeDt: String? = null // 마감일자\r\n        var wantedMobileInfoUrl: String? = null // 워크넷 모바일 채용정보 URL\r\n        var jobsCd: String? = null // 직종코드\r\n        var infoSvc: String? = null // 정보제공처\r\n\r\n        while (eventType != XmlPullParser.END_DOCUMENT) {\r\n            when (eventType) {\r\n                XmlPullParser.START_TAG -> {\r\n                    when (xpp.name) {\r\n                        \"company\" -> company = xpp.nextText()\r\n                        \"title\" -> title = xpp.nextText()\r\n                        \"salTpNm\" -> salTpNm = xpp.nextText()\r\n                        \"sal\" -> sal = xpp.nextText()\r\n                        \"region\" -> region = xpp.nextText()\r\n                        \"holidayTpNm\" -> holidayTpNm = xpp.nextText()\r\n                        \"minEdubg\" -> minEdubg = xpp.nextText()\r\n                        \"career\" -> career = xpp.nextText()\r\n                        \"closeDt\" -> closeDt = xpp.nextText()\r\n                        \"wantedMobileInfoUrl\" -> wantedMobileInfoUrl = xpp.nextText()\r\n                        \"jobsCd\" -> jobsCd = xpp.nextText()\r\n                        \"infoSvc\" -> infoSvc = xpp.nextText()\r\n                    }\r\n                }\r\n                XmlPullParser.END_TAG -> {\r\n                    if (xpp.name == \"wanted\") {\r\n                        company?.let { c ->\r\n                            title?.let { t ->\r\n                                wantedList.add(\r\n                                    Wanted(\r\n                                        c,\r\n                                        t,\r\n                                        salTpNm,\r\n                                        sal,\r\n                                        region,\r\n                                        holidayTpNm,\r\n                                        minEdubg,\r\n                                        career,\r\n                                        closeDt,\r\n                                        wantedMobileInfoUrl,\r\n                                        jobsCd,\r\n                                        infoSvc\r\n                                    )\r\n                                )\r\n                            }\r\n                        }\r\n                        company = null\r\n                        title = null\r\n                        salTpNm = null\r\n                        sal = null\r\n                        region = null\r\n                        holidayTpNm = null\r\n                        minEdubg = null\r\n                        career = null\r\n                        closeDt = null\r\n                        wantedMobileInfoUrl = null\r\n                        jobsCd = null\r\n                        infoSvc = null\r\n                    }\r\n                }\r\n            }\r\n            eventType = xpp.next()\r\n        } // while문 종료\r\n        return wantedList\r\n    }\r\n\r\n\r\n    private fun showErrorToast() {\r\n        Toast.makeText(requireContext(), \"Failed to fetch wanted list.\", Toast.LENGTH_SHORT).show()\r\n    }\r\n\r\n    private fun showWarningToast1() {\r\n        Toast.makeText(requireContext(), \"지역은 필수 선택 조건입니다.\", Toast.LENGTH_SHORT).show()\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/a23_hf069/WantedFilteringFragment.kt b/app/src/main/java/com/example/a23_hf069/WantedFilteringFragment.kt
+--- a/app/src/main/java/com/example/a23_hf069/WantedFilteringFragment.kt	(revision 6761cae6ff513e9a2e0aca489564906d26148c34)
++++ b/app/src/main/java/com/example/a23_hf069/WantedFilteringFragment.kt	(date 1692955491847)
+@@ -26,6 +26,9 @@
+ class WantedFilteringFragment : Fragment() {
+     private val baseUrl =
+         "http://openapi.work.go.kr/opi/opi/opia/wantedApi.do?authKey=WNLJYZLM2VZXTT2TZA9XR2VR1HK&callTp=L&returnType=XML&display=100"
++    private val jobUrl =
++        "http://openapi.work.go.kr/opi/commonCode/commonCode.do?returnType=XML&target=CMCD&authKey=WNLJYZLM2VZXTT2TZA9XR2VR1HK&dtlGb=2"
++
+     private var page = 1
+ 
+     //완료 버튼
+@@ -108,8 +111,9 @@
+             // 선택한 지역이 있을 경우 키워드에 해당 지역이름 넣기
+             if (selectedRegion != "") {
+                 keywordRegion = sharedSelectionViewModel.keywordRegions // ex) "서울 성동구|서울 종로구"
+-                keywordRegion2 = keywordRegion.replace(" ","") // ex) "서울성동구|서울종로구"
+-                regionList = keywordRegion.split("|").map{it.trim()}.toMutableList() //ex) [서울 성동구, 서울 종로구]
++                keywordRegion2 = keywordRegion.replace(" ", "") // ex) "서울성동구|서울종로구"
++                regionList = keywordRegion.split("|").map { it.trim() }
++                    .toMutableList() //ex) [서울 성동구, 서울 종로구]
+ 
+             }
+ 
+@@ -124,12 +128,15 @@
+                 R.id.rb_e_1 -> {
+                     keywordEdu = "학력무관"
+                 }
++
+                 R.id.rb_e_2 -> {
+                     keywordEdu = "고졸"
+                 }
++
+                 R.id.rb_e_3 -> {
+                     keywordEdu = "대졸(2~3년)"
+                 }
++
+                 R.id.rb_e_4 -> {
+                     keywordEdu = "대졸(4년)"
+                 }
+@@ -140,10 +147,12 @@
+                 R.id.rb_c_1 -> {
+                     keywordCareer = "관계없음"
+                 }
++
+                 R.id.rb_c_2 -> {
+                     // 고등학교 졸 라디오 버튼이 선택되었을 때
+                     keywordCareer = "신입"
+                 }
++
+                 R.id.rb_c_3 -> {
+                     // 대학(2년제) 라디오 버튼이 선택되었을 때
+                     keywordCareer = "경력"
+@@ -154,9 +163,11 @@
+                 R.id.rb_d_1 -> {
+                     keywordCloseDt = "7days"
+                 }
++
+                 R.id.rb_d_2 -> {
+                     keywordCloseDt = "30days"
+                 }
++
+                 R.id.rb_d_3 -> {
+                     keywordCloseDt = "60days"
+                 }
+@@ -207,8 +218,8 @@
+     private fun fetchWantedList() {
+         //네트워크 연결
+         val client = OkHttpClient()
+-        if(keywordRegion2.contains("전체")){ // ex) 서울 전체인 경우 -> 서울로 변경
+-            keywordRegion2.replace("전체","").trim()
++        if (keywordRegion2.contains("전체")) { // ex) 서울 전체인 경우 -> 서울로 변경
++            keywordRegion2.replace("전체", "").trim()
+         }
+         val request = Request.Builder()
+             .url("$baseUrl&startPage=$page&keyword=$keywordRegion2") // &keyword로 지역 1차 필터링하기 (이렇게 안하면 traffic 터져서 아무것도 안나옴)
+@@ -227,51 +238,73 @@
+                     result = parseXmlResponse(xmlString) // parsing한 후 리스트화 하기
+                     wantedList = result
+ 
+-                    // 지역 2차 필터링하기
+-                    val filteredList = wantedList.filter { it.region?.trim() in regionList }
++                    // 직종 XML 데이터 호출
++                    val jobRequest = Request.Builder()
++                        .url(jobUrl)
++                        .build()
++
++                    client.newCall(jobRequest).enqueue(object : Callback {
++                        override fun onFailure(call: Call, e: IOException) {
++                            println(e.printStackTrace())
++                        }
++
++                        @RequiresApi(Build.VERSION_CODES.O)
++                        override fun onResponse(call: Call, jobResponse: Response) {
++                            if (jobResponse.isSuccessful) {
++                                val jobXmlString = jobResponse.body?.string()
++                                // 파싱된 결과를 wantedList와 결합
++                                val jobList = parseJobXmlResponse(jobXmlString)
++
++                                // 지역 2차 필터링하기
++                                val filteredList =
++                                    wantedList.filter { it.region?.trim() in regionList }
++
++                                val matchedSuperCds = jobList.filter { it.superCd == keywordJob }.map { it.jobsCd }.toSet()
+ 
+-                    if(keywordEdu =="" && keywordCareer == ""){ // 지역만 선택
+-                        sharedSelectionViewModel.updateFilteredList(filteredList)
+-                    }
+-                    else if (keywordCareer.isNotEmpty() && keywordEdu == "") { // 경력만 선택
+-                        val filteredList1 = filteredList.filter {// 경력 필터링
+-                            it.career == keywordCareer
+-                        }
+-                        sharedSelectionViewModel.updateFilteredList(filteredList1)
+-                    } else if (keywordEdu.isNotEmpty() && keywordCareer == "") { // 학력만 선택
+-                        val filteredList1 = filteredList.filter { // 학력 필터링
+-                            it.minEdubg == keywordEdu
+-                        }
+-                        sharedSelectionViewModel.updateFilteredList(filteredList1)
+-                    } else if(keywordEdu.isNotEmpty()&&keywordCareer.isNotEmpty()){ // 경력, 학력 모두 선택
+-                        val filteredList1 = filteredList.filter { // 경력, 학력 필터링
+-                            it.minEdubg == keywordEdu && it.career == keywordCareer
+-                        }
+-                        sharedSelectionViewModel.updateFilteredList(filteredList1)
+-                    }else if(keywordEdu =="" && keywordCareer == "" && keywordJob.isNotEmpty()){ //지역+직종
+-                        val filteredList1 = wantedList.filter {
+-                            it.jobsCd == keywordJob
+-                        }
+-                        sharedSelectionViewModel.updateFilteredList(filteredList1)
+-                    }
+-                    else if(keywordEdu =="" && keywordCareer.isNotEmpty() && keywordJob.isNotEmpty()){ //지역+직종+경력
+-                        val filteredList1 = wantedList.filter {
+-                            it.jobsCd == keywordJob && it.career == keywordCareer
+-                        }
+-                        sharedSelectionViewModel.updateFilteredList(filteredList1)
+-                    }
+-                    else if(keywordEdu.isNotEmpty() && keywordCareer =="" && keywordJob.isNotEmpty()){ //지역+직종+학력
+-                        val filteredList1 = wantedList.filter {
+-                            it.minEdubg == keywordEdu && it.jobsCd == keywordJob
+-                        }
+-                        sharedSelectionViewModel.updateFilteredList(filteredList1)
+-                    }
+-                    else { //지역+직종+경력+학력
+-                        val filteredList1 = wantedList.filter {
+-                            it.minEdubg == keywordEdu && it.career == keywordCareer && it.jobsCd == keywordJob
+-                        }
+-                        sharedSelectionViewModel.updateFilteredList(filteredList1)
+-                    }
++                                if (keywordEdu == "" && keywordCareer == "") { // 지역만 선택
++                                    sharedSelectionViewModel.updateFilteredList(filteredList)
++                                } else if (keywordCareer.isNotEmpty() && keywordEdu == "") { // 경력만 선택
++                                    val filteredList1 = filteredList.filter {// 경력 필터링
++                                        it.career == keywordCareer
++                                    }
++                                    sharedSelectionViewModel.updateFilteredList(filteredList1)
++                                } else if (keywordEdu.isNotEmpty() && keywordCareer == "") { // 학력만 선택
++                                    val filteredList1 = filteredList.filter { // 학력 필터링
++                                        it.minEdubg == keywordEdu
++                                    }
++                                    sharedSelectionViewModel.updateFilteredList(filteredList1)
++                                } else if (keywordEdu.isNotEmpty() && keywordCareer.isNotEmpty()) { // 경력, 학력 모두 선택
++                                    val filteredList1 = filteredList.filter { // 경력, 학력 필터링
++                                        it.minEdubg == keywordEdu && it.career == keywordCareer
++                                    }
++                                    sharedSelectionViewModel.updateFilteredList(filteredList1)
++                                } else if (keywordEdu == "" && keywordCareer == "" && keywordJob.isNotEmpty()) { //지역+직종
++                                    val filteredList1 = wantedList.filter {
++                                        it.jobsCd in matchedSuperCds
++                                    }
++                                    sharedSelectionViewModel.updateFilteredList(filteredList1)
++                                } else if (keywordEdu == "" && keywordCareer.isNotEmpty() && keywordJob.isNotEmpty()) { //지역+직종+경력
++                                    val filteredList1 = wantedList.filter {
++                                        (it.jobsCd in matchedSuperCds) && it.career == keywordCareer
++                                    }
++                                    sharedSelectionViewModel.updateFilteredList(filteredList1)
++                                } else if (keywordEdu.isNotEmpty() && keywordCareer == "" && keywordJob.isNotEmpty()) { //지역+직종+학력
++                                    val filteredList1 = wantedList.filter {
++                                        it.minEdubg == keywordEdu && (it.jobsCd in matchedSuperCds)
++                                    }
++                                    sharedSelectionViewModel.updateFilteredList(filteredList1)
++                                } else { //지역+직종+경력+학력
++                                    val filteredList1 = wantedList.filter {
++                                        it.minEdubg == keywordEdu && it.career == keywordCareer && (it.jobsCd in matchedSuperCds)
++                                    }
++                                    sharedSelectionViewModel.updateFilteredList(filteredList1)
++                                }
++                            } else {
++                                // 두 번째 XML 데이터를 가져오는데 실패한 경우의 처리 로직
++                                showErrorToast()
++                            }
++                        }
++                    })
+ 
+                     // 더 많은 페이지가 있는지 확인합니다.
+                     val factory = XmlPullParserFactory.newInstance()
+@@ -318,6 +351,10 @@
+         val jobsCd: String?,
+         val infoSvc: String?
+     )
++data class Job(
++    val jobsCd: String?,
++    val superCd: String?
++)
+ 
+     private fun parseXmlResponse(xmlResponse: String?): List<Wanted> {
+         val wantedList = mutableListOf<Wanted>()
+@@ -357,6 +394,7 @@
+                         "infoSvc" -> infoSvc = xpp.nextText()
+                     }
+                 }
++
+                 XmlPullParser.END_TAG -> {
+                     if (xpp.name == "wanted") {
+                         company?.let { c ->
+@@ -399,6 +437,41 @@
+         return wantedList
+     }
+ 
++    private fun parseJobXmlResponse(xmlResponse: String?): List<Job> {
++        val jobList = mutableListOf<Job>()
++        val factory = XmlPullParserFactory.newInstance()
++        val xpp = factory.newPullParser()
++        xpp.setInput(StringReader(xmlResponse))
++
++        var eventType = xpp.eventType
++        var jobsCd: String? = null
++        var superCd: String? = null
++
++        while (eventType != XmlPullParser.END_DOCUMENT) {
++            when (eventType) {
++                XmlPullParser.START_TAG -> {
++                   when (xpp.name) {
++                        "jobsCd" -> jobsCd = xpp.nextText()
++                        "superCd" -> superCd = xpp.nextText()
++                    }
++                }
++
++                XmlPullParser.END_TAG -> {
++                    if (xpp.name == "cmcdJobs") {  // 두 번째 XML 데이터의 항목의 끝 태그 이름
++                        jobsCd?.let { jCd ->
++                            superCd?.let { sCd ->
++                                jobList.add(Job(jCd, sCd))
++                            }
++                        }
++                        jobsCd = null
++                        superCd = null
++                    }
++                }
++            }
++            eventType = xpp.next()
++        }
++        return jobList
++    }
+ 
+     private fun showErrorToast() {
+         Toast.makeText(requireContext(), "Failed to fetch wanted list.", Toast.LENGTH_SHORT).show()
+Index: app/src/main/java/com/example/a23_hf069/JobWorkNetSelectionFragment.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.a23_hf069\r\n\r\nimport android.annotation.SuppressLint\r\nimport android.content.Intent\r\nimport android.graphics.Color\r\nimport android.os.Bundle\r\nimport android.util.Xml\r\nimport android.view.LayoutInflater\r\nimport android.view.MotionEvent\r\nimport android.view.View\r\nimport android.view.ViewGroup\r\nimport android.view.inputmethod.InputMethodManager\r\nimport android.widget.AdapterView\r\nimport android.widget.ArrayAdapter\r\nimport android.widget.ListView\r\nimport android.widget.Toast\r\nimport androidx.core.content.ContentProviderCompat.requireContext\r\nimport androidx.fragment.app.Fragment\r\nimport androidx.fragment.app.activityViewModels\r\nimport com.example.a23_hf069.databinding.FragmentJobWorkNetSelectionBinding\r\nimport kotlinx.coroutines.Dispatchers\r\nimport kotlinx.coroutines.GlobalScope\r\nimport kotlinx.coroutines.launch\r\nimport kotlinx.coroutines.withContext\r\nimport okhttp3.*\r\nimport org.w3c.dom.Element\r\nimport org.xml.sax.InputSource\r\nimport org.xmlpull.v1.XmlPullParser\r\nimport java.io.IOException\r\nimport java.io.StringReader\r\nimport java.util.Collections.addAll\r\nimport javax.xml.parsers.DocumentBuilderFactory\r\n\r\nclass JobWorkNetSelectionFragment : Fragment() {\r\n\r\n    private lateinit var binding: FragmentJobWorkNetSelectionBinding\r\n    private lateinit var jobAdapter: ArrayAdapter<String>\r\n    private lateinit var jobCodeList: MutableList<String> //직종코드를 담을 리스트\r\n    private lateinit var selectedJobList: MutableList<String> // 여러 개의 직종을 저장할 리스트\r\n\r\n    private lateinit var selectedJobCodeList: MutableList<String> // 여러 개의 직종코드를 저장할 리스트\r\n    private lateinit var combinedList: MutableList<String>\r\n\r\n    private lateinit var jobAdapter1: ArrayAdapter<String> // 대분류 지역 리스트뷰에 대한 어댑터\r\n    private lateinit var jobAdapter2: ArrayAdapter<String> // 중분류 지역 리스트뷰에 대한 어댑터\r\n\r\n    private lateinit var joblistView1: ListView // 대분류 직종 리스트뷰\r\n    private lateinit var joblistView2: ListView // 중분류 직종 리스트뷰\r\n\r\n    private val jobList1: MutableList<String> = mutableListOf() // 대분류 직종을 담을 리스트\r\n    private val jobList2: MutableList<String> = mutableListOf() // 중분류 직종을 담을 리스트\r\n\r\n    private var selectedMajorCode: String? = null\r\n    lateinit var selectedJob: String\r\n\r\n    // 클래스 내에 맵을 선언합니다.\r\n    private val majorToMiddleMap: MutableMap<String, List<String>> = mutableMapOf()\r\n\r\n\r\n    // ViewModel 생성\r\n    private val sharedSelectionViewModel: SharedSelectionViewModel by activityViewModels()\r\n\r\n    // 직업 목록을 불러오는 API의 기본 URL을 설정\r\n    private val baseUrl =\r\n        \"http://openapi.work.go.kr/opi/commonCode/commonCode.do?returnType=XML&target=CMCD&authKey=WNLJYZLM2VZXTT2TZA9XR2VR1HK&dtlGb=2\"\r\n\r\n    @SuppressLint(\"SuspiciousIndentation\")\r\n    override fun onCreateView(\r\n        inflater: LayoutInflater, container: ViewGroup?,\r\n        savedInstanceState: Bundle?\r\n    ): View? {\r\n        binding = FragmentJobWorkNetSelectionBinding.inflate(inflater, container, false)\r\n        val rootView = binding.root\r\n\r\n        // View 초기화\r\n        val searchEditText = binding.tvSelectJob\r\n        //val jobListView = binding.listviewMajorCategory\r\n        val jobSelectButton = binding.btnJobSelectComplete\r\n\r\n        joblistView1 = binding.listviewMajorCategory\r\n        joblistView2 = binding.listviewMiddleCategory\r\n\r\n        selectedJobList = mutableListOf()\r\n        jobCodeList = mutableListOf()\r\n        selectedJobCodeList = mutableListOf()\r\n        combinedList = mutableListOf()\r\n\r\n        // ListView 초기화\r\n        jobAdapter1 = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, jobList1)\r\n        jobAdapter2 = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, jobList2)\r\n        joblistView1.adapter = jobAdapter1\r\n        joblistView2.adapter = jobAdapter2\r\n\r\n        selectedJob = sharedSelectionViewModel.selectedJob.toString() // ViewModel에서 선택된 직종 정보를 가져와서 TextView에 설정\r\n        binding.tvSelectedJob.text = selectedJob //화면에 textView 나타내기\r\n\r\n        fetchJobList() // 직업 목록 API 호출 및 결과 처리 함수를 호출\r\n\r\n\r\n        binding.btnMajorCategory.setOnClickListener {\r\n            selectedMajorCode = null // 선택된 대분류 초기화\r\n            joblistView1.visibility = View.VISIBLE\r\n            joblistView2.visibility = View.VISIBLE\r\n            binding.btnMajorCategory.setBackgroundColor(Color.parseColor(\"#35B891\"))\r\n            // 중분류 버튼을 안 보이도록 설정\r\n            binding.btnMiddleCategory.visibility = View.GONE\r\n\r\n            // 중분류 목록 초기화 및 갱신\r\n            jobList2.clear()\r\n            jobAdapter2.clear() // 중분류 어댑터에도 데이터를 클리어해야 함\r\n            jobAdapter2.addAll(jobList2) // 초기 중분류 목록을 추가\r\n            jobAdapter2.notifyDataSetChanged()\r\n\r\n        }\r\n\r\n\r\n        binding.btnMiddleCategory.setOnClickListener {\r\n            joblistView1.visibility = View.GONE\r\n            joblistView2.visibility = View.VISIBLE\r\n        }\r\n\r\n        // EditText을 클릭하면 검색 화면 JobWorkNetSelectionSearchFragment로 전환\r\n        searchEditText.setOnFocusChangeListener { _, hasFocus -> // EditText의 포커스 변화를 감지하는 리스너를 설정\r\n            if (hasFocus) {\r\n                val searchFragment = JobWorkNetSelectionSearchFragment()\r\n                requireActivity().supportFragmentManager.beginTransaction() // 프래그먼트 간 전환 수행\r\n                    .replace(R.id.fl_container, searchFragment) // 프래그먼트 교체\r\n                    .addToBackStack(null) // 이전 프래그먼트로 돌아가기\r\n                    .commit()\r\n                hideKeyboard() // 키보드 숨김 처리\r\n            }\r\n        }\r\n\r\n        joblistView1.setOnItemClickListener { _, _, position, _ ->\r\n            val selectedJob = jobList1[position]\r\n            val parts = selectedJob.split(\"-\")\r\n            if (parts.size == 2) {\r\n                selectedMajorCode = parts[1]\r\n                updateMiddleJobList(selectedJob) // 중분류 목록 업데이트\r\n                // 중분류 버튼 자동 클릭\r\n                binding.btnMiddleCategory.performClick()\r\n                // 중분류 버튼을 보이도록 설정\r\n                binding.btnMiddleCategory.visibility = View.VISIBLE\r\n                // 대분류 버튼 색상 변경\r\n                binding.btnMajorCategory.setBackgroundColor(resources.getColor(android.R.color.darker_gray))\r\n            }\r\n        }\r\n\r\n        // 중분류 직종 선택 시\r\n        joblistView2.setOnItemClickListener { _, _, position, _ ->\r\n            val selectedJob = jobList2[position]\r\n            if (selectedJob.contains(\"전체\")) {\r\n                handleAllMiddleJobs() // \"전체\" 선택 시 모든 중분류 아이템 처리\r\n            } else {\r\n                handleJobItemClick(selectedJob) // 일반적인 아이템 선택 시 처리\r\n            }\r\n        }\r\n\r\n        jobSelectButton.setOnClickListener {\r\n            val selectedJobs = selectedJobList.joinToString(\", \\n\")\r\n            sharedSelectionViewModel.selectedJob = selectedJobs // 선택된 직종 정보를 ViewModel에 저장\r\n            val selectedJobCodes=selectedJobCodeList.joinToString(\", \\n\")\r\n            sharedSelectionViewModel.selectedJobCode= selectedJobCodes //선택된 직종코드 정보를 viewModel에 저장\r\n\r\n            // Bundle을 생성하여 데이터 추가\r\n            val bundle = Bundle()\r\n            bundle.putString(\"selectedJobs\", selectedJobs)\r\n            bundle.putString(\"selectedJobCodes\", selectedJobCodes)\r\n\r\n            // 다음 프래그먼트 생성 및 데이터 전달\r\n            val wantedFilteringFragment = WantedFilteringFragment()\r\n            requireActivity().supportFragmentManager.beginTransaction()\r\n                .replace(R.id.fl_container, wantedFilteringFragment)\r\n                .addToBackStack(null)\r\n                .commit()\r\n            wantedFilteringFragment.arguments = bundle //뷰모델 사용x, bundle로 값넘겨줄때 필요한 코드\r\n        }\r\n\r\n        return rootView\r\n    }\r\n\r\n    // 선택된 직업 아이템을 처리하는 함수\r\n    private fun handleJobItemClick(selectedJobItem: String) {\r\n        val parts = selectedJobItem.split(\"-\")\r\n        if (parts.size == 2) {\r\n            val jobName = parts[0]\r\n            val jobCode = parts[1]\r\n\r\n            if (!selectedJobList.contains(jobName)) {\r\n                selectedJobList.add(jobName)\r\n                updateSelectedJobTextView()\r\n\r\n                selectedJobCodeList.add(jobCode)\r\n            }\r\n        }\r\n    }\r\n\r\n    private fun handleAllMiddleJobs() {\r\n        val selectedMajorName = jobList1.find { it.split(\"-\")[1] == selectedMajorCode }?.split(\"-\")?.get(0) ?: \"\"\r\n        val majorCode = selectedMajorCode ?: \"\"\r\n\r\n        val allOption = \"${selectedMajorName} 전체\"\r\n\r\n        if (!selectedJobList.contains(allOption)) {\r\n            selectedJobList.add(allOption)\r\n            selectedJobCodeList.add(majorCode) // 선택된 대분류 직종 코드 추가\r\n            updateSelectedJobTextView()\r\n        }\r\n    }\r\n\r\n\r\n    // TextView 업데이트 함수 추가\r\n    private fun updateSelectedJobTextView() {\r\n        val selectedJobs = selectedJobList.joinToString(\", \\n\") // selectedJobList의 모든 항목을 하나의 문자열로 합침\r\n        binding.tvSelectedJob.text = selectedJobs // selectedJobs에서 만들어진 문자열을 tvSelectedJob의 텍스트로 설정하여 선택된 직종들을 화면에 표시\r\n    }\r\n\r\n    // 직업 목록을 서버로부터 가져오는 함수\r\n    private fun fetchJobList() {\r\n        val client = OkHttpClient()\r\n        val request = Request.Builder()\r\n            .url(baseUrl)\r\n            .build()\r\n\r\n        // 비동기적으로 API 요청을 수행하고 결과를 처리하는 콜백 등록\r\n        client.newCall(request).enqueue(object : Callback {\r\n            override fun onFailure(call: Call, e: IOException) {\r\n                // 네트워크 요청 실패 시 에러 토스트 메시지를 보여줌\r\n                showErrorToast()\r\n            }\r\n\r\n            override fun onResponse(call: Call, response: Response) {\r\n                if (response.isSuccessful) {\r\n                    // 응답이 성공적으로 도착한 경우, XML 형태의 데이터를 문자열로 변환하여 직업 목록 파싱\r\n                    val xmlString = response.body?.string()\r\n                    parseJobList(xmlString)\r\n                } else {\r\n                    // 응답이 실패한 경우 에러 토스트 메시지를 보여줌\r\n                    showErrorToast()\r\n                }\r\n            }\r\n        })\r\n    }\r\n\r\n    private fun parseJobList(xmlString: String?) {\r\n        GlobalScope.launch(Dispatchers.Main) {\r\n            val jobList1Temp = mutableListOf<String>()\r\n            val jobList2Temp = mutableListOf<String>()\r\n\r\n            val xmlPullParser: XmlPullParser = Xml.newPullParser()\r\n            xmlPullParser.setInput(StringReader(xmlString))\r\n\r\n            var eventType = xmlPullParser.eventType\r\n            var isOneDepth = false\r\n            var isTwoDepth = false\r\n            var isJobsNm = false\r\n            var jobsName = \"\"\r\n            var jobsCode = \"\"\r\n\r\n            while (eventType != XmlPullParser.END_DOCUMENT) {\r\n                when (eventType) {\r\n                    XmlPullParser.START_TAG -> {\r\n                        when (xmlPullParser.name) {\r\n                            \"oneDepth\" -> {\r\n                                isOneDepth = true\r\n                                isTwoDepth = false\r\n                            }\r\n                            \"twoDepth\" -> {\r\n                                isOneDepth = false\r\n                                isTwoDepth = true\r\n                            }\r\n                            \"jobsNm\" -> {\r\n                                isJobsNm = true\r\n                            }\r\n                            \"jobsCd\" -> {\r\n                                jobsCode = xmlPullParser.nextText().trim()\r\n                            }\r\n                        }\r\n                    }\r\n                    XmlPullParser.TEXT -> {\r\n                        if ((isOneDepth || isTwoDepth) && isJobsNm && xmlPullParser.text.trim().isNotEmpty()) {\r\n                            jobsName = xmlPullParser.text.trim().replace(\"-\", \"/\")\r\n                        }\r\n                    }\r\n                    XmlPullParser.END_TAG -> {\r\n                        if (isTwoDepth) {\r\n                            if (jobsName.isNotEmpty() && jobsCode.isNotEmpty()) {\r\n                                jobList2Temp.add(\"$jobsName-$jobsCode\")\r\n                            }\r\n                            isTwoDepth = false\r\n                        } else if (isOneDepth) {\r\n                            if (jobsName.isNotEmpty() && jobsCode.isNotEmpty()) {\r\n                                jobList1Temp.add(\"$jobsName-$jobsCode\")\r\n                            }\r\n                            isOneDepth = false\r\n                        }\r\n                        jobsName = \"\"\r\n                        jobsCode = \"\"\r\n                    }\r\n                }\r\n\r\n                eventType = xmlPullParser.next()\r\n            }\r\n\r\n            // 중분류 목록을 majorToMiddleMap에 저장합니다.\r\n            majorToMiddleMap.clear()\r\n            jobList1Temp.forEach { majorJob ->\r\n                val majorCode = majorJob.split(\"-\")[1]\r\n                val middleJobs = jobList2Temp.filter { it.contains(\"-$majorCode\") }\r\n                majorToMiddleMap[majorCode] = middleJobs\r\n            }\r\n\r\n            // 백그라운드 작업 결과를 UI 업데이트를 위한 메인 스레드 블록으로 전달\r\n            withContext(Dispatchers.Main) {\r\n                jobList1.clear()\r\n                jobList2.clear()\r\n                jobList1.addAll(jobList1Temp)\r\n                jobList2.addAll(jobList2Temp)\r\n                jobAdapter1.notifyDataSetChanged()\r\n                jobAdapter2.notifyDataSetChanged()\r\n            }\r\n        }\r\n    }\r\n\r\n\r\n    private fun updateMiddleJobList(selectedJob: String) {\r\n        val parts = selectedJob.split(\"-\")\r\n        if (parts.size == 2) {\r\n            val selectedMajorCode = parts[1]\r\n\r\n            // 선택된 대분류 직종과 \"전체\" 옵션을 만듭니다.\r\n            val allOption = \"${parts[0]} 전체-$selectedMajorCode\"\r\n\r\n            // 선택된 대분류 직종과 관련된 중분류 직종 리스트를 가져옵니다.\r\n            val filteredMiddleJobs = majorToMiddleMap[selectedMajorCode] ?: emptyList()\r\n\r\n            // \"전체\" 옵션을 중분류 직종 리스트 맨 위에 추가하여 새로운 리스트를 생성합니다.\r\n            val updatedMiddleJobs = mutableListOf<String>().apply {\r\n                add(allOption)\r\n                addAll(filteredMiddleJobs)\r\n            }\r\n\r\n            // 중분류 리스트 어댑터를 갱신하여 변경된 리스트를 화면에 표시합니다.\r\n            jobAdapter2.clear()\r\n            jobAdapter2.addAll(updatedMiddleJobs)\r\n            jobAdapter2.notifyDataSetChanged()\r\n        }\r\n    }\r\n\r\n    private fun hideKeyboard() {\r\n        // 키보드 숨김 처리를 수행\r\n        val imm =\r\n            requireContext().getSystemService(android.content.Context.INPUT_METHOD_SERVICE) as InputMethodManager\r\n        imm.hideSoftInputFromWindow(view?.windowToken, 0)\r\n        view?.clearFocus()\r\n    }\r\n\r\n    // API 요청 실패 시 에러 메시지를 보여주는 함수\r\n    private fun showErrorToast() {\r\n        Toast.makeText(requireContext(), \"Failed to fetch job list.\", Toast.LENGTH_SHORT).show()\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/a23_hf069/JobWorkNetSelectionFragment.kt b/app/src/main/java/com/example/a23_hf069/JobWorkNetSelectionFragment.kt
+--- a/app/src/main/java/com/example/a23_hf069/JobWorkNetSelectionFragment.kt	(revision 6761cae6ff513e9a2e0aca489564906d26148c34)
++++ b/app/src/main/java/com/example/a23_hf069/JobWorkNetSelectionFragment.kt	(date 1692797508670)
+@@ -63,7 +63,6 @@
+     // 직업 목록을 불러오는 API의 기본 URL을 설정
+     private val baseUrl =
+         "http://openapi.work.go.kr/opi/commonCode/commonCode.do?returnType=XML&target=CMCD&authKey=WNLJYZLM2VZXTT2TZA9XR2VR1HK&dtlGb=2"
+-
+     @SuppressLint("SuspiciousIndentation")
+     override fun onCreateView(
+         inflater: LayoutInflater, container: ViewGroup?,
+@@ -159,12 +158,13 @@
+         jobSelectButton.setOnClickListener {
+             val selectedJobs = selectedJobList.joinToString(", \n")
+             sharedSelectionViewModel.selectedJob = selectedJobs // 선택된 직종 정보를 ViewModel에 저장
+-            val selectedJobCodes=selectedJobCodeList.joinToString(", \n")
+-            sharedSelectionViewModel.selectedJobCode= selectedJobCodes //선택된 직종코드 정보를 viewModel에 저장
++            val selectedJobCodes = selectedJobCodeList.joinToString(",")
++            sharedSelectionViewModel.selectedJobCode = selectedJobCodes //선택된 직종코드 정보를 viewModel에 저장
++            //채용공고는 소분류로 이루어져있음
++            //필터링시에는 superCd에 해당하는 채용공고들을 호출
+ 
+             // Bundle을 생성하여 데이터 추가
+             val bundle = Bundle()
+-            bundle.putString("selectedJobs", selectedJobs)
+             bundle.putString("selectedJobCodes", selectedJobCodes)
+ 
+             // 다음 프래그먼트 생성 및 데이터 전달
+@@ -294,6 +294,7 @@
+                             }
+                             isOneDepth = false
+                         }
++
+                         jobsName = ""
+                         jobsCode = ""
+                     }
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ExternalStorageConfigurationManager\" enabled=\"true\" />\r\n  <component name=\"ProjectRootManager\" version=\"2\" languageLevel=\"JDK_17\" project-jdk-name=\"jbr-17\" project-jdk-type=\"JavaSDK\">\r\n    <output url=\"file://$PROJECT_DIR$/build/classes\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/misc.xml b/.idea/misc.xml
+--- a/.idea/misc.xml	(revision 6761cae6ff513e9a2e0aca489564906d26148c34)
++++ b/.idea/misc.xml	(date 1692933812177)
+@@ -1,4 +1,3 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
+   <component name="ExternalStorageConfigurationManager" enabled="true" />
+   <component name="ProjectRootManager" version="2" languageLevel="JDK_17" project-jdk-name="jbr-17" project-jdk-type="JavaSDK">

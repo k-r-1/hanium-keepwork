@@ -22,6 +22,10 @@
             android:name=".CorporateHomeActivity"
             android:exported="false" />
         <activity
+            android:name=".TalentManagementFragment"
+            android:exported="false"
+            tools:ignore="Instantiatable" />
+        <activity
             android:name=".FindPersonalIdActivity"
             android:exported="false">
             <meta-data

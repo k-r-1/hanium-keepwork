@@ -50,6 +50,7 @@ class WantedFilteringFragment : Fragment() {
     lateinit var rgCareer: RadioGroup // 경력 라디오그룹
 
     private lateinit var wantedList: List<Wanted>
+    private lateinit var jobList: List<Job>
     private val sharedSelectionViewModel: SharedSelectionViewModel by activityViewModels() // 필터링된 리스트를 전달하는 viewModel 객체 생성
 
 
@@ -226,6 +227,7 @@ class WantedFilteringFragment : Fragment() {
                     val jobRequest = Request.Builder()
                         .url(jobUrl)
                         .build()
+                    var result2: List<Job> = emptyList()
 
                     client.newCall(jobRequest).enqueue(object : Callback {
                         override fun onFailure(call: Call, e: IOException) {
@@ -236,7 +238,8 @@ class WantedFilteringFragment : Fragment() {
                         override fun onResponse(call: Call, jobResponse: Response) {
                             if (jobResponse.isSuccessful) {
                                 val jobXmlString = jobResponse.body?.string()
-                                val jobList = parseJobXmlResponse(jobXmlString)
+                                result2 = parseJobXmlResponse(jobXmlString)
+                                jobList=result2
 
                                 // 지역 2차 필터링하기
                                 var filteredList =

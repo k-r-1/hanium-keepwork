@@ -27,8 +27,8 @@ class C_loginFragment : Fragment() {
         signUp = view.findViewById<Button>(R.id.signUp_btn)
 
         login.setOnClickListener() {
-            // login버튼을 클릭하면 homeactivity로 전환
-            val intent = Intent(getActivity(), HomeActivity::class.java)
+            // login버튼을 클릭하면 CorporateHomeActivity로 전환
+            val intent = Intent(getActivity(), CorporateHomeActivity::class.java)
             startActivity(intent)
         }
         signUp.setOnClickListener() {

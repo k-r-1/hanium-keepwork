@@ -26,6 +26,8 @@ import kotlin.collections.ArrayList
 class WantedFilteringFragment : Fragment() {
     private val baseUrl =
         "http://openapi.work.go.kr/opi/opi/opia/wantedApi.do?authKey=WNLJYZLM2VZXTT2TZA9XR2VR1HK&callTp=L&returnType=XML&display=100"
+    private val jobUrl =
+        "http://openapi.work.go.kr/opi/commonCode/commonCode.do?returnType=XML&target=CMCD&authKey=WNLJYZLM2VZXTT2TZA9XR2VR1HK&dtlGb=2"
     private var page = 1
 
     //완료 버튼
@@ -104,15 +106,15 @@ class WantedFilteringFragment : Fragment() {
             // 선택한 지역이 있을 경우 키워드에 해당 지역이름 넣기
             if (selectedRegion != "") {
                 keywordRegion = sharedSelectionViewModel.keywordRegions // ex) "서울 성동구|서울 종로구"
-                keywordRegion2 = keywordRegion.replace(" ","") // ex) "서울성동구|서울종로구"
-                regionList = keywordRegion.split("|").map{it.trim()}.toMutableList() //ex) [서울 성동구, 서울 종로구]
+                keywordRegion2 = keywordRegion.replace(" ", "") // ex) "서울성동구|서울종로구"
+                regionList = keywordRegion.split("|").map { it.trim() }
+                    .toMutableList() //ex) [서울 성동구, 서울 종로구]
 
             }
 
             // 선택한 직종이 있을 경우 필터링하기
             if (selectedJob != "") {
                 keywordJob = selectedJobCodes
-                println(keywordJob)
             }
 
             // 학력 라디오 그룹중 선택된 라디오 버튼이 있을때 처리
@@ -120,12 +122,15 @@ class WantedFilteringFragment : Fragment() {
                 R.id.rb_e_1 -> {
                     keywordEdu = "학력무관"
                 }
+
                 R.id.rb_e_2 -> {
                     keywordEdu = "고졸"
                 }
+
                 R.id.rb_e_3 -> {
                     keywordEdu = "대졸(2~3년)"
                 }
+
                 R.id.rb_e_4 -> {
                     keywordEdu = "대졸(4년)"
                 }
@@ -136,10 +141,12 @@ class WantedFilteringFragment : Fragment() {
                 R.id.rb_c_1 -> {
                     keywordCareer = "관계없음"
                 }
+
                 R.id.rb_c_2 -> {
                     // 고등학교 졸 라디오 버튼이 선택되었을 때
                     keywordCareer = "신입"
                 }
+
                 R.id.rb_c_3 -> {
                     // 대학(2년제) 라디오 버튼이 선택되었을 때
                     keywordCareer = "경력"
@@ -193,8 +200,8 @@ class WantedFilteringFragment : Fragment() {
         val client = OkHttpClient()
         //전체
         var wholeRegion = false
-        if(keywordRegion2.contains("전체")){ // ex) 서울 전체인 경우 -> 서울로 변경
-            keywordRegion2 = keywordRegion2.replace("전체","").trim()
+        if (keywordRegion2.contains("전체")) { // ex) 서울 전체인 경우 -> 서울로 변경
+            keywordRegion2 = keywordRegion2.replace("전체", "").trim()
             wholeRegion = true
         }
         val request = Request.Builder()
@@ -215,78 +222,104 @@ class WantedFilteringFragment : Fragment() {
                     // 지역 1차 필터링만 한 리스트
                     wantedList = result
 
-                    // 지역 2차 필터링하기
-                    var filteredList = wantedList.filter { it.region?.trim() in regionList }
+                    // 직종 XML 데이터 호출
+                    val jobRequest = Request.Builder()
+                        .url(jobUrl)
+                        .build()
 
-                    // 전체 지역이 선택된 경우
-                    if(wholeRegion){
-                        filteredList = wantedList.filter { it.region != null && checkCommonPrefix(it.region, keywordRegion2) }
-                    }
-                    if(keywordEdu =="" && keywordCareer == ""){ // 지역만 선택
-                        sharedSelectionViewModel.updateFilteredList(filteredList)
-                    }
-                    else if (keywordCareer.isNotEmpty() && keywordEdu == "") { // 경력만 선택
-                        val filteredList1 = filteredList.filter {// 경력 필터링
-                            it.career == keywordCareer
+                    client.newCall(jobRequest).enqueue(object : Callback {
+                        override fun onFailure(call: Call, e: IOException) {
+                            //println(e.printStackTrace())
                         }
-                        sharedSelectionViewModel.updateFilteredList(filteredList1)
-                    } else if (keywordEdu.isNotEmpty() && keywordCareer == "") { // 학력만 선택
-                        val filteredList1 = filteredList.filter { // 학력 필터링
-                            it.minEdubg == keywordEdu
-                        }
-                        sharedSelectionViewModel.updateFilteredList(filteredList1)
-                    } else if(keywordEdu.isNotEmpty()&&keywordCareer.isNotEmpty()){ // 경력, 학력 모두 선택
-                        val filteredList1 = filteredList.filter { // 경력, 학력 필터링
-                            it.minEdubg == keywordEdu && it.career == keywordCareer
-                        }
-                        sharedSelectionViewModel.updateFilteredList(filteredList1)
-                    }else if(keywordEdu =="" && keywordCareer == "" && keywordJob.isNotEmpty()){ //지역+직종
-                        val filteredList1 = wantedList.filter {
-                            it.jobsCd == keywordJob
-                        }
-                        sharedSelectionViewModel.updateFilteredList(filteredList1)
-                    }
-                    else if(keywordEdu =="" && keywordCareer.isNotEmpty() && keywordJob.isNotEmpty()){ //지역+직종+경력
-                        val filteredList1 = wantedList.filter {
-                            it.jobsCd == keywordJob && it.career == keywordCareer
-                        }
-                        sharedSelectionViewModel.updateFilteredList(filteredList1)
-                    }
-                    else if(keywordEdu.isNotEmpty() && keywordCareer =="" && keywordJob.isNotEmpty()){ //지역+직종+학력
-                        val filteredList1 = wantedList.filter {
-                            it.minEdubg == keywordEdu && it.jobsCd == keywordJob
-                        }
-                        sharedSelectionViewModel.updateFilteredList(filteredList1)
-                    }
-                    else { //지역+직종+경력+학력
-                        val filteredList1 = wantedList.filter {
-                            it.minEdubg == keywordEdu && it.career == keywordCareer && it.jobsCd == keywordJob
-                        }
-                        sharedSelectionViewModel.updateFilteredList(filteredList1)
-                    }
 
-                    // 더 많은 페이지가 있는지 확인합니다.
-                    val factory = XmlPullParserFactory.newInstance()
-                    val xpp = factory.newPullParser()
-                    xpp.setInput(StringReader(xmlString))
+                        @RequiresApi(Build.VERSION_CODES.O)
+                        override fun onResponse(call: Call, jobResponse: Response) {
+                            if (jobResponse.isSuccessful) {
+                                val jobXmlString = jobResponse.body?.string()
+                                val jobList = parseJobXmlResponse(jobXmlString)
 
-                    var eventType = xpp.eventType
-                    var totalItems = 0
-                    var totalPages = 0
+                                // 지역 2차 필터링하기
+                                var filteredList =
+                                    wantedList.filter { it.region?.trim() in regionList }
 
-                    while (eventType != XmlPullParser.END_DOCUMENT) {
-                        if (eventType == XmlPullParser.START_TAG && xpp.name == "total") {
-                            totalItems = xpp.nextText().toInt()
-                            totalPages = totalItems / 100
-                            break
+                                val matchedSuperCds =
+                                    jobList.filter { it.superCd == keywordJob }.map { it.jobsCd }
+                                        .toSet()
+
+                                // 전체 지역이 선택된 경우
+                                if (wholeRegion) {
+                                    filteredList = wantedList.filter {
+                                        it.region != null && checkCommonPrefix(
+                                            it.region,
+                                            keywordRegion2
+                                        )
+                                    }
+                                }
+
+                                if (keywordEdu == "" && keywordCareer == "") { // 지역만 선택
+                                    sharedSelectionViewModel.updateFilteredList(filteredList)
+                                } else if (keywordCareer.isNotEmpty() && keywordEdu == "") { // 경력만 선택
+                                    val filteredList1 = filteredList.filter {// 경력 필터링
+                                        it.career == keywordCareer
+                                    }
+                                    sharedSelectionViewModel.updateFilteredList(filteredList1)
+                                } else if (keywordEdu.isNotEmpty() && keywordCareer == "") { // 학력만 선택
+                                    val filteredList1 = filteredList.filter { // 학력 필터링
+                                        it.minEdubg == keywordEdu
+                                    }
+                                    sharedSelectionViewModel.updateFilteredList(filteredList1)
+                                } else if (keywordEdu.isNotEmpty() && keywordCareer.isNotEmpty()) { // 경력, 학력 모두 선택
+                                    val filteredList1 = filteredList.filter { // 경력, 학력 필터링
+                                        it.minEdubg == keywordEdu && it.career == keywordCareer
+                                    }
+                                    sharedSelectionViewModel.updateFilteredList(filteredList1)
+                                } else if (keywordEdu == "" && keywordCareer == "" && keywordJob.isNotEmpty()) { //지역+직종
+                                    val filteredList1 = wantedList.filter {
+                                        it.jobsCd in matchedSuperCds
+                                    }
+                                    sharedSelectionViewModel.updateFilteredList(filteredList1)
+                                } else if (keywordEdu == "" && keywordCareer.isNotEmpty() && keywordJob.isNotEmpty()) { //지역+직종+경력
+                                    val filteredList1 = wantedList.filter {
+                                        (it.jobsCd in matchedSuperCds) && it.career == keywordCareer
+                                    }
+                                    sharedSelectionViewModel.updateFilteredList(filteredList1)
+                                } else if (keywordEdu.isNotEmpty() && keywordCareer == "" && keywordJob.isNotEmpty()) { //지역+직종+학력
+                                    val filteredList1 = wantedList.filter {
+                                        it.minEdubg == keywordEdu && (it.jobsCd in matchedSuperCds)
+                                    }
+                                    sharedSelectionViewModel.updateFilteredList(filteredList1)
+                                } else { //지역+직종+경력+학력
+                                    val filteredList1 = wantedList.filter {
+                                        it.minEdubg == keywordEdu && it.career == keywordCareer && (it.jobsCd in matchedSuperCds)
+                                    }
+                                    sharedSelectionViewModel.updateFilteredList(filteredList1)
+                                }
+
+                                // 더 많은 페이지가 있는지 확인합니다.
+                                val factory = XmlPullParserFactory.newInstance()
+                                val xpp = factory.newPullParser()
+                                xpp.setInput(StringReader(xmlString))
+
+                                var eventType = xpp.eventType
+                                var totalItems = 0
+                                var totalPages = 0
+
+                                while (eventType != XmlPullParser.END_DOCUMENT) {
+                                    if (eventType == XmlPullParser.START_TAG && xpp.name == "total") {
+                                        totalItems = xpp.nextText().toInt()
+                                        totalPages = totalItems / 100
+                                        break
+                                    }
+                                    eventType = xpp.next()
+                                }
+                                // 더 많은 페이지가 있다면 다음 페이지를 가져옵니다.
+                                while (totalPages > page) {
+                                    page += 1
+                                    fetchWantedList()
+                                }
+                            }
                         }
-                        eventType = xpp.next()
-                    }
-                    // 더 많은 페이지가 있다면 다음 페이지를 가져옵니다.
-                    while (totalPages > page) {
-                        page += 1
-                        fetchWantedList()
-                    }
+                    })
 
                 }// if 응답이 성공적일때
                 else {
@@ -309,6 +342,11 @@ class WantedFilteringFragment : Fragment() {
         val wantedMobileInfoUrl: String?,
         val jobsCd: String?,
         val infoSvc: String?
+    )
+
+    data class Job(
+        val jobsCd: String?,
+        val superCd: String?
     )
 
     private fun parseXmlResponse(xmlResponse: String?): List<Wanted> {
@@ -349,6 +387,7 @@ class WantedFilteringFragment : Fragment() {
                         "infoSvc" -> infoSvc = xpp.nextText()
                     }
                 }
+
                 XmlPullParser.END_TAG -> {
                     if (xpp.name == "wanted") {
                         company?.let { c ->
@@ -389,6 +428,42 @@ class WantedFilteringFragment : Fragment() {
             eventType = xpp.next()
         } // while문 종료
         return wantedList
+    }
+
+    private fun parseJobXmlResponse(xmlResponse: String?): List<Job> {
+        val jobList = mutableListOf<Job>()
+        val factory = XmlPullParserFactory.newInstance()
+        val xpp = factory.newPullParser()
+        xpp.setInput(StringReader(xmlResponse))
+
+        var eventType = xpp.eventType
+        var jobsCd: String? = null
+        var superCd: String? = null
+
+        while (eventType != XmlPullParser.END_DOCUMENT) {
+            when (eventType) {
+                XmlPullParser.START_TAG -> {
+                    when (xpp.name) {
+                        "jobsCd" -> jobsCd = xpp.nextText()
+                        "superCd" -> superCd = xpp.nextText()
+                    }
+                }
+
+                XmlPullParser.END_TAG -> {
+                    if (xpp.name == "cmcdJobs") {
+                        jobsCd?.let { jCd ->
+                            superCd?.let { sCd ->
+                                jobList.add(Job(jCd, sCd))
+                            }
+                        }
+                        jobsCd = null
+                        superCd = null
+                    }
+                }
+            }
+            eventType = xpp.next()
+        }
+        return jobList
     }
 
     // 앞의 두 글자가 연속적으로 일치하는지 확인하는 함수

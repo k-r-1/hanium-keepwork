@@ -63,7 +63,6 @@ class JobWorkNetSelectionFragment : Fragment() {
     // 직업 목록을 불러오는 API의 기본 URL을 설정
     private val baseUrl =
         "http://openapi.work.go.kr/opi/commonCode/commonCode.do?returnType=XML&target=CMCD&authKey=WNLJYZLM2VZXTT2TZA9XR2VR1HK&dtlGb=2"
-
     @SuppressLint("SuspiciousIndentation")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -159,12 +158,13 @@ class JobWorkNetSelectionFragment : Fragment() {
         jobSelectButton.setOnClickListener {
             val selectedJobs = selectedJobList.joinToString(", \n")
             sharedSelectionViewModel.selectedJob = selectedJobs // 선택된 직종 정보를 ViewModel에 저장
-            val selectedJobCodes=selectedJobCodeList.joinToString(", \n")
-            sharedSelectionViewModel.selectedJobCode= selectedJobCodes //선택된 직종코드 정보를 viewModel에 저장
+            val selectedJobCodes = selectedJobCodeList.joinToString(",")
+            sharedSelectionViewModel.selectedJobCode = selectedJobCodes //선택된 직종코드 정보를 viewModel에 저장
+            //채용공고는 소분류로 이루어져있음
+            //필터링시에는 superCd에 해당하는 채용공고들을 호출
 
             // Bundle을 생성하여 데이터 추가
             val bundle = Bundle()
-            bundle.putString("selectedJobs", selectedJobs)
             bundle.putString("selectedJobCodes", selectedJobCodes)
 
             // 다음 프래그먼트 생성 및 데이터 전달
@@ -294,6 +294,7 @@ class JobWorkNetSelectionFragment : Fragment() {
                             }
                             isOneDepth = false
                         }
+
                         jobsName = ""
                         jobsCode = ""
                     }

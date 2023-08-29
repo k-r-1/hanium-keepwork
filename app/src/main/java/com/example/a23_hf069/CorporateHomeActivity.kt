@@ -25,6 +25,12 @@ class CorporateHomeActivity : AppCompatActivity() {
 
         bnv_main.run { setOnNavigationItemSelectedListener {
             when(it.itemId) { // 공고등록
+                R.id.homeMenu -> {
+                    // 다른 프래그먼트 화면으로 이동하는 기능
+                    val CorporateHomeFragment = CorporateHomeFragment()
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fl_container, CorporateHomeFragment).commit()
+                }
                 R.id.jobPostingMenu -> {
                     // 다른 프래그먼트 화면으로 이동하는 기능
                     val JobPostingFragment = JobPostingFragment()
@@ -45,7 +51,7 @@ class CorporateHomeActivity : AppCompatActivity() {
             }
             true
         }
-            bnv_main.selectedItemId = R.id.jobPostingMenu
+            bnv_main.selectedItemId = R.id.homeMenu
         }
     }
 }

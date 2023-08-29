@@ -15,12 +15,10 @@
         android:textSize="17sp"
         android:gravity="center_vertical" />
 
-    <ImageView
+    <Switch
         android:id="@+id/notificationImageView"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_gravity="center_vertical"
-        android:src="@drawable/baseline_toggle_off_24"
-        android:clickable="true" />
+        android:layout_gravity="center_vertical" />
 
 </LinearLayout>

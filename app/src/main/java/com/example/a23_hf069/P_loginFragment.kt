@@ -136,6 +136,11 @@ class P_loginFragment : Fragment() { //개인로그인
             } else {
                 // 로그인 실패
                 Toast.makeText(view?.context, "로그인 실패", Toast.LENGTH_SHORT).show()
+
+                // 추후 삭제할 코드
+                val intent = Intent(getActivity(), HomeActivity::class.java)
+                intent.putExtra("userId", "test") // 아이디를 Intent에 추가 (사용자 아이디를 HomeActivity로 넘김)
+                startActivity(intent)
             }
         }
     }

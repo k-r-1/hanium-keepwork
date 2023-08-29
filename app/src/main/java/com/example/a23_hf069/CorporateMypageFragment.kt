@@ -3,6 +3,7 @@ package com.example.a23_hf069
 import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.provider.MediaStore
 import androidx.core.content.ContextCompat
@@ -21,7 +22,7 @@ class CorporateMypageFragment : Fragment() {
 
     // 이미지 선택 요청 코드. startActivityForResult 호출 시 사용됨.
     private val REQUEST_IMAGE_PICK = 1
-    private val STORAGE_PERMISSION_REQUEST_CODE = 1234
+    private val STORAGE_PERMISSION_REQUEST_CODE = 0
 
 
     // 프래그먼트 뷰가 생성될 때 호출되는 메서드.
@@ -39,7 +40,7 @@ class CorporateMypageFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // profileImageView라는 ID를 가진 ImageView를 찾아서 변수에 할당.
-        val profileImageView = view.findViewById<ImageView>(R.id.profileImageView)
+        val profileImageView = view.findViewById<de.hdodenhof.circleimageview.CircleImageView>(R.id.profileImageView)
 
         val profileName = view.findViewById<LinearLayout>(R.id.profile_name_btn)
 
@@ -54,40 +55,10 @@ class CorporateMypageFragment : Fragment() {
         // profileImageView를 클릭하면 실행될 클릭 리스너 설정.
         profileImageView.setOnClickListener {
             Log.d("permission","클릭됨")
-            // 외부 저장소 읽기 권한이 허용되어 있는지 확인.
-            if (ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                // 권한이 없으면 권한 요청.
-                ActivityCompat.requestPermissions(requireActivity(), arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE), STORAGE_PERMISSION_REQUEST_CODE)
-                Log.d("permission","권한요청함")
+            // 갤러리 열기
+            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            startActivityForResult(intent, REQUEST_IMAGE_PICK)
 
-            } else {
-                // 권한이 있으면 갤러리를 여는 메서드 호출.
-                openGalleryForImage()
-                Log.d("permission","바로 갤러리 열어버림")
-
-            }
-        }
-    }
-
-    // 갤러리를 여는 메서드.
-    private fun openGalleryForImage() {
-        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-        startActivityForResult(intent, REQUEST_IMAGE_PICK)
-        Log.d("permission","갤러리 메소드 호출됨!!")
-
-    }
-
-    // 권한 요청에 대한 결과를 받는 메서드.
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        Log.d("permission","권한요청 메소드 호출됨")
-        if (requestCode == STORAGE_PERMISSION_REQUEST_CODE
-                && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            // 권한 요청이 승인되면 갤러리를 여는 메서드 호출.
-            Log.d("permission","갤러리 메소드 호출됨")
-            openGalleryForImage()
-        } else {
-            // 권한 요청이 거부되면 토스트 메시지 출력.
-            Toast.makeText(context, "퍼미션을 허용해주세요.", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -99,9 +70,14 @@ class CorporateMypageFragment : Fragment() {
         if (requestCode == REQUEST_IMAGE_PICK && resultCode == RESULT_OK) {
             // 선택된 이미지의 URI를 가져옴.
             val selectedImageUri = data?.data
+            if (selectedImageUri != null) {
+                val bitmap = MediaStore.Images.Media.getBitmap(requireActivity().contentResolver, selectedImageUri)
+                val resizedBitmap = Bitmap.createScaledBitmap(bitmap, 160, 160, true)
+                // profileImageView에 선택된 이미지를 설정.
+                view?.findViewById<de.hdodenhof.circleimageview.CircleImageView>(R.id.profileImageView)?.setImageBitmap(resizedBitmap)
+            }
 
-            // profileImageView에 선택된 이미지를 설정.
-            view?.findViewById<ImageView>(R.id.profileImageView)?.setImageURI(selectedImageUri)
+            //view?.findViewById<ImageView>(R.id.profileImageView)?.setImageURI(selectedImageUri)
         }
     }
 }

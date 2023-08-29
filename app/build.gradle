@@ -107,7 +107,8 @@ dependencies {
     // amazon ses 설정
     implementation 'com.amazonaws:aws-android-sdk-ses:2.73.0'  // AWS SES 라이브러리
     implementation 'com.amazonaws:aws-android-sdk-core:2.73.0' // AWS Core 라이브러리
-
+    // 원 형태 편집
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
 
 }
 

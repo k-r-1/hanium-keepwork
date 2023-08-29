@@ -130,7 +130,7 @@ class P_loginFragment : Fragment() { //개인로그인
                 // 로그인 성공
                 Toast.makeText(view?.context, "로그인 성공", Toast.LENGTH_SHORT).show()
                 // 로그인 성공 시 homeactivity로 전환
-                val intent = Intent(getActivity(), HomeActivity::class.java)
+                val intent = Intent(requireActivity(), HomeActivity::class.java)
                 intent.putExtra("userId", id) // 아이디를 Intent에 추가 (사용자 아이디를 HomeActivity로 넘김)
                 startActivity(intent)
             } else {

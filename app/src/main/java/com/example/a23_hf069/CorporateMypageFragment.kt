@@ -15,6 +15,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import android.util.Log
+import android.widget.Button
 import android.widget.LinearLayout
 
 // CorporateMypageFragment 클래스 정의. Fragment를 상속받음.
@@ -22,8 +23,10 @@ class CorporateMypageFragment : Fragment() {
 
     // 이미지 선택 요청 코드. startActivityForResult 호출 시 사용됨.
     private val REQUEST_IMAGE_PICK = 1
-    private val STORAGE_PERMISSION_REQUEST_CODE = 0
-
+    lateinit var notificationButton : Button
+    lateinit var noticeButton: Button
+    lateinit var faqButton : Button
+    lateinit var logoutButton: Button
 
     // 프래그먼트 뷰가 생성될 때 호출되는 메서드.
     override fun onCreateView(
@@ -60,6 +63,35 @@ class CorporateMypageFragment : Fragment() {
             startActivityForResult(intent, REQUEST_IMAGE_PICK)
 
         }
+        notificationButton = view.findViewById<Button>(R.id.notificationButton)
+        notificationButton.setOnClickListener(){// 알림 설정 프래그먼트로 전환
+            val fragment_notification_settings = NotificationSettingsFragment()
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.fl_container, fragment_notification_settings) // 프래그먼트 교체
+                .addToBackStack(null) // 이전 프래그먼트로 돌아가기
+                .commit()
+        }
+        noticeButton = view.findViewById<Button>(R.id.noticeButton)
+        noticeButton.setOnClickListener {
+            // NoticeActivity로 이동하는 코드
+            val intent = Intent(requireContext(), NoticeActivity::class.java)
+            startActivity(intent)
+        }
+
+        faqButton = view.findViewById<Button>(R.id.faqButton)
+        faqButton.setOnClickListener(){// 자주 묻는 질문 프래그먼트로 전환
+            val fragment_faq = FAQFragment()
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.fl_container, fragment_faq) // 프래그먼트 교체
+                .addToBackStack(null) // 이전 프래그먼트로 돌아가기
+                .commit()
+        }
+
+        logoutButton = view.findViewById<Button>(R.id.logoutButton)
+        logoutButton.setOnClickListener(){// C_login프래그먼트로 전환
+            val intent = Intent(requireContext(), MainActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     // startActivityForResult로 시작된 액티비티의 결과를 받는 메서드.
@@ -77,7 +109,6 @@ class CorporateMypageFragment : Fragment() {
                 view?.findViewById<de.hdodenhof.circleimageview.CircleImageView>(R.id.profileImageView)?.setImageBitmap(resizedBitmap)
             }
 
-            //view?.findViewById<ImageView>(R.id.profileImageView)?.setImageURI(selectedImageUri)
         }
     }
 }

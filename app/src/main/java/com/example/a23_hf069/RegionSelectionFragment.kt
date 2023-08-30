@@ -120,11 +120,12 @@ class RegionSelectionFragment : Fragment() {
             val regionKeyword = selectedRegionList.joinToString ("|")
             sharedSelectionViewModel.keywordRegions = regionKeyword
 
-            val wantedFilteringFragment = WantedFilteringFragment()
-            requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.fl_container, wantedFilteringFragment)
-                .addToBackStack(null)
-                .commit()
+            val WantedFilteringFragment = WantedFilteringFragment()
+            FragmentManagerHelper.replaceFragment(
+                requireActivity().supportFragmentManager,
+                R.id.fl_container,
+                WantedFilteringFragment
+            )
         }
 
         return rootView

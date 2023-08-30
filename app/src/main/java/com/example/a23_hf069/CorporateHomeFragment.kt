@@ -20,11 +20,12 @@ class CorporateHomeFragment : Fragment() {
         notificationButton = view.findViewById(R.id.notifications)
         notificationButton.setOnClickListener {
             // notificationButton을 클릭하면 알림 화면 CorporateHomeNotificationFragment로 전환
-            val notificationFragment = CorporateHomeNotificationFragment()
-            requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.fl_container, notificationFragment)
-                .addToBackStack(null)
-                .commit()
+            val CorporateHomeNotificationFragment = CorporateHomeNotificationFragment()
+            FragmentManagerHelper.replaceFragment(
+                requireActivity().supportFragmentManager,
+                R.id.fl_container,
+                CorporateHomeNotificationFragment
+            )
         }
     }
 

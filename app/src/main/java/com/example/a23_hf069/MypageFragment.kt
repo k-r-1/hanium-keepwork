@@ -53,11 +53,12 @@ class MypageFragment : Fragment() {
         }
         notificationButton = view.findViewById<Button>(R.id.notificationButton)
         notificationButton.setOnClickListener(){// 알림 설정 프래그먼트로 전환
-            val fragment_notification_settings = NotificationSettingsFragment()
-            requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.fl_container, fragment_notification_settings) // 프래그먼트 교체
-                .addToBackStack(null) // 이전 프래그먼트로 돌아가기
-                .commit()
+            val NotificationSettingsFragment = NotificationSettingsFragment()
+            FragmentManagerHelper.replaceFragment(
+                requireActivity().supportFragmentManager,
+                R.id.fl_container,
+                NotificationSettingsFragment
+            )
         }
         noticeButton = view.findViewById<Button>(R.id.noticeButton)
         noticeButton.setOnClickListener {
@@ -68,11 +69,12 @@ class MypageFragment : Fragment() {
 
         faqButton = view.findViewById<Button>(R.id.faqButton)
         faqButton.setOnClickListener(){// 자주 묻는 질문 프래그먼트로 전환
-            val fragment_faq = FAQFragment()
-            requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.fl_container, fragment_faq) // 프래그먼트 교체
-                .addToBackStack(null) // 이전 프래그먼트로 돌아가기
-                .commit()
+            val FAQFragment = FAQFragment()
+            FragmentManagerHelper.replaceFragment(
+                requireActivity().supportFragmentManager,
+                R.id.fl_container,
+                FAQFragment
+            )
         }
 
         logoutButton = view.findViewById<Button>(R.id.logoutButton)

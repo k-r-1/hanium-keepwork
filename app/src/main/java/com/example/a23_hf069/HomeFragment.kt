@@ -10,10 +10,12 @@ import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.a23_hf069.FragmentManagerHelper
 import com.example.a23_hf069.HomeNotificationFragment
 import com.example.a23_hf069.HomeSearchFragment
 import com.example.a23_hf069.ListAdapterGrid
 import com.example.a23_hf069.R
+import com.example.a23_hf069.WantedFilteringFragment
 
 class HomeFragment : Fragment() {
 
@@ -28,11 +30,12 @@ class HomeFragment : Fragment() {
         notificationButton = toolbar.findViewById(R.id.notificationButton)
         notificationButton.setOnClickListener {
             // notificationButton을 클릭하면 알림 화면 HomeNotificationFragment로 전환
-            val notificationFragment = HomeNotificationFragment()
-            requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.fl_container, notificationFragment)
-                .addToBackStack(null)
-                .commit()
+            val HomeNotificationFragment = HomeNotificationFragment()
+            FragmentManagerHelper.replaceFragment(
+                requireActivity().supportFragmentManager,
+                R.id.fl_container,
+                HomeNotificationFragment
+            )
         }
     }
 
@@ -74,11 +77,12 @@ class HomeFragment : Fragment() {
         val searchContent = rootView.findViewById<EditText>(R.id.searchContent) // EditText를 rootView에서 찾아옴
         searchContent.setOnFocusChangeListener { _, hasFocus -> // EditText의 포커스 변화를 감지하는 리스너를 설정
             if (hasFocus) {
-                val searchFragment = HomeSearchFragment()
-                requireActivity().supportFragmentManager.beginTransaction() // 프래그먼트 간 전환 수행
-                    .replace(R.id.fl_container, searchFragment) // 프래그먼트 교체
-                    .addToBackStack(null) // 이전 프래그먼트로 돌아가기
-                    .commit()
+                val HomeSearchFragment = HomeSearchFragment()
+                FragmentManagerHelper.replaceFragment(
+                    requireActivity().supportFragmentManager,
+                    R.id.fl_container,
+                    HomeSearchFragment
+                )
                 hideKeyboard() // 키보드 숨김 처리
             }
         }

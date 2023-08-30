@@ -37,17 +37,19 @@ class CommunityFragment : Fragment(), TabLayout.OnTabSelectedListener {
             val currentTab = tabLayout.selectedTabPosition
             if (currentTab == 1) {
                 val PublicityBoardSearchFragment = PublicityBoardSearchFragment()
-                requireActivity().supportFragmentManager.beginTransaction()
-                    .replace(R.id.fl_container, PublicityBoardSearchFragment)
-                    .addToBackStack(null)
-                    .commit()
+                FragmentManagerHelper.replaceFragment(
+                    requireActivity().supportFragmentManager,
+                    R.id.fl_container,
+                    PublicityBoardSearchFragment
+                )
                 searchContent.hint = "홍보 게시판 검색"
             } else if (currentTab == 0) {
                 val CommunityBoardSearchFragment = CommunityBoardSearchFragment()
-                requireActivity().supportFragmentManager.beginTransaction()
-                    .replace(R.id.fl_container, CommunityBoardSearchFragment)
-                    .addToBackStack(null)
-                    .commit()
+                FragmentManagerHelper.replaceFragment(
+                    requireActivity().supportFragmentManager,
+                    R.id.fl_container,
+                    CommunityBoardSearchFragment
+                )
                 searchContent.hint = "커뮤니티 검색"
             }
             true

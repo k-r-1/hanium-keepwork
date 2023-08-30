@@ -62,26 +62,35 @@
             android:id="@+id/tab1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="전체" />
+            android:text="전체(2)" />
 
         <com.google.android.material.tabs.TabItem
             android:id="@+id/tab2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="검토중" />
+            android:text="검토중(2)" />
 
         <com.google.android.material.tabs.TabItem
             android:id="@+id/tab3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="합격" />
+            android:text="합격(0)" />
 
         <com.google.android.material.tabs.TabItem
             android:id="@+id/tab4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="불합격" />
+            android:text="불합격(0)" />
 
     </com.google.android.material.tabs.TabLayout>
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/ViewPager2"
+        android:layout_width="409dp"
+        android:layout_height="615dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tablayout01" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

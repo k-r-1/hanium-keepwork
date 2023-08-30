@@ -165,11 +165,12 @@ class WantedFilteringFragment : Fragment() {
                 fetchWantedList()
 
                 // 화면전환
-                val wantedResultFragment = WantedResultFragment()
-                requireActivity().supportFragmentManager.beginTransaction()
-                    .replace(R.id.fl_container, wantedResultFragment)
-                    .addToBackStack(null)
-                    .commit()
+                val WantedResultFragment = WantedResultFragment()
+                FragmentManagerHelper.replaceFragment(
+                    requireActivity().supportFragmentManager,
+                    R.id.fl_container,
+                    WantedResultFragment
+                )
             }
 
         }
@@ -177,20 +178,22 @@ class WantedFilteringFragment : Fragment() {
 
         // 지역선택 버튼 눌렸을 때 지역선택 화면으로 전환
         regioncl_btn.setOnClickListener {
-            val regionSelectionFragment = RegionSelectionFragment()
-            requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.fl_container, regionSelectionFragment)
-                .addToBackStack(null)
-                .commit()
+            val RegionSelectionFragment = RegionSelectionFragment()
+            FragmentManagerHelper.replaceFragment(
+                requireActivity().supportFragmentManager,
+                R.id.fl_container,
+                RegionSelectionFragment
+            )
         }
 
         // 직종선택 버튼 눌렸을 때 직종선택 화면으로 전환
         jobcl_btn.setOnClickListener {
-            val jobSelectionFragment = JobWorkNetSelectionFragment()
-            requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.fl_container, jobSelectionFragment)
-                .addToBackStack(null)
-                .commit()
+            val JobWorkNetSelectionFragment = JobWorkNetSelectionFragment()
+            FragmentManagerHelper.replaceFragment(
+                requireActivity().supportFragmentManager,
+                R.id.fl_container,
+                JobWorkNetSelectionFragment
+            )
         }
 
     }

@@ -121,11 +121,12 @@ class JobWorkNetSelectionFragment : Fragment() {
         // EditText을 클릭하면 검색 화면 JobWorkNetSelectionSearchFragment로 전환
         searchEditText.setOnFocusChangeListener { _, hasFocus -> // EditText의 포커스 변화를 감지하는 리스너를 설정
             if (hasFocus) {
-                val searchFragment = JobWorkNetSelectionSearchFragment()
-                requireActivity().supportFragmentManager.beginTransaction() // 프래그먼트 간 전환 수행
-                    .replace(R.id.fl_container, searchFragment) // 프래그먼트 교체
-                    .addToBackStack(null) // 이전 프래그먼트로 돌아가기
-                    .commit()
+                val JobWorkNetSelectionSearchFragment = JobWorkNetSelectionSearchFragment()
+                FragmentManagerHelper.replaceFragment(
+                    requireActivity().supportFragmentManager,
+                    R.id.fl_container,
+                    JobWorkNetSelectionSearchFragment
+                )
                 hideKeyboard() // 키보드 숨김 처리
             }
         }
@@ -168,12 +169,13 @@ class JobWorkNetSelectionFragment : Fragment() {
             bundle.putString("selectedJobCodes", selectedJobCodes)
 
             // 다음 프래그먼트 생성 및 데이터 전달
-            val wantedFilteringFragment = WantedFilteringFragment()
-            requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.fl_container, wantedFilteringFragment)
-                .addToBackStack(null)
-                .commit()
-            wantedFilteringFragment.arguments = bundle //뷰모델 사용x, bundle로 값넘겨줄때 필요한 코드
+            val WantedFilteringFragment = WantedFilteringFragment()
+            FragmentManagerHelper.replaceFragment(
+                requireActivity().supportFragmentManager,
+                R.id.fl_container,
+                WantedFilteringFragment
+            )
+            WantedFilteringFragment.arguments = bundle //뷰모델 사용x, bundle로 값넘겨줄때 필요한 코드
         }
 
         return rootView

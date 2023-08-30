@@ -36,29 +36,32 @@ class WantedListFragment : Fragment(), TabLayout.OnTabSelectedListener {
 
         filter = view.findViewById<Button>(R.id.conditionButton)
         filter.setOnClickListener() {
-            val fragment1 = WantedFilteringFragment()
-            requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.fl_container, fragment1)
-                .addToBackStack(null)
-                .commit()
+            val WantedFilteringFragment = WantedFilteringFragment()
+            FragmentManagerHelper.replaceFragment(
+                requireActivity().supportFragmentManager,
+                R.id.fl_container,
+                WantedFilteringFragment
+            )
         }
 
         searchContent = view.findViewById<EditText>(R.id.searchContent)
         searchContent.setOnTouchListener { _, _ ->
             val currentTab = tabLayout.selectedTabPosition
             if (currentTab == 1) {
-                val wantedWorkNetSearchFragment = WantedWorkNetSearchFragment()
-                requireActivity().supportFragmentManager.beginTransaction()
-                    .replace(R.id.fl_container, wantedWorkNetSearchFragment)
-                    .addToBackStack(null)
-                    .commit()
+                val WantedWorkNetSearchFragment = WantedWorkNetSearchFragment()
+                FragmentManagerHelper.replaceFragment(
+                    requireActivity().supportFragmentManager,
+                    R.id.fl_container,
+                    WantedWorkNetSearchFragment
+                )
                 searchContent.hint = "워크넷 채용공고 검색"
             } else if (currentTab == 0) {
-                val wantedRequestingSearchFragment = WantedRequestingSearchFragment()
-                requireActivity().supportFragmentManager.beginTransaction()
-                    .replace(R.id.fl_container, wantedRequestingSearchFragment)
-                    .addToBackStack(null)
-                    .commit()
+                val WantedRequestingSearchFragment = WantedRequestingSearchFragment()
+                FragmentManagerHelper.replaceFragment(
+                    requireActivity().supportFragmentManager,
+                    R.id.fl_container,
+                    WantedRequestingSearchFragment
+                )
                 searchContent.hint = "즉시지원 가능한 일자리 검색"
             }
             true

@@ -142,12 +142,13 @@ class JobWorkNetSelectionSearchFragment : Fragment() {
             bundle.putString("selectedJobCodes", selectedJobCodes)
 
             // 다음 프래그먼트 생성 및 데이터 전달
-            val wantedFilteringFragment = WantedFilteringFragment()
-            requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.fl_container, wantedFilteringFragment)
-                .addToBackStack(null)
-                .commit()
-            wantedFilteringFragment.arguments = bundle //뷰모델 사용x, bundle로 값넘겨줄때 필요한 코드
+            val WantedFilteringFragment = WantedFilteringFragment()
+            FragmentManagerHelper.replaceFragment(
+                requireActivity().supportFragmentManager,
+                R.id.fl_container,
+                WantedFilteringFragment
+            )
+            WantedFilteringFragment.arguments = bundle //뷰모델 사용x, bundle로 값넘겨줄때 필요한 코드
         }
 
         return rootView

@@ -43,7 +43,7 @@ class WantedFilteringFragment : Fragment() {
     lateinit var selectedRegion: String
 
     //직종 코드
-    private lateinit var selectedJobCodes: String
+    private lateinit var selectedJobCode: String
 
     //라디오 그룹
     lateinit var rgEdu: RadioGroup // 학력 라디오그룹
@@ -92,7 +92,8 @@ class WantedFilteringFragment : Fragment() {
         tv_jobcl_selected.text = selectedJob //화면에 textView 나타내기
 
         // 전달된 직종코드 데이터를 받아서 사용
-        selectedJobCodes = arguments?.getString("selectedJobCodes").toString()
+        //selectedJobCode = arguments?.getString("selectedJobCode").toString()
+        selectedJobCode=sharedSelectionViewModel.selectedJobCode.toString()
 
         // 라디오 그룹을 초기화
         rgEdu = view.findViewById(R.id.rg_edu)
@@ -115,7 +116,7 @@ class WantedFilteringFragment : Fragment() {
 
             // 선택한 직종이 있을 경우 필터링하기
             if (selectedJob != "") {
-                keywordJob = selectedJobCodes
+                keywordJob = selectedJobCode
             }
 
             // 학력 라디오 그룹중 선택된 라디오 버튼이 있을때 처리
@@ -262,19 +263,19 @@ class WantedFilteringFragment : Fragment() {
                                     }
                                 }
 
-                                if (keywordEdu == "" && keywordCareer == "") { // 지역만 선택
+                                if (keywordEdu == "" && keywordCareer == "" && keywordJob =="") { // 지역만 선택
                                     sharedSelectionViewModel.updateFilteredList(filteredList)
                                 } else if (keywordCareer.isNotEmpty() && keywordEdu == "") { // 경력만 선택
                                     val filteredList1 = filteredList.filter {// 경력 필터링
                                         it.career == keywordCareer
                                     }
                                     sharedSelectionViewModel.updateFilteredList(filteredList1)
-                                } else if (keywordEdu.isNotEmpty() && keywordCareer == "") { // 학력만 선택
+                                } else if (keywordEdu.isNotEmpty() && keywordCareer == "" && keywordJob =="") { // 학력만 선택
                                     val filteredList1 = filteredList.filter { // 학력 필터링
                                         it.minEdubg == keywordEdu
                                     }
                                     sharedSelectionViewModel.updateFilteredList(filteredList1)
-                                } else if (keywordEdu.isNotEmpty() && keywordCareer.isNotEmpty()) { // 경력, 학력 모두 선택
+                                } else if (keywordEdu.isNotEmpty() && keywordCareer.isNotEmpty() && keywordJob =="") { // 경력, 학력 모두 선택
                                     val filteredList1 = filteredList.filter { // 경력, 학력 필터링
                                         it.minEdubg == keywordEdu && it.career == keywordCareer
                                     }
@@ -456,7 +457,7 @@ class WantedFilteringFragment : Fragment() {
                 }
 
                 XmlPullParser.END_TAG -> {
-                    if (xpp.name == "cmcdJobs") {
+                    if (xpp.name == "threeDepth" || xpp.name == "twoDepth" || xpp.name == "oneDepth") {
                         jobsCd?.let { jCd ->
                             superCd?.let { sCd ->
                                 jobList.add(Job(jCd, sCd))

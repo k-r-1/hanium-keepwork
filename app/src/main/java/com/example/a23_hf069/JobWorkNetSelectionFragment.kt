@@ -166,7 +166,7 @@ class JobWorkNetSelectionFragment : Fragment() {
 
             // Bundle을 생성하여 데이터 추가
             val bundle = Bundle()
-            bundle.putString("selectedJobCodes", selectedJobCodes)
+            bundle.putString("selectedJobCode", selectedJobCodes)
 
             // 다음 프래그먼트 생성 및 데이터 전달
             val WantedFilteringFragment = WantedFilteringFragment()

@@ -58,8 +58,7 @@
                 android:layout_marginTop="50dp"
                 android:text="학교명"
                 android:textColor="@color/black"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textSize="20sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -70,7 +69,7 @@
                     android:id="@+id/school1"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     gravity="center"
-                    android:layout_width="232dp"
+                    android:layout_width="183dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="40dp">
 
@@ -83,13 +82,28 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <Spinner
-                    android:id="@+id/graduate"
-                    android:layout_width="84dp"
-                    android:layout_height="48dp"
-                    android:gravity="right"
-                    android:layout_marginLeft="10dp"
-                    android:spinnerMode="dropdown" />
+<!--                <Spinner-->
+<!--                    android:id="@+id/graduate_spinner"-->
+<!--                    android:layout_width="84dp"-->
+<!--                    android:layout_height="48dp"-->
+<!--                    android:gravity="right"-->
+<!--                    android:layout_marginLeft="10dp"-->
+<!--                    android:spinnerMode="dropdown" />-->
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="10dp"
+                    android:background="@drawable/rounded_border">
+
+                    <!-- Spinner -->
+                    <Spinner
+                        android:id="@+id/graduate_spinner"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp" />
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -102,8 +116,7 @@
                 android:layout_marginTop="20dp"
                 android:text="재학 기간"
                 android:textColor="@color/black"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textSize="20sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -123,14 +136,14 @@
                     android:text="입학일자" />
 
                 <Button
-                    android:id="@+id/graduate_calendar"
+                    android:id="@+id/admission_calendar"
                     android:layout_width="63dp"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
                     android:text="달력" />
 
                 <EditText
-                    android:id="@+id/edt_grauate_year"
+                    android:id="@+id/edt_admission_year"
                     android:layout_width="70dp"
                     android:layout_height="wrap_content"
                     android:focusable="false"
@@ -144,7 +157,7 @@
                     />
 
                 <EditText
-                    android:id="@+id/edt_grauate_month"
+                    android:id="@+id/edt_admission_month"
                     android:layout_width="40dp"
                     android:layout_height="wrap_content"
                     android:focusable="false"
@@ -157,7 +170,7 @@
                     android:text="월" />
 
                 <EditText
-                    android:id="@+id/edt_grauate_day"
+                    android:id="@+id/edt_admission_day"
                     android:layout_width="40dp"
                     android:layout_height="wrap_content"
                     android:focusable="false"
@@ -188,14 +201,14 @@
                     android:text="졸업일자" />
 
                 <Button
-                    android:id="@+id/btn_calendar"
+                    android:id="@+id/graduate_calendar"
                     android:layout_width="63dp"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
                     android:text="달력" />
 
                 <EditText
-                    android:id="@+id/edt_birthyear"
+                    android:id="@+id/edt_graduate_year"
                     android:layout_width="70dp"
                     android:layout_height="wrap_content"
                     android:focusable="false"
@@ -209,7 +222,7 @@
                     />
 
                 <EditText
-                    android:id="@+id/edt_birthmonth"
+                    android:id="@+id/edt_graduate_month"
                     android:layout_width="40dp"
                     android:layout_height="wrap_content"
                     android:focusable="false"
@@ -222,7 +235,7 @@
                     android:text="월" />
 
                 <EditText
-                    android:id="@+id/edt_birthday"
+                    android:id="@+id/edt_graduate_day"
                     android:layout_width="40dp"
                     android:layout_height="wrap_content"
                     android:focusable="false"
@@ -245,8 +258,7 @@
                 android:layout_marginTop="20dp"
                 android:text="전공명"
                 android:textColor="@color/black"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textSize="20sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"

@@ -57,7 +57,7 @@
             android:layout_height="wrap_content"
             android:text="공고 제목"
             android:textColor="@android:color/black"
-            android:textSize="18sp"
+            android:textSize="20sp"
             android:layout_gravity="left"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="10dp" />
@@ -85,7 +85,7 @@
             android:layout_height="wrap_content"
             android:text="지원 조건"
             android:textColor="@android:color/black"
-            android:textSize="18sp"
+            android:textSize="20sp"
             android:layout_gravity="left"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="10dp" />
@@ -106,7 +106,7 @@
                 <!-- 상단 영역의 텍스트뷰 -->
                 <TextView
                     android:id="@+id/careerLabel"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="경력"
                     android:layout_marginTop="10dp"
@@ -115,6 +115,7 @@
                     android:textColor="@android:color/black"
                     android:textSize="16sp" />
 
+
                 <!-- Spinner를 포함한 LinearLayout -->
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -122,17 +123,16 @@
                     android:layout_marginStart="20dp"
                     android:layout_marginBottom="10dp"
                     android:background="@drawable/rounded_border"
-                    android:orientation="vertical">
+                    android:orientation="horizontal">
 
                     <!-- Spinner -->
                     <Spinner
                         android:id="@+id/careerSpinner"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp" />
                 </LinearLayout>
 
-                <!-- 구분선 -->
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
@@ -145,12 +145,12 @@
                 <!-- 하단 영역의 텍스트뷰 -->
                 <TextView
                     android:id="@+id/educationLabel"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="학력"
+                    android:layout_marginStart="20dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
-                    android:layout_marginStart="20dp"
+                    android:text="학력"
                     android:textColor="@android:color/black"
                     android:textSize="16sp" />
 
@@ -161,7 +161,7 @@
                     android:layout_marginStart="20dp"
                     android:layout_marginBottom="10dp"
                     android:background="@drawable/rounded_border"
-                    android:orientation="vertical">
+                    android:orientation="horizontal">
 
                     <!-- Spinner -->
                     <Spinner
@@ -170,17 +170,18 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp" />
                 </LinearLayout>
-
             </LinearLayout>
+
         </FrameLayout>
 
-        <TextView
+
+            <TextView
             android:id="@+id/workingConditionLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="근무 조건"
             android:textColor="@android:color/black"
-            android:textSize="18sp"
+            android:textSize="20sp"
             android:layout_gravity="left"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="10dp" />
@@ -375,7 +376,7 @@
                 android:layout_height="wrap_content"
                 android:text="인사담당자 정보"
                 android:textColor="@android:color/black"
-                android:textSize="18sp"
+                android:textSize="20sp"
                 android:layout_gravity="left"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="10dp" />
@@ -446,7 +447,7 @@
             android:layout_height="wrap_content"
             android:text="회사 정보 확인"
             android:textColor="@android:color/black"
-            android:textSize="18sp"
+            android:textSize="20sp"
             android:layout_gravity="left"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="10dp" />
@@ -491,7 +492,7 @@
                 android:layout_height="wrap_content"
                 android:text="공고 마감일"
                 android:textColor="@android:color/black"
-                android:textSize="18sp"
+                android:textSize="20sp"
                 android:layout_gravity="left"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="10dp" />
@@ -502,36 +503,53 @@
                 android:layout_marginBottom="20dp"
                 android:orientation="horizontal">
 
-                <!-- Spinner를 포함한 LinearLayout -->
-                <LinearLayout
+
+                <Button
+                    android:id="@+id/posting_calendar"
+                    android:layout_width="63dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:text="달력" />
+
+                <EditText
+                    android:id="@+id/edt_posting_year"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:gravity="center" />
+
+                <TextView
+                    android:id="@+id/tv_posting_year"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/rounded_border"
-                    android:orientation="vertical">
+                    android:text="년"
+                    />
 
-                    <!-- Spinner -->
-                    <Spinner
-                        android:id="@+id/deadlineInfoMonthSpinner"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="10dp" />
-                </LinearLayout>
+                <EditText
+                    android:id="@+id/edt_posting_month"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:gravity="center" />
 
-                <!-- Spinner를 포함한 LinearLayout -->
-                <LinearLayout
+                <TextView
+                    android:id="@+id/tv_posting_month"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:background="@drawable/rounded_border"
-                    android:orientation="vertical">
+                    android:text="월" />
+                
+                <EditText
+                    android:id="@+id/edt_posting_day"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:gravity="center" />
 
-                    <!-- Spinner -->
-                    <Spinner
-                        android:id="@+id/deadlineInfoDateSpinner"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="10dp" />
-                </LinearLayout>
+                <TextView
+                    android:id="@+id/tv_graduate_day"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="일" />
 
             </LinearLayout>
 

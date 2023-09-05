@@ -48,49 +48,49 @@ class ResumeFragment : Fragment() {
     private lateinit var dataAdapter: DataAdapter
 
     // 이력서 목록을 업데이트하는 주기를 지정하는 변수 (2초로 설정)
-    private val updateIntervalMillis: Long = 2000
+//    private val updateIntervalMillis: Long = 2000
 
     // 업데이트를 위해 사용할 핸들러 객체
-    private val handler = Handler()
+//    private val handler = Handler()
 
     // Handler 동작 여부를 나타내는 변수
-    private var isHandlerRunning = false
+//    private var isHandlerRunning = false
 
     // Fragment가 화면에 보일 때 호출되는 메서드
-    override fun onStart() {
-        super.onStart()
-        // Handler 시작 (주기적인 작업 시작)
-        startHandler()
-    }
+//    override fun onStart() {
+//        super.onStart()
+//        // Handler 시작 (주기적인 작업 시작)
+//        startHandler()
+//    }
 
     // Fragment가 화면에서 사라질 때 호출되는 메서드
-    override fun onStop() {
-        super.onStop()
-        // Handler 중지 (주기적인 작업 중지)
-        stopHandler()
-    }
+//    override fun onStop() {
+//        super.onStop()
+//        // Handler 중지 (주기적인 작업 중지)
+//        stopHandler()
+//    }
 
     // Handler 시작 메서드
-    private fun startHandler() {
-        if (!isHandlerRunning) {
-            handler.postDelayed(updateDataRunnable, updateIntervalMillis)
-            isHandlerRunning = true
-        }
-    }
+//    private fun startHandler() {
+//        if (!isHandlerRunning) {
+//            handler.postDelayed(updateDataRunnable, updateIntervalMillis)
+//            isHandlerRunning = true
+//        }
+//    }
 
     // Handler 중지 메서드
-    private fun stopHandler() {
-        handler.removeCallbacks(updateDataRunnable)
-        isHandlerRunning = false
-    }
+//    private fun stopHandler() {
+//        handler.removeCallbacks(updateDataRunnable)
+//        isHandlerRunning = false
+//    }
 
     // 서버로부터 데이터를 가져오는 작업을 반복할 Runnable 객체
-    private val updateDataRunnable = object : Runnable {
-        override fun run() {
-            fetchDataFromServer()
-            handler.postDelayed(this, updateIntervalMillis) // 일정 간격 후 다시 호출
-        }
-    }
+//    private val updateDataRunnable = object : Runnable {
+//        override fun run() {
+//            fetchDataFromServer()
+//            handler.postDelayed(this, updateIntervalMillis) // 일정 간격 후 다시 호출
+//        }
+//    }
 
     // Fragment의 뷰를 생성하는 메서드
     @SuppressLint("MissingInflatedId")
@@ -154,7 +154,7 @@ class ResumeFragment : Fragment() {
         fetchDataFromServer()
 
         // 일정 간격으로 서버에서 데이터를 가져오고 UI를 업데이트하는 작업 시작
-        handler.postDelayed(updateDataRunnable, updateIntervalMillis)
+//        handler.postDelayed(updateDataRunnable, updateIntervalMillis)
 
         // 이력서 삭제 버튼 클릭 리스너 설정
         setupDeleteButtonClickListener()

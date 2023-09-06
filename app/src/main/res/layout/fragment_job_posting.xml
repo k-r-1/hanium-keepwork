@@ -65,19 +65,24 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/rounded_border"
-            android:padding="10dp"
             android:layout_gravity="center">
 
-        <EditText
-            android:id="@+id/titleEditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/white"
-            android:hint="제목을 입력하세요."
-            android:textSize="16sp" />
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/titleEditText_layout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-    </FrameLayout>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/titleEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:hint="예) 홍길동"
+                    android:textAppearance="@style/TextLabel" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </FrameLayout>
 
         <TextView
             android:id="@+id/supportConditionLabel"
@@ -210,16 +215,30 @@
                         android:textColor="@android:color/black"
                         android:textSize="16sp" />
 
-                    <EditText
-                        android:id="@+id/periodEditText"
+                    <FrameLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginEnd="20dp"
+                        android:layout_gravity="center">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/periodEditText_layout"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
                         android:layout_marginBottom="20dp"
-                        android:backgroundTint="#35B891"
-                        android:hint="ex. 1년 or 협의"
-                        android:textSize="16sp" />
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/periodEditText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="16sp"
+                            android:hint="ex. 1년 or 협의"
+                            android:textAppearance="@style/TextLabel" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </FrameLayout>
 
                     <TextView
                         android:id="@+id/dayLabel"
@@ -232,16 +251,30 @@
                         android:textColor="@android:color/black"
                         android:textSize="16sp" />
 
-                    <EditText
-                        android:id="@+id/dayEditText"
+                    <FrameLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginEnd="20dp"
-                        android:layout_marginBottom="20dp"
-                        android:backgroundTint="#35B891"
-                        android:hint="ex. 평일 / 월,수,금"
-                        android:textSize="16sp" />
+                        android:layout_gravity="center">
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/dayEditText_layout"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="20dp"
+                            android:layout_marginBottom="20dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/dayEditText"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textSize="16sp"
+                                android:hint="ex. 평일 / 월,수,금"
+                                android:textAppearance="@style/TextLabel" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                    </FrameLayout>
 
                     <TextView
                         android:id="@+id/timeLabel"
@@ -254,16 +287,30 @@
                         android:textColor="@android:color/black"
                         android:textSize="16sp" />
 
-                    <EditText
-                        android:id="@+id/timeEditText"
+                    <FrameLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginEnd="20dp"
-                        android:layout_marginBottom="20dp"
-                        android:backgroundTint="#35B891"
-                        android:hint="ex. 오전 10시 ~ 오후 6시"
-                        android:textSize="16sp" />
+                        android:layout_gravity="center">
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/timeEditText_layout"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="20dp"
+                            android:layout_marginBottom="20dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/timeEditText"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textSize="16sp"
+                                android:hint="ex. 오전 10시 ~ 오후 6시"
+                                android:textAppearance="@style/TextLabel" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                    </FrameLayout>
 
                     <TextView
                         android:id="@+id/payLabel"
@@ -276,16 +323,30 @@
                         android:textColor="@android:color/black"
                         android:textSize="16sp" />
 
-                    <EditText
-                        android:id="@+id/payEditText"
+                    <FrameLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginEnd="20dp"
-                        android:layout_marginBottom="20dp"
-                        android:backgroundTint="#35B891"
-                        android:hint="ex. 월급 230만원"
-                        android:textSize="16sp" />
+                        android:layout_gravity="center">
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/payEditText_layout"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="20dp"
+                            android:layout_marginBottom="20dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/payEditText"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textSize="16sp"
+                                android:hint="ex. 월급 230만원"
+                                android:textAppearance="@style/TextLabel" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                    </FrameLayout>
 
                     <TextView
                         android:id="@+id/positionLabel"
@@ -298,16 +359,30 @@
                         android:textColor="@android:color/black"
                         android:textSize="16sp" />
 
-                    <EditText
-                        android:id="@+id/positionEditText"
+                    <FrameLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginEnd="20dp"
-                        android:layout_marginBottom="20dp"
-                        android:backgroundTint="#35B891"
-                        android:hint="부서명/직책 (ex. 인사부/평사원)"
-                        android:textSize="16sp" />
+                        android:layout_gravity="center">
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/positionEditText_layout"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="20dp"
+                            android:layout_marginBottom="20dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/positionEditText"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textSize="16sp"
+                                android:hint="부서명/직책 (ex. 인사부/평사원)"
+                                android:textAppearance="@style/TextLabel" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                    </FrameLayout>
 
                     <TextView
                         android:id="@+id/occupationLabel"
@@ -367,6 +442,7 @@
                             android:hint="추가적으로 요구하는 지원조건이나 경력사항이 있다면 기술해 주세요."
                             android:textSize="16sp" />
                     </FrameLayout>
+
                 </LinearLayout>
             </FrameLayout>
 
@@ -405,16 +481,30 @@
                     android:textColor="@android:color/black"
                     android:textSize="16sp" />
 
-                <EditText
-                    android:id="@+id/contactEditText"
+                <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginBottom="20dp"
-                    android:backgroundTint="#35B891"
-                    android:hint="ex. 010-1234-1234"
-                    android:textSize="16sp" />
+                    android:layout_gravity="center">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/contactEditText_layout"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginBottom="20dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/contactEditText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="16sp"
+                            android:hint="ex. 010-1234-1234"
+                            android:textAppearance="@style/TextLabel" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </FrameLayout>
 
                 <TextView
                     android:id="@+id/emailLabel"
@@ -427,21 +517,35 @@
                     android:textColor="@android:color/black"
                     android:textSize="16sp" />
 
-                <EditText
-                    android:id="@+id/emailEditText"
+                <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginBottom="10dp"
-                    android:backgroundTint="#35B891"
-                    android:hint="ex. abc@naver.com"
-                    android:textSize="16sp" />
+                    android:layout_gravity="center">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/emailEditText_layout"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginBottom="20dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/emailEditText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="16sp"
+                            android:hint="ex.abc@naver.com"
+                            android:textAppearance="@style/TextLabel" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </FrameLayout>
 
                </LinearLayout>
             </FrameLayout>
 
-        <TextView
+        <!--<TextView
             android:id="@+id/companyInfoLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -484,7 +588,7 @@
                     android:textSize="20sp"
                     android:layout_margin="20dp"/>
             </LinearLayout>
-             </FrameLayout>
+             </FrameLayout>-->
 
             <TextView
                 android:id="@+id/deadlineInfoLabel"

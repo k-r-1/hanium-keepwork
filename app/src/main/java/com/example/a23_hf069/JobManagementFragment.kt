@@ -33,9 +33,9 @@ class JobManagementFragment : Fragment() {
 
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             when (position) {
-                0 -> tab.text = "게재"
-                1 -> tab.text = "임시저장"
-                2 -> tab.text = "마감"
+                0 -> tab.text = "게재 (0)"
+                1 -> tab.text = "임시저장 (0)"
+                2 -> tab.text = "마감 (0)"
                 else -> tab.text = ""
             }
         }.attach()

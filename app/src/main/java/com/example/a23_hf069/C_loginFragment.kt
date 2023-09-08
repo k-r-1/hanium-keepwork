@@ -11,6 +11,8 @@ import androidx.fragment.app.Fragment
 class C_loginFragment : Fragment() {
     lateinit var login : Button
     lateinit var signUp : Button
+    lateinit var btnFindId : Button // 아이디 찾기 버튼
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -25,6 +27,7 @@ class C_loginFragment : Fragment() {
 
         login = view.findViewById<Button>(R.id.login_btn)
         signUp = view.findViewById<Button>(R.id.signUp_btn)
+        btnFindId = view.findViewById<Button>(R.id.findID_btn)
 
         login.setOnClickListener() {
             // login버튼을 클릭하면 CorporateHomeActivity로 전환
@@ -37,6 +40,11 @@ class C_loginFragment : Fragment() {
             startActivity(intent)
         }
 
+        btnFindId.setOnClickListener {
+            // findId 버튼을 클릭하면 FindCorporateIdActivity로 전환
+            val intent = Intent(getActivity(), FindCorporateIdActivity::class.java)
+            startActivity(intent)
+        }
     }
 
 }

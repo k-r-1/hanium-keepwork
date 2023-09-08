@@ -35,6 +35,13 @@
                 android:value="" />
         </activity>
         <activity
+            android:name=".FindCorporateIdActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".MemberInfoEditActivity"
             android:exported="false">
             <meta-data

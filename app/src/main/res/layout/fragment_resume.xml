@@ -50,7 +50,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -105,12 +106,6 @@
             </LinearLayout>
         </LinearLayout>
 
-        <Button
-            android:id="@+id/btnAddResume"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="이력서 추가" />
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerviewResume"
             android:layout_width="match_parent"
@@ -118,32 +113,58 @@
             android:visibility="gone"
             tools:listitem="@layout/resume_item" />
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabLayout"
-            style="@style/CustomTabLayout"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:tabIndicatorColor="#35B891"
-            app:tabIndicatorHeight="10dp">
+            android:layout_height="match_parent">
 
-            <com.google.android.material.tabs.TabItem
-                android:id="@+id/tabResumeComplete"
+            <LinearLayout
+                android:id="@+id/linearLayout2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/tabLayout"
+                    style="@style/CustomTabLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:tabIndicatorColor="#35B891"
+                    app:tabIndicatorHeight="10dp">
+
+                    <com.google.android.material.tabs.TabItem
+                        android:id="@+id/tabResumeComplete"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="작성완료 (0)" />
+
+                    <com.google.android.material.tabs.TabItem
+                        android:id="@+id/tabResumeTemporary"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="작성중 (0)" />
+
+                </com.google.android.material.tabs.TabLayout>
+
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/viewPager2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/btnAddResume"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="작성완료 (0)" />
-
-            <com.google.android.material.tabs.TabItem
-                android:id="@+id/tabResumeTemporary"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="작성중 (0)" />
-
-        </com.google.android.material.tabs.TabLayout>
+                android:src="@drawable/plus_button"
+                app:backgroundTint="#35B790"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </LinearLayout>
-
-    <androidx.viewpager2.widget.ViewPager2
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
 
 </LinearLayout>

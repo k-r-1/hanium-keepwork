@@ -115,8 +115,35 @@
             android:id="@+id/recyclerviewResume"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:visibility="gone"
             tools:listitem="@layout/resume_item" />
 
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayout"
+            style="@style/CustomTabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:tabIndicatorColor="#35B891"
+            app:tabIndicatorHeight="10dp">
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/tabResumeComplete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="작성완료 (0)" />
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/tabResumeTemporary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="작성중 (0)" />
+
+        </com.google.android.material.tabs.TabLayout>
+
     </LinearLayout>
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </LinearLayout>

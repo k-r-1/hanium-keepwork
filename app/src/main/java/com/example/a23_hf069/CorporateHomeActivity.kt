@@ -31,11 +31,6 @@ class CorporateHomeActivity : AppCompatActivity() {
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.fl_container, CorporateHomeFragment).commit()
                 }
-                R.id.jobPostingMenu -> {
-                    // 다른 프래그먼트 화면으로 이동하는 기능
-                    val JobPostingFragment = JobPostingFragment()
-                    supportFragmentManager.beginTransaction().replace(R.id.fl_container, JobPostingFragment).commit()
-                }
                 R.id.jobManagementMenu -> { // 공고관리
                     val JobManagementFragment = JobManagementFragment()
                     supportFragmentManager.beginTransaction().replace(R.id.fl_container, JobManagementFragment).commit()

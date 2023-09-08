@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -42,4 +43,22 @@ class JobManagementFragment : Fragment() {
 
         return rootView
     }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // floatbtnJobPost 버튼에 클릭 리스너 추가
+        val floatbtnJobPost: FloatingActionButton = view.findViewById(R.id.floatbtnJobPost)
+        floatbtnJobPost.setOnClickListener {
+            // 백 스택에 추가하지 않고 JobPostingFragment로 이동
+            FragmentManagerHelper.replaceFragment(
+                requireActivity().supportFragmentManager,
+                R.id.fl_container,
+                JobPostingFragment(),
+                addToBackStack = false
+            )
+        }
+    }
+
 }
+

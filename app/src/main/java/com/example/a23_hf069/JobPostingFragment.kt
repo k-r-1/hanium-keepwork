@@ -2,6 +2,7 @@ package com.example.a23_hf069
 
 import android.app.DatePickerDialog
 import android.os.Bundle
+import android.view.KeyEvent
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.Spinner
 import androidx.databinding.DataBindingUtil.setContentView
 import com.example.a23_hf069.databinding.ActivityResumeEducationBinding
@@ -49,6 +51,41 @@ class JobPostingFragment : Fragment() {
         }
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // ...
+
+        // 뒤로 가기 버튼을 처리하기 위한 코드
+        view.isFocusableInTouchMode = true
+        view.requestFocus()
+        view.setOnKeyListener { _, keyCode, event ->
+            if (keyCode == KeyEvent.KEYCODE_BACK && event.action == KeyEvent.ACTION_UP) {
+                // 백 스택에 추가하지 않고 JobManagementFragment로 이동
+                val jobManagementFragment = JobManagementFragment()
+                requireActivity().supportFragmentManager.beginTransaction()
+                    .replace(R.id.fl_container, jobManagementFragment)
+                    .commit()
+                true
+            } else {
+                false
+            }
+        }
+
+        // 뒤로가기 버튼 처리
+        val backButton: ImageButton = view.findViewById(R.id.backButton)
+        backButton.setOnClickListener {
+            // 백 스택에 추가하지 않고 JobManagementFragment로 이동
+            FragmentManagerHelper.replaceFragment(
+                requireActivity().supportFragmentManager,
+                R.id.fl_container,
+                JobManagementFragment(),
+                addToBackStack = false
+            )
+        }
+    }
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -70,6 +107,7 @@ class JobPostingFragment : Fragment() {
             }, postingYear, postingMonth, postingDay)
             datePickerDialog1.show()
         }
+
 
         val careerList = listOf(
             "경력무관",

@@ -1,0 +1,227 @@
+Index: .idea/shelf/Uncommitted_changes_before_Update_at_2023-08-29_오후_11_08_[Changes]/shelved.patch
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Update_at_2023-08-29_오후_11_08_[Changes]/shelved.patch b/.idea/shelf/Uncommitted_changes_before_Update_at_2023-08-29_오후_11_08_[Changes]/shelved.patch
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_Update_at_2023-08-29_오후_11_08_[Changes]/shelved.patch	(revision 920e73811383f6a542684faec30832e61b3dfcf9)
++++ /dev/null	(revision 920e73811383f6a542684faec30832e61b3dfcf9)
+@@ -1,134 +0,0 @@
+-Index: app/google-services.json
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+>{\r\n  \"project_info\": {\r\n    \"project_number\": \"690907773251\",\r\n    \"project_id\": \"keepwork-c58a3\",\r\n    \"storage_bucket\": \"keepwork-c58a3.appspot.com\"\r\n  },\r\n  \"client\": [\r\n    {\r\n      \"client_info\": {\r\n        \"mobilesdk_app_id\": \"1:690907773251:android:d80dc5ed36dd92b0c157f6\",\r\n        \"android_client_info\": {\r\n          \"package_name\": \"com.example.a23_hf069\"\r\n        }\r\n      },\r\n      \"oauth_client\": [\r\n        {\r\n          \"client_id\": \"690907773251-lsoc0e0vchbq076r29cedmsapbfhn9e8.apps.googleusercontent.com\",\r\n          \"client_type\": 3\r\n        }\r\n      ],\r\n      \"api_key\": [\r\n        {\r\n          \"current_key\": \"AIzaSyCAIWgNEMOuuEl9Lgd60dkkLjlEspO_Cjo\"\r\n        }\r\n      ],\r\n      \"services\": {\r\n        \"appinvite_service\": {\r\n          \"other_platform_oauth_client\": [\r\n            {\r\n              \"client_id\": \"690907773251-lsoc0e0vchbq076r29cedmsapbfhn9e8.apps.googleusercontent.com\",\r\n              \"client_type\": 3\r\n            }\r\n          ]\r\n        }\r\n      }\r\n    }\r\n  ],\r\n  \"configuration_version\": \"1\"\r\n}
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/google-services.json b/app/google-services.json
+---- a/app/google-services.json	(revision 4e9e97ce0c256dccbdb1b7bb2be77c9877991d6e)
+-+++ b/app/google-services.json	(date 1693228670641)
+-@@ -1,33 +1,78 @@
+- {
+-   "project_info": {
+--    "project_number": "690907773251",
+--    "project_id": "keepwork-c58a3",
+--    "storage_bucket": "keepwork-c58a3.appspot.com"
+-+    "project_number": "617733453211",
+-+    "project_id": "cookie-parkmoon",
+-+    "storage_bucket": "cookie-parkmoon.appspot.com"
+-   },
+-   "client": [
+-     {
+-       "client_info": {
+--        "mobilesdk_app_id": "1:690907773251:android:d80dc5ed36dd92b0c157f6",
+-+        "mobilesdk_app_id": "1:617733453211:android:8062fa837ebc0749b3dd3e",
+-         "android_client_info": {
+-           "package_name": "com.example.a23_hf069"
+-         }
+-       },
+-       "oauth_client": [
+-         {
+--          "client_id": "690907773251-lsoc0e0vchbq076r29cedmsapbfhn9e8.apps.googleusercontent.com",
+-+          "client_id": "617733453211-kkvujlr9puitvthp0v0nq2m29e39e3ud.apps.googleusercontent.com",
+-+          "client_type": 1,
+-+          "android_info": {
+-+            "package_name": "com.example.a23_hf069",
+-+            "certificate_hash": "32299286b90a85872994c15e1ecb55a677aae598"
+-+          }
+-+        },
+-+        {
+-+          "client_id": "617733453211-8tqctco7ahi8bns2ra9g4fvgn2rs4kod.apps.googleusercontent.com",
+-           "client_type": 3
+-         }
+-       ],
+-       "api_key": [
+-         {
+--          "current_key": "AIzaSyCAIWgNEMOuuEl9Lgd60dkkLjlEspO_Cjo"
+-+          "current_key": "AIzaSyBt09j-VA-EY6TlOBN7Tk7XzV1617pnWc4"
+-         }
+-       ],
+-       "services": {
+-         "appinvite_service": {
+-           "other_platform_oauth_client": [
+-             {
+--              "client_id": "690907773251-lsoc0e0vchbq076r29cedmsapbfhn9e8.apps.googleusercontent.com",
+-+              "client_id": "617733453211-8tqctco7ahi8bns2ra9g4fvgn2rs4kod.apps.googleusercontent.com",
+-+              "client_type": 3
+-+            }
+-+          ]
+-+        }
+-+      }
+-+    },
+-+    {
+-+      "client_info": {
+-+        "mobilesdk_app_id": "1:617733453211:android:5dc0d876083dd277b3dd3e",
+-+        "android_client_info": {
+-+          "package_name": "com.example.cookie"
+-+        }
+-+      },
+-+      "oauth_client": [
+-+        {
+-+          "client_id": "617733453211-p5cb9bk44njo8emhv1cbk2hvh8nstiqv.apps.googleusercontent.com",
+-+          "client_type": 1,
+-+          "android_info": {
+-+            "package_name": "com.example.cookie",
+-+            "certificate_hash": "b064e906d18bc7848cbae05e4d4772f633c76917"
+-+          }
+-+        },
+-+        {
+-+          "client_id": "617733453211-8tqctco7ahi8bns2ra9g4fvgn2rs4kod.apps.googleusercontent.com",
+-+          "client_type": 3
+-+        }
+-+      ],
+-+      "api_key": [
+-+        {
+-+          "current_key": "AIzaSyBt09j-VA-EY6TlOBN7Tk7XzV1617pnWc4"
+-+        }
+-+      ],
+-+      "services": {
+-+        "appinvite_service": {
+-+          "other_platform_oauth_client": [
+-+            {
+-+              "client_id": "617733453211-8tqctco7ahi8bns2ra9g4fvgn2rs4kod.apps.googleusercontent.com",
+-               "client_type": 3
+-             }
+-           ]
+-Index: .idea/gradle.xml
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"GradleMigrationSettings\" migrationVersion=\"1\" />\r\n  <component name=\"GradleSettings\">\r\n    <option name=\"linkedExternalProjectsSettings\">\r\n      <GradleProjectSettings>\r\n        <option name=\"testRunner\" value=\"GRADLE\" />\r\n        <option name=\"distributionType\" value=\"DEFAULT_WRAPPED\" />\r\n        <option name=\"externalProjectPath\" value=\"$PROJECT_DIR$\" />\r\n        <option name=\"gradleJvm\" value=\"Embedded JDK\" />\r\n        <option name=\"modules\">\r\n          <set>\r\n            <option value=\"$PROJECT_DIR$\" />\r\n            <option value=\"$PROJECT_DIR$/app\" />\r\n          </set>\r\n        </option>\r\n      </GradleProjectSettings>\r\n    </option>\r\n  </component>\r\n</project>
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/.idea/gradle.xml b/.idea/gradle.xml
+---- a/.idea/gradle.xml	(revision 4e9e97ce0c256dccbdb1b7bb2be77c9877991d6e)
+-+++ b/.idea/gradle.xml	(date 1693229295849)
+-@@ -7,7 +7,7 @@
+-         <option name="testRunner" value="GRADLE" />
+-         <option name="distributionType" value="DEFAULT_WRAPPED" />
+-         <option name="externalProjectPath" value="$PROJECT_DIR$" />
+--        <option name="gradleJvm" value="Embedded JDK" />
+-+        <option name="gradleJvm" value="jbr-17" />
+-         <option name="modules">
+-           <set>
+-             <option value="$PROJECT_DIR$" />
+-Index: .idea/misc.xml
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+><project version=\"4\">\r\n  <component name=\"ExternalStorageConfigurationManager\" enabled=\"true\" />\r\n  <component name=\"ProjectRootManager\" version=\"2\" languageLevel=\"JDK_17\" project-jdk-name=\"jbr-17\" project-jdk-type=\"JavaSDK\">\r\n    <output url=\"file://$PROJECT_DIR$/build/classes\" />\r\n  </component>\r\n</project>
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/.idea/misc.xml b/.idea/misc.xml
+---- a/.idea/misc.xml	(revision 4e9e97ce0c256dccbdb1b7bb2be77c9877991d6e)
+-+++ b/.idea/misc.xml	(date 1693318096451)
+-@@ -1,6 +1,6 @@
+- <project version="4">
+-   <component name="ExternalStorageConfigurationManager" enabled="true" />
+--  <component name="ProjectRootManager" version="2" languageLevel="JDK_17" project-jdk-name="jbr-17" project-jdk-type="JavaSDK">
+-+  <component name="ProjectRootManager" version="2" languageLevel="JDK_17" default="true" project-jdk-name="jbr-17" project-jdk-type="JavaSDK">
+-     <output url="file://$PROJECT_DIR$/build/classes" />
+-   </component>
+- </project>
+-\ No newline at end of file
+Index: .idea/shelf/Uncommitted_changes_before_Update_at_2023-08-29__11_08__Changes_.xml
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Update_at_2023-08-29__11_08__Changes_.xml b/.idea/shelf/Uncommitted_changes_before_Update_at_2023-08-29__11_08__Changes_.xml
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_Update_at_2023-08-29__11_08__Changes_.xml	(revision 920e73811383f6a542684faec30832e61b3dfcf9)
++++ /dev/null	(revision 920e73811383f6a542684faec30832e61b3dfcf9)
+@@ -1,4 +0,0 @@
+-<changelist name="Uncommitted_changes_before_Update_at_2023-08-29_오후_11_08_[Changes]" date="1693318140725" recycled="true" deleted="true">
+-  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2023-08-29_오후_11_08_[Changes]/shelved.patch" />
+-  <option name="DESCRIPTION" value="Uncommitted changes before Update at 2023-08-29 오후 11:08 [Changes]" />
+-</changelist>
+\ No newline at end of file
+Index: .idea/shelf/Uncommitted_changes_before_Update_at_2023-08-30__12_04__Changes_.xml
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Update_at_2023-08-30__12_04__Changes_.xml b/.idea/shelf/Uncommitted_changes_before_Update_at_2023-08-30__12_04__Changes_.xml
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_Update_at_2023-08-30__12_04__Changes_.xml	(revision 920e73811383f6a542684faec30832e61b3dfcf9)
++++ /dev/null	(revision 920e73811383f6a542684faec30832e61b3dfcf9)
+@@ -1,4 +0,0 @@
+-<changelist name="Uncommitted_changes_before_Update_at_2023-08-30_오전_12_04_[Changes]" date="1693321494793" recycled="true" deleted="true">
+-  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2023-08-30_오전_12_04_[Changes]/shelved.patch" />
+-  <option name="DESCRIPTION" value="Uncommitted changes before Update at 2023-08-30 오전 12:04 [Changes]" />
+-</changelist>
+\ No newline at end of file
+Index: .idea/shelf/Uncommitted_changes_before_Update_at_2023-08-30_오전_12_04_[Changes]/shelved.patch
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Update_at_2023-08-30_오전_12_04_[Changes]/shelved.patch b/.idea/shelf/Uncommitted_changes_before_Update_at_2023-08-30_오전_12_04_[Changes]/shelved.patch
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_Update_at_2023-08-30_오전_12_04_[Changes]/shelved.patch	(revision 920e73811383f6a542684faec30832e61b3dfcf9)
++++ /dev/null	(revision 920e73811383f6a542684faec30832e61b3dfcf9)
+@@ -1,55 +0,0 @@
+-Index: app/src/main/res/layout/applicant_item.xml
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/res/layout/applicant_item.xml b/app/src/main/res/layout/applicant_item.xml
+-new file mode 100644
+---- /dev/null	(date 1693319521248)
+-+++ b/app/src/main/res/layout/applicant_item.xml	(date 1693319521248)
+-@@ -0,0 +1,44 @@
+-+<?xml version="1.0" encoding="utf-8"?>
+-+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+-+    xmlns:app="http://schemas.android.com/apk/res-auto"
+-+    xmlns:tools="http://schemas.android.com/tools"
+-+    android:layout_width="match_parent"
+-+    android:layout_height="150dp"
+-+    android:layout_margin="20dp">
+-+
+-+
+-+    <ImageView
+-+        android:id="@+id/imageView2"
+-+        android:layout_width="101dp"
+-+        android:layout_height="102dp"
+-+        tools:layout_editor_absoluteX="16dp"
+-+        tools:layout_editor_absoluteY="16dp"
+-+        tools:srcCompat="@tools:sample/avatars" />
+-+
+-+    <TextView
+-+        android:id="@+id/textView"
+-+        android:layout_width="0dp"
+-+        android:layout_height="wrap_content"
+-+        android:layout_marginStart="10dp"
+-+        android:layout_marginEnd="10dp"
+-+        android:text="TextView"
+-+        app:layout_constraintEnd_toEndOf="parent"
+-+        app:layout_constraintStart_toEndOf="@+id/imageView2"
+-+        tools:layout_editor_absoluteY="25dp" />
+-+
+-+    <Button
+-+        android:id="@+id/passBtn"
+-+        android:layout_width="wrap_content"
+-+        android:layout_height="wrap_content"
+-+        android:text="합격"
+-+        tools:layout_editor_absoluteX="132dp"
+-+        tools:layout_editor_absoluteY="89dp" />
+-+
+-+    <Button
+-+        android:id="@+id/failBtn"
+-+        android:layout_width="wrap_content"
+-+        android:layout_height="wrap_content"
+-+        android:text="불합격"
+-+        tools:layout_editor_absoluteX="251dp"
+-+        tools:layout_editor_absoluteY="89dp" />
+-+</androidx.constraintlayout.widget.ConstraintLayout>
+-\ No newline at end of file

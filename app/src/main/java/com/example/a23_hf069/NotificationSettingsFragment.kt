@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.ListView
+import android.widget.Switch
 import android.widget.TextView
 import android.widget.Toast
 
@@ -69,47 +70,34 @@ class NotificationSettingsFragment : Fragment() {
 
             // 뷰의 요소들을 찾음
             val titleTextView: TextView = itemView.findViewById(R.id.titleTextView)
-            val notificationImageView: ImageView = itemView.findViewById(R.id.notificationImageView)
+            val notificationImageView: Switch = itemView.findViewById(R.id.notificationImageView)
 
             // 현재 포지션의 아이템 가져오기
             val item = notificationList[position]
             titleTextView.text = item.title
+            notificationImageView.isChecked = item.isNotificationOn
             notificationImageView.tag = position // 클릭 이벤트를 위해 포지션을 태그로 설정
 
             // 알림 아이콘 변경
-            notificationImageView.setImageResource(
-                if (item.isNotificationOn) R.drawable.baseline_toggle_on_24
-                else R.drawable.baseline_toggle_off_24
-            )
-
-            // 알림 아이콘 클릭 리스너 설정
-            notificationImageView.setOnClickListener {
-                onNotificationImageClick(it, position)
+            notificationImageView.setOnCheckedChangeListener { _, isChecked ->
+                onNotificationImageClick(position, isChecked)
             }
+
 
             // 뷰 반환
             return itemView
         }
     }
 
-    private fun onNotificationImageClick(view: View, position: Int) {
+    private fun onNotificationImageClick(position: Int, isChecked: Boolean) {
         val item = notificationList[position]
-        item.isNotificationOn = !item.isNotificationOn
-
-        // ListView 아이템의 뷰를 직접 수정
-        val listView: ListView = requireView().findViewById(R.id.notification_settings_list)
-        val itemView = listView.getChildAt(position - listView.firstVisiblePosition)
-        val notificationImageView: ImageView = itemView.findViewById(R.id.notificationImageView)
-        notificationImageView.setImageResource(
-            if (item.isNotificationOn) R.drawable.baseline_toggle_on_24
-            else R.drawable.baseline_toggle_off_24
-        )
+        item.isNotificationOn = isChecked
 
         // 아이템의 클릭 이벤트 리스너가 설정되어 있다면 호출
         item.onClickListener?.onNotificationItemClick(position, item)
 
         // 아이템에 따라 다른 Toast 메시지 표시
-        val toastMessage = if (item.isNotificationOn) {
+        val toastMessage = if (isChecked) {
             when (position) {
                 0 -> "일자리 추천 매칭 공고 알림 켜짐"
                 1 -> "관심기업 공고 알림 켜짐"

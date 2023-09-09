@@ -128,7 +128,7 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <com.google.android.material.tabs.TabLayout
-                    android:id="@+id/tabLayout"
+                    android:id="@+id/tabLayout_resume"
                     style="@style/CustomTabLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -150,7 +150,7 @@
                 </com.google.android.material.tabs.TabLayout>
 
                 <androidx.viewpager2.widget.ViewPager2
-                    android:id="@+id/viewPager2"
+                    android:id="@+id/viewPager_resume"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
             </LinearLayout>

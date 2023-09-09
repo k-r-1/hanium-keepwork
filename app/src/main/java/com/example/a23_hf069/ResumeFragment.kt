@@ -15,10 +15,18 @@ import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
+import com.example.a23_hf069.JobManagementEndFragment
+import com.example.a23_hf069.JobManagementSaveFragment
 import com.example.a23_hf069.R
 import com.example.a23_hf069.ResumeChangeActivity
 import com.example.a23_hf069.ResumeClickActivity
+import com.example.a23_hf069.ResumeCompleteFragment
+import com.example.a23_hf069.ResumeTemporaryFragment
 import com.example.a23_hf069.ResumeWriteActivity
+import com.example.a23_hf069.TabPagerAdapter
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import com.google.gson.Gson
 import okhttp3.*
 import org.json.JSONException
@@ -134,8 +142,28 @@ class ResumeFragment : Fragment() {
             startActivity(intent)
         }
 
+        val tabLayout: TabLayout = view.findViewById(R.id.tabLayout_resume) // TabLayout ID
+        val viewPager: ViewPager2 = view.findViewById(R.id.viewPager_resume) // ViewPager2 ID
+
+        val fragmentList = listOf(
+            ResumeCompleteFragment(),
+            ResumeTemporaryFragment()
+        )
+
+        val adapter = TabPagerAdapter(fragmentList, requireActivity().supportFragmentManager, lifecycle)
+        viewPager.adapter = adapter
+
+        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+            when (position) {
+                0 -> tab.text = "작성완료 (0)"
+                1 -> tab.text = "작성중 (0)"
+                else -> tab.text = ""
+            }
+        }.attach()
+
         // 생성한 뷰 반환
         return view
+
     }
 
     // Fragment의 뷰가 생성되었을 때 호출되는 메서드

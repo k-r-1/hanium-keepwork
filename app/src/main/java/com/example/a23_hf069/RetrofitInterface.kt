@@ -13,6 +13,6 @@ interface RetrofitInterface {
     @GET("keepwork/member_personal")
     fun getData(@Query("personal_id") id: String): Call<List<P_MemberModel>>
 
-//    @POST("api/endpoint")
-//    fun postData(@Body data: DataModel): Call<ResponseModel>
+    @POST("keepwork/member_personal")
+    fun postData(@Body data: P_MemberModel): Call<P_MemberModel>
 }

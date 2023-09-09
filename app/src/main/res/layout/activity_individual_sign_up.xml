@@ -174,6 +174,72 @@
                     android:textAppearance="@style/TextLabel" />
             </com.google.android.material.textfield.TextInputLayout>
 
+            <!--생년월일-->
+            <TextView
+                android:id="@+id/birth_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="20dp"
+                android:text="생년월일"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center">
+
+                <Button
+                    android:id="@+id/btn_calendar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="20dp"
+                    android:text="달력" />
+
+                <EditText
+                    android:id="@+id/edt_birthyear"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:gravity="center" />
+
+                <TextView
+                    android:id="@+id/tv_year"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="년" />
+
+                <EditText
+                    android:id="@+id/edt_birthmonth"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:gravity="center" />
+
+                <TextView
+                    android:id="@+id/tv_month"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="월" />
+
+                <EditText
+                    android:id="@+id/edt_birthday"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:gravity="center" />
+
+                <TextView
+                    android:id="@+id/tv_day"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="일" />
+            </LinearLayout>
+
+
             <!--이메일-->
             <TextView
                 android:id="@+id/email_textview"
@@ -201,13 +267,13 @@
                     android:hint="예) keepwork@naver.com"
                     android:textAppearance="@style/TextLabel" />
 
-                <Button
-                    android:id="@+id/btnEmailCertify"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:layout_marginTop="5dp"
-                    android:text="이메일 인증" />
+<!--                <Button-->
+<!--                    android:id="@+id/btnEmailCertify"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_gravity="end"-->
+<!--                    android:layout_marginTop="5dp"-->
+<!--                    android:text="이메일 인증" />-->
             </com.google.android.material.textfield.TextInputLayout>
 
             <!--전화번호-->
@@ -246,6 +312,33 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
+            <!--주소-->
+            <TextView
+                android:id="@+id/address_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="20dp"
+                android:text="주소"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/address_textview_input_layout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="40dp"
+                android:layout_marginTop="10dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/address_textview_input_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="예) 서울시 노원구 화랑로"
+                    android:textAppearance="@style/TextLabel" />
+            </com.google.android.material.textfield.TextInputLayout>
             <!--전화번호 인증번호-->
 <!--            <TextView-->
 <!--                android:id="@+id/phoneNumberCheck_textview"-->

@@ -66,10 +66,7 @@ class P_loginFragment : Fragment() { //개인로그인
                 val apiService = retrofit.create(RetrofitInterface::class.java)
 
                 apiService.getData(id).enqueue(object : Callback<List<P_MemberModel>> {
-                    override fun onResponse(
-                        call: Call<List<P_MemberModel>>,
-                        response: Response<List<P_MemberModel>>
-                    ) {
+                    override fun onResponse(call: Call<List<P_MemberModel>>, response: Response<List<P_MemberModel>>) {
                         if (response.isSuccessful) {
                             val result = response.body()
                             if (result != null && result.isNotEmpty()) {

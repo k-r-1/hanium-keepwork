@@ -7,6 +7,7 @@ import android.widget.AdapterView
 import androidx.appcompat.app.ActionBar
 import android.app.ProgressDialog
 import android.content.ContentValues.TAG
+import android.content.Intent
 import android.os.AsyncTask
 import android.text.method.ScrollingMovementMethod
 import android.util.Log
@@ -41,7 +42,7 @@ import kotlinx.coroutines.withContext
 import java.util.Calendar
 
 
-class PersonalSignUpActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
+class PersonalSignUpActivity : AppCompatActivity() {
 
     private var checkID = false
     private var calendar = Calendar.getInstance()
@@ -68,13 +69,12 @@ class PersonalSignUpActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
     // TextView 요소인 mTextViewResult 선언
     private lateinit var mTextViewResult: TextView
 
-    private val retrofitInterface: RetrofitInterface by lazy {
-        Retrofit.Builder()
-            .baseUrl(RetrofitInterface.API_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(RetrofitInterface::class.java)
-    }
+    private val retrofit: Retrofit = Retrofit.Builder()
+        .baseUrl(RetrofitInterface.API_URL)
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+
+    private val apiService: RetrofitInterface= retrofit.create(RetrofitInterface::class.java)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -106,8 +106,18 @@ class PersonalSignUpActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
         btnCalendar.setOnClickListener{
             val datePickerDialog = DatePickerDialog(this, { _, year, month, day ->
                 edtBirthYear.setText(year.toString())
-                edtBirthMonth.setText((month + 1).toString())
-                edtBirthDay.setText(day.toString())
+                if (month < 9) {
+                    edtBirthMonth.setText("0" + (month + 1).toString())
+                }
+                else {
+                    edtBirthMonth.setText((month + 1).toString())
+                }
+                if (day < 10) {
+                    edtBirthDay.setText("0" + day.toString())
+                }
+                else {
+                    edtBirthDay.setText(day.toString())
+                }
             }, birthYear, birthMonth, birthDay)
             datePickerDialog.show()
         }
@@ -129,34 +139,35 @@ class PersonalSignUpActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
             if (id.isEmpty()) {
                 Toast.makeText(this@PersonalSignUpActivity, "아이디를 입력해주세요.", Toast.LENGTH_SHORT).show()
             } else {
-                // Retrofit을 사용하여 ID 중복 확인 요청을 보냅니다.
-                GlobalScope.launch(Dispatchers.IO) {
-                    try {
-                        val response = retrofitInterface.getData(id).execute()
+                apiService.getData(id).enqueue(object : Callback<List<P_MemberModel>> {
+                    override fun onResponse(call: Call<List<P_MemberModel>>, response: Response<List<P_MemberModel>>) {
                         if (response.isSuccessful) {
-                            val memberList = response.body()
-                            if (memberList.isNullOrEmpty()) {
-                                // 중복되는 ID가 없는 경우
-                                runOnUiThread {
+                            val result = response.body()
+                            if (result != null && result.isNotEmpty()) {
+                                var cnt = 0
+                                for (data in result) {
+                                    if (data.personal_id == id) {
+                                        // 아이디 중복
+                                        cnt = 1
+                                        id_text_input_edit_text.setText("")
+                                        Toast.makeText(this@PersonalSignUpActivity, "이미 사용 중인 아이디입니다.", Toast.LENGTH_SHORT).show()
+                                    }
+                                }
+                                if (cnt == 0) {
                                     Toast.makeText(this@PersonalSignUpActivity, "사용 가능한 아이디입니다.", Toast.LENGTH_SHORT).show()
                                     checkID = true
                                 }
-                            } else {
-                                // 중복되는 ID가 있는 경우
-                                runOnUiThread {
-                                    id_text_input_edit_text.setText("")
-                                    Toast.makeText(this@PersonalSignUpActivity, "이미 사용 중인 아이디입니다.", Toast.LENGTH_SHORT).show()
-                                }
                             }
                         } else {
-                            runOnUiThread {
-                                Toast.makeText(this@PersonalSignUpActivity, "서버 응답 오류", Toast.LENGTH_SHORT).show()
-                            }
+                            Toast.makeText(this@PersonalSignUpActivity, "서버 응답 오류", Toast.LENGTH_SHORT).show()
                         }
-                    } catch (e: Exception) {
-                        Log.e(TAG, "ID 확인 오류", e)
                     }
-                }
+
+                    override fun onFailure(call: Call<List<P_MemberModel>>, t: Throwable) {
+                        // 네트워크 오류 처리
+                        Toast.makeText(this@PersonalSignUpActivity, "네트워크 오류", Toast.LENGTH_SHORT).show()
+                    }
+                })
             }
         }
 
@@ -188,176 +199,27 @@ class PersonalSignUpActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
                         // 사용자 데이터를 포함하는 P_MemberModel 객체를 생성합니다.
                         val memberModel = P_MemberModel(id, password, name, birth, email, phonenum, address)
 
-
                         // Retrofit을 사용하여 서버에 사용자 데이터를 보냅니다.
-                        GlobalScope.launch(Dispatchers.IO) {
-                            try {
-                                val response = retrofitInterface.postData(memberModel).execute()
-                                if (response.isSuccessful) {
-                                    runOnUiThread {
-                                        Toast.makeText(this@PersonalSignUpActivity, "회원가입에 성공하셨습니다.", Toast.LENGTH_SHORT).show()
-                                        checkID = false
-                                        finish()
-                                    }
+                        apiService.postData(memberModel).enqueue(object : Callback<P_MemberModel> {
+                            override fun onResponse(call: Call<P_MemberModel>, response: Response<P_MemberModel>) {
+                                if (response.message().equals("Created")) {
+                                    Toast.makeText(this@PersonalSignUpActivity, "회원가입에 성공하셨습니다.", Toast.LENGTH_SHORT).show()
+                                    checkID = false
+                                    finish()
                                 } else {
-                                    runOnUiThread {
-                                        Toast.makeText(this@PersonalSignUpActivity, "서버 응답 오류", Toast.LENGTH_SHORT).show()
-                                    }
+                                    Toast.makeText(this@PersonalSignUpActivity, "회원가입 실패", Toast.LENGTH_SHORT).show()
                                 }
-                            } catch (e: Exception) {
-                                Log.e(TAG, "회원가입 오류", e)
                             }
-                        }
+
+                            override fun onFailure(call: Call<P_MemberModel>, t: Throwable) {
+                                // 네트워크 오류 처리
+                                Toast.makeText(this@PersonalSignUpActivity, "네트워크 오류", Toast.LENGTH_SHORT).show()
+                            }
+                        })
                     }
                 } else {
                     Toast.makeText(this@PersonalSignUpActivity, "비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show()
                 }
-            }
-        }
-    }
-
-
-    // AsyncTask를 상속받고, 서버로 데이터를 전송
-    inner class InsertData : AsyncTask<String, Void, String>() {
-        private var progressDialog: ProgressDialog? = null
-
-        // 백그라운드 작업 실행 전 실행, 프로그레스 다이얼로그 표시
-        override fun onPreExecute() {
-            super.onPreExecute()
-            progressDialog = ProgressDialog.show(
-                this@PersonalSignUpActivity,
-                "Please Wait",
-                null,
-                true,
-                true
-            )
-        }
-
-        // 백그라운드 작업 완료 후 실행, 결과를 처리하고 프로그레스 다이얼로그 종료
-        override fun onPostExecute(result: String) {
-            super.onPostExecute(result)
-            progressDialog?.dismiss()
-            mTextViewResult.text = result
-            Log.d(TAG, "POST response  - $result")
-        }
-
-        // 백그라운드에서 수행될 작업 정의, 서버로 데이터 전송 & 응답을 받아 처리
-        // AsyncTask의 Params 매개변수로 가변 인자를 받아 String을 반환
-        override fun doInBackground(vararg params: String): String {
-
-            // param 배열에서 서버 URL과 각각의 개인정보 추출
-            val serverURL = params[0]
-            val personal_id = params[1]
-            val personal_password = params[2]
-            val personal_password_chk = params[3]
-            val personal_name = params[4]
-            val personal_email = params[5]
-            val personal_phonenum = params[6]
-
-            // POST 요청으로 전송할 파라미터 문자열 구성
-            val postParameters =
-                "personal_id=$personal_id&personal_password=$personal_password&personal_password_chk=$personal_password_chk&personal_name=$personal_name&personal_email=$personal_email&personal_phonenum=$personal_phonenum"
-
-            // 'serverURL'을 기반으로 URL 객체 생성, 'openConnection'메서드를 사용해 HttpURLconnection 객체 얻음
-            try {
-                val url = URL(serverURL)
-                val httpURLConnection = url.openConnection() as HttpURLConnection
-
-                // 연결과 읽기 타임아웃 설정
-                httpURLConnection.readTimeout = 5000
-                httpURLConnection.connectTimeout = 5000
-
-                // 요청 메서드를 POST로 설정정
-                httpURLConnection.requestMethod = "POST"
-
-                // 서버에 연결
-                httpURLConnection.connect()
-
-                // 연결에 대한 출력 스트림을 얻고, 파라미터를 'UTF-8'로 인코딩하여 전송
-                val outputStream = httpURLConnection.outputStream
-                outputStream.write(postParameters.toByteArray(charset("UTF-8")))
-                outputStream.flush()
-                outputStream.close()
-
-                // 서버로부터 응답 상태 코드 얻음
-                val responseStatusCode = httpURLConnection.responseCode
-                Log.d(TAG, "POST response code - $responseStatusCode")
-
-                // 응답 상태 코드가 'HTTP_OK(200)'인 경우, 'inputStream'을 얻고, 아닌 경우 'errorStream'을 얻음
-                val inputStream: InputStream
-                inputStream = if (responseStatusCode == HttpURLConnection.HTTP_OK) {
-                    httpURLConnection.inputStream
-                } else {
-                    httpURLConnection.errorStream
-                }
-
-                // 'inputStream'을 'UTF-8'로 읽기 위해 'InputStreadReader'와 'BufferedReader'를 생성
-                val inputStreamReader = InputStreamReader(inputStream, "UTF-8")
-                val bufferedReader = BufferedReader(inputStreamReader)
-
-                // 'StringBuilder'를 사용해 응답 데이터를 한 줄씩 읽어 연결
-                val sb = StringBuilder()
-                var line: String? = null
-
-                while (bufferedReader.readLine().also { line = it } != null) {
-                    sb.append(line)
-                }
-
-                // 'bufferReader' 닫기
-                bufferedReader.close()
-                Log.d("php 값 :", sb.toString())
-
-                // 'sb.toString()'을 반환하여 응답 데이터를 반환
-                return sb.toString()
-            } catch (e: Exception) {
-                Log.d(TAG, "InsertData: Error", e)
-                return "Error " + e.message
-            }
-        }
-    }
-
-    // 아이템이 선택되었을 때 호출
-    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {}
-
-    // 아무것도 선택되지 않았을 때 호출
-    override fun onNothingSelected(parent: AdapterView<*>?) {}
-
-    // AsyncTask를 상속받고, 서버로 아이디 중복 여부 확인을 위한 데이터를 전송
-    // CheckIdDuplicate 클래스에서 중복 여부를 받아와 처리하는 부분
-    inner class CheckIdDuplicate : AsyncTask<String, Void, String>() {
-        override fun doInBackground(vararg params: String?): String {
-            val url = params[0]?: ""
-            val id = params[1]?: ""
-
-            val client = OkHttpClient()
-
-            val formBody = FormBody.Builder()
-                .add("personal_id", id)
-                .build()
-
-            val request = Request.Builder()
-                .url(url)
-                .post(formBody)
-                .build()
-
-            val response = client.newCall(request).execute()
-            return response.body?.string() ?: ""
-        }
-
-        override fun onPostExecute(result: String?) {
-            super.onPostExecute(result)
-
-            // 중복 여부에 따라 처리
-            if (result == "duplicate") {
-                // 중복된 아이디가 존재하는 경우, 아이디 칸을 빈칸으로 만들기
-                id_text_input_edit_text.setText("")
-                Toast.makeText(this@PersonalSignUpActivity, "이미 사용 중인 아이디입니다.", Toast.LENGTH_SHORT).show()
-            } else if (result == "not_duplicate") {
-                Toast.makeText(this@PersonalSignUpActivity, "사용 가능한 아이디입니다.", Toast.LENGTH_SHORT).show()
-                checkID = true
-            } else {
-                // 오류 처리
-                Toast.makeText(this@PersonalSignUpActivity, "서버 응답 오류", Toast.LENGTH_SHORT).show()
             }
         }
     }

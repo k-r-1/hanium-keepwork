@@ -77,12 +77,12 @@ class NoticeContentActivity : AppCompatActivity() {
 
     // 공지사항 아이템 데이터를 처리하는 함수 추가
     private fun handleNoticeItemData(noticeData: List<NoticeModel>?) {
-        noticeData?.let {
-            if (it.isNotEmpty()) {
-                val data = it[0]
-                noticeTitle.text = data.notice_title
-                noticeContent.text = data.notice_content
-                noticeDate.text = data.notice_date
+        noticeData?.let { dataList ->
+            val targetNotice = dataList.find { it.notice_listnum == this.noticeListNum }
+            targetNotice?.let {
+                noticeTitle.text = it.notice_title
+                noticeContent.text = it.notice_content
+                noticeDate.text = it.notice_date
             }
         }
     }

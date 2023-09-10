@@ -67,7 +67,7 @@ class C_loginFragment : Fragment() {
                                     if (data.company_id == id) {
                                         Toast.makeText(requireContext(), "로그인 성공", Toast.LENGTH_SHORT).show()
                                         val intent = Intent(requireActivity(), CorporateHomeActivity::class.java)
-                                        intent.putExtra("userId", id)
+                                        intent.putExtra("userCompanyName", data.company_name)
                                         startActivity(intent)
                                     }
                                 }

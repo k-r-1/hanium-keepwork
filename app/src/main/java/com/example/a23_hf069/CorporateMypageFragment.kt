@@ -17,9 +17,13 @@ import androidx.core.app.ActivityCompat
 import android.util.Log
 import android.widget.Button
 import android.widget.LinearLayout
+import android.widget.TextView
 
 // CorporateMypageFragment 클래스 정의. Fragment를 상속받음.
 class CorporateMypageFragment : Fragment() {
+
+    // 사용자 ID를 저장할 변수
+    private lateinit var userCompanyName: String
 
     // 이미지 선택 요청 코드. startActivityForResult 호출 시 사용됨.
     private val REQUEST_IMAGE_PICK = 1
@@ -41,6 +45,14 @@ class CorporateMypageFragment : Fragment() {
     // 프래그먼트의 뷰가 완전히 생성된 후 호출되는 메서드.
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // Argument로부터 전달받은 사용자 ID를 변수에 저장
+        if (arguments != null) {
+            userCompanyName = arguments?.getString("userCompanyName", "") ?: ""
+        }
+        // 사용자 userCompanyName를 표시할 TextView 초기화
+        val textName = view.findViewById<TextView>(R.id.tv_user_name)
+        textName.text = userCompanyName
 
         // profileImageView라는 ID를 가진 ImageView를 찾아서 변수에 할당.
         val profileImageView = view.findViewById<de.hdodenhof.circleimageview.CircleImageView>(R.id.profileImageView)

@@ -12,6 +12,8 @@ class CorporateHomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_corporate_home)
 
+        val userCompanyName = intent.getStringExtra("userCompanyName") // Intent에서 사용자 아이디를 받아옴
+
         // 기본 툴바 숨기기
         val actionBar: ActionBar? = supportActionBar
         if (actionBar != null) {
@@ -28,19 +30,43 @@ class CorporateHomeActivity : AppCompatActivity() {
                 R.id.homeMenu -> {
                     // 다른 프래그먼트 화면으로 이동하는 기능
                     val CorporateHomeFragment = CorporateHomeFragment()
+
+                    // 사용자 아이디를 Bundle에 추가해서 전달
+                    val bundle = Bundle()
+                    bundle.putString("userCompanyName", userCompanyName)
+                    CorporateHomeFragment.arguments = bundle
+
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.fl_container, CorporateHomeFragment).commit()
                 }
                 R.id.jobManagementMenu -> { // 공고관리
                     val JobManagementFragment = JobManagementFragment()
+
+                    // 사용자 아이디를 Bundle에 추가해서 전달
+                    val bundle = Bundle()
+                    bundle.putString("userCompanyName", userCompanyName)
+                    JobManagementFragment.arguments = bundle
+
                     supportFragmentManager.beginTransaction().replace(R.id.fl_container, JobManagementFragment).commit()
                 }
                 R.id.talentManagementMenu -> { // 인재관리
                     val TalentManagementFragment = TalentManagementFragment()
+
+                    // 사용자 아이디를 Bundle에 추가해서 전달
+                    val bundle = Bundle()
+                    bundle.putString("userCompanyName", userCompanyName)
+                    TalentManagementFragment.arguments = bundle
+
                     supportFragmentManager.beginTransaction().replace(R.id.fl_container, TalentManagementFragment).commit()
                 }
                 R.id.mypageMenu -> { // 마이페이지
                     val CorporateMypageFragment = CorporateMypageFragment()
+
+                    // 사용자 아이디를 Bundle에 추가해서 전달
+                    val bundle = Bundle()
+                    bundle.putString("userCompanyName", userCompanyName)
+                    CorporateMypageFragment.arguments = bundle
+
                     supportFragmentManager.beginTransaction().replace(R.id.fl_container, CorporateMypageFragment).commit()
                 }
             }

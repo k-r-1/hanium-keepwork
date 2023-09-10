@@ -5,13 +5,15 @@ import android.os.Bundle
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.TextView
-import okhttp3.*
-import org.json.JSONException
-import org.json.JSONObject
+import android.widget.Toast
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class NoticeContentActivity : AppCompatActivity() {
-    private var IP_ADDRESS = "54.180.186.168" // Replace with your IP address.
     private var noticeListNum: Int = -1
     private lateinit var noticeTitle: TextView
     private lateinit var noticeContent: TextView
@@ -44,48 +46,44 @@ class NoticeContentActivity : AppCompatActivity() {
 
     // 공지사항 아이템 데이터 불러오기
     private fun getNoticeItemData(noticeListNum: Int) {
-        val url =
-            "http://$IP_ADDRESS/android_notice_content.php?notice_listnum=$noticeListNum" // 데이터를 불러올 PHP 스크립트의 주소
-
-        val client = OkHttpClient()
-
-        val request = Request.Builder()
-            .url(url)
-            .get() // GET 방식으로 요청 변경
+        // Retrofit 객체 생성
+        val retrofit = Retrofit.Builder()
+            .baseUrl(RetrofitInterface.API_URL)
+            .addConverterFactory(GsonConverterFactory.create())
             .build()
 
-        client.newCall(request).enqueue(object : okhttp3.Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                // Handle request failure
-                e.printStackTrace()
-            }
+        // RetrofitInterface 인터페이스 구현
+        val apiService = retrofit.create(RetrofitInterface::class.java)
 
-            override fun onResponse(call: Call, response: Response) {
-                val noticeData = response.body?.string()
-                // 공지사항 아이템 데이터를 파싱하여 UI 업데이트
-                runOnUiThread {
+        apiService.getNoticeData(noticeListNum, null, null, null).enqueue(object : Callback<List<NoticeModel>> {
+            override fun onResponse(call: Call<List<NoticeModel>>, response: Response<List<NoticeModel>>) {
+                if (response.isSuccessful) {
+                    val noticeData = response.body()
                     handleNoticeItemData(noticeData)
                 }
+            }
+
+            override fun onFailure(call: Call<List<NoticeModel>>, t: Throwable) {
+                // 통신 실패 처리
+                t.printStackTrace()
+                Toast.makeText(
+                    this@NoticeContentActivity,
+                    "통신 오류: " + t.message,
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         })
     }
 
     // 공지사항 아이템 데이터를 처리하는 함수 추가
-    private fun handleNoticeItemData(responseData: String?) {
-        try {
-            val jsonObject = JSONObject(responseData) // JSONObject로 파싱
-
-            // 공지사항 아이템 데이터가 존재하는 경우에만 UI 업데이트
-            if (jsonObject.length() > 0) {
-                // 여기서 공지사항 아이템 데이터를 파싱하여 UI에 표시하는 작업을 수행하면 됩니다.
-                // 예를 들어, 다음과 같이 각 EditText에 데이터를 설정할 수 있습니다.
-                noticeTitle.setText(jsonObject.optString("noticeTitle", ""))
-                noticeContent.setText(jsonObject.optString("noticeContent", ""))
-                noticeDate.setText(jsonObject.optString("noticeDate", ""))
+    private fun handleNoticeItemData(noticeData: List<NoticeModel>?) {
+        noticeData?.let {
+            if (it.isNotEmpty()) {
+                val data = it[0]
+                noticeTitle.text = data.notice_title
+                noticeContent.text = data.notice_content
+                noticeDate.text = data.notice_date
             }
-        } catch (e: JSONException) {
-            // JSON 파싱 오류 처리
-            e.printStackTrace()
         }
     }
 }

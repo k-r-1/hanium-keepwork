@@ -104,10 +104,18 @@
         android:gravity="end">
 
         <Button
+            android:id="@+id/onHoldBtn"
+            android:layout_width="100dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="20dp"
+            android:layout_weight="1"
+            android:text="검토중" />
+
+        <Button
             android:id="@+id/passBtn"
             android:layout_width="100dp"
             android:layout_height="48dp"
-            android:layout_marginEnd="40dp"
+            android:layout_marginEnd="20dp"
             android:text="합격" />
 
         <Button
@@ -116,6 +124,7 @@
             android:layout_height="48dp"
             android:layout_marginEnd="16dp"
             android:text="불합격" />
+
 
     </LinearLayout>
 

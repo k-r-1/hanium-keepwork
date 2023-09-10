@@ -15,4 +15,12 @@ interface RetrofitInterface {
 
     @POST("keepwork/member_personal/")
     fun postData(@Body data: P_MemberModel): Call<P_MemberModel>
+
+    @GET("keepwork/notice")
+    fun getNoticeData(
+        @Query("notice_listnum") noticeListNum: Int?,
+        @Query("notice_title") noticeTitle: String?,
+        @Query("notice_content") noticeContent: Int?,
+        @Query("notice_date") noticeDate : String?
+    ): Call<List<NoticeModel>>
 }

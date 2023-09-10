@@ -16,6 +16,9 @@ interface RetrofitInterface {
     @POST("keepwork/member_personal/")
     fun postData(@Body data: P_MemberModel): Call<P_MemberModel>
 
+    @GET("keepwork/member_company/")
+    fun getCorporateData(@Query("company_id") id: String): Call<List<C_MemberModel>> // 추가: C_MemberModel 사용
+
     @GET("keepwork/notice")
     fun getNoticeData(
         @Query("notice_listnum") noticeListNum: Int?,

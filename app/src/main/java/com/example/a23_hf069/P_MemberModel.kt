@@ -9,20 +9,6 @@ data class P_MemberModel (
     val personal_address: String
 )
 
-data class C_MemberModel (
-    val company_id: String,
-    val company_password: String,
-    val company_manager: String,
-    val company_email: String,
-    val company_phonenum: String,
-    val company_registnum: String,
-    val company_name: String,
-    val company_representative: String,
-    val company_address: String,
-    val company_establishment: Int,
-    val company_employees: Int,
-    val company_type: String
-)
 
 data class NoticeModel (
     val notice_listnum: Int,

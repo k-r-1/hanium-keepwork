@@ -403,8 +403,34 @@
                         android:textColor="@android:color/black"
                         android:textSize="16sp" />
 
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center">
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/occupationEditText_layout"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="20dp"
+                            android:layout_marginBottom="20dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/occupationEditText"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textSize="16sp"
+                                android:hint="ex. 사무직"
+                                android:textAppearance="@style/TextLabel" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                    </FrameLayout>
+
+
                     <!-- Spinner를 포함한 LinearLayout -->
-                    <LinearLayout
+                   <!-- <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
@@ -412,13 +438,13 @@
                         android:background="@drawable/rounded_border"
                         android:orientation="vertical">
 
-                        <!-- Spinner -->
+                        &lt;!&ndash; Spinner &ndash;&gt;
                         <Spinner
                             android:id="@+id/occupationSpinner"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp" />
-                    </LinearLayout>
+                    </LinearLayout>-->
 
                     <TextView
                         android:id="@+id/detailedLabel"
@@ -442,7 +468,7 @@
                         android:padding="10dp">
 
                         <EditText
-                            android:id="@+id/titleEditText2"
+                            android:id="@+id/detailedEditText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"

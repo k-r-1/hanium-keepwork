@@ -13,6 +13,9 @@ import com.google.android.material.tabs.TabLayoutMediator
 
 class JobManagementFragment : Fragment() {
 
+    // 사용자 ID를 저장할 변수
+    private lateinit var userCompanyId: String
+
     @SuppressLint("MissingInflatedId")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -23,8 +26,13 @@ class JobManagementFragment : Fragment() {
         val tabLayout: TabLayout = rootView.findViewById(R.id.tabLayout_jobManagement) // TabLayout ID
         val viewPager: ViewPager2 = rootView.findViewById(R.id.viewPager_jobManagement) // ViewPager2 ID
 
+        // Argument로부터 전달받은 사용자 ID를 변수에 저장
+        if (arguments != null) {
+            userCompanyId = arguments?.getString("userCompanyId", "") ?: ""
+        }
+
         val fragmentList = listOf(
-            JobManagementEndFragment(),
+            JobManagementPostFragment.newInstance(userCompanyId),
             JobManagementSaveFragment(),
             JobManagementEndFragment()
         )
@@ -46,6 +54,11 @@ class JobManagementFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // Argument로부터 전달받은 사용자 ID를 변수에 저장
+        if (arguments != null) {
+            userCompanyId = arguments?.getString("userCompanyName", "") ?: ""
+        }
 
         // floatbtnJobPost 버튼에 클릭 리스너 추가
         val floatbtnJobPost: FloatingActionButton = view.findViewById(R.id.floatbtnJobPost)

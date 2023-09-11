@@ -13,6 +13,7 @@ class CorporateHomeActivity : AppCompatActivity() {
         setContentView(R.layout.activity_corporate_home)
 
         val userCompanyName = intent.getStringExtra("userCompanyName") // Intent에서 사용자 아이디를 받아옴
+        val userCompanyId = intent.getStringExtra("userCompanyId") // Intent에서 사용자 아이디를 받아옴
 
         // 기본 툴바 숨기기
         val actionBar: ActionBar? = supportActionBar
@@ -55,6 +56,7 @@ class CorporateHomeActivity : AppCompatActivity() {
                     // 사용자 아이디를 Bundle에 추가해서 전달
                     val bundle = Bundle()
                     bundle.putString("userCompanyName", userCompanyName)
+                    bundle.putString("userCompanyId", userCompanyId)
                     TalentManagementFragment.arguments = bundle
 
                     supportFragmentManager.beginTransaction().replace(R.id.fl_container, TalentManagementFragment).commit()

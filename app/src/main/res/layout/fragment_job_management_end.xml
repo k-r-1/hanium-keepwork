@@ -14,9 +14,10 @@
         android:visibility="gone"
         tools:listitem="@layout/jobmanagement_item" />
 
-    <ImageView
-        android:id="@+id/imageView6"
+    <TextView
+        android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/recruit" />
+        android:text="TextView" />
+
 </LinearLayout>

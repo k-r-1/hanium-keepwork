@@ -1,5 +1,6 @@
 package com.example.a23_hf069
 
+import JobPosting
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -18,6 +19,11 @@ interface RetrofitInterface {
 
     @GET("keepwork/member_company/")
     fun getCorporateData(@Query("company_id") id: String): Call<List<C_MemberModel>> // 추가: C_MemberModel 사용
+
+    //
+    @GET("keepwork/job/")
+    fun getJobPostingData(@Query("company_id") id: String): Call<List<JobPosting>>
+
 
     @GET("keepwork/notice/")
     fun getNoticeData(

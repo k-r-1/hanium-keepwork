@@ -1,24 +1,50 @@
 package com.example.a23_hf069
 
+import JobPosting
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import okhttp3.*
-import org.json.JSONArray
-import java.io.IOException
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+
 
 class JobManagementPostFragment : Fragment() {
 
-    private var IP_ADDRESS = "54.180.186.168"
-    private val recyclerViewAdapter = JobPostAdapter()
+    // 사용자 ID를 저장할 변수
+    private lateinit var userCompanyId: String
+
+    companion object {
+        private const val ARG_USER_COMPANY_NAME = "userCompanyId"
+
+        fun newInstance(userCompanyId: String): JobManagementPostFragment {
+            val fragment = JobManagementPostFragment()
+            val args = Bundle()
+            args.putString(ARG_USER_COMPANY_NAME, userCompanyId)
+            fragment.arguments = args
+            return fragment
+        }
+    }
+
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var adapter: JobPostingAdapter
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // Arguments에서 userCompanyId 값을 읽어와서 변수에 할당합니다.
+        arguments?.let {
+            userCompanyId = it.getString(ARG_USER_COMPANY_NAME, "")
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,88 +56,41 @@ class JobManagementPostFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val recyclerView = view.findViewById<RecyclerView>(R.id.recylcerviewJobPost)
+        recyclerView = view.findViewById(R.id.recylcerviewJobPost)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        recyclerView.adapter = recyclerViewAdapter
+        adapter = JobPostingAdapter(emptyList()) // 빈 목록으로 초기화
+        recyclerView.adapter = adapter
 
-        fetchJobPosts()
+        // 서버에서 작업 게시 데이터 가져오기
+        fetchDataFromServer()
     }
 
-    private fun fetchJobPosts() {
-        val client = OkHttpClient()
-        val phpUrl = "http://$IP_ADDRESS/android_recruit_post.php"
-        val requestBody = FormBody.Builder()
-            .add("company_email", "keepwork@naver.com")
-            .build()
-        val request = Request.Builder()
-            .url(phpUrl)
-            .post(requestBody)
+    private fun fetchDataFromServer() {
+        val retrofit = Retrofit.Builder()
+            .baseUrl(RetrofitInterface.API_URL)
+            .addConverterFactory(GsonConverterFactory.create())
             .build()
 
-        client.newCall(request).enqueue(object : Callback {
-            override fun onResponse(call: Call, response: Response) {
-                val responseData = response.body?.string()
-                val jobPosts = parseJobPosts(responseData)
+        val service = retrofit.create(RetrofitInterface::class.java)
 
-                GlobalScope.launch(Dispatchers.Main) {
-                    recyclerViewAdapter.setJobPosts(jobPosts)
+        val call = service.getJobPostingData(userCompanyId)
+        call.enqueue(object : Callback<List<JobPosting>> {
+            override fun onResponse(
+                call: Call<List<JobPosting>>,
+                response: Response<List<JobPosting>>
+            ) {
+                if (response.isSuccessful) {
+                    val jobPostings = response.body() ?: emptyList()
+                    adapter = JobPostingAdapter(jobPostings)
+                    recyclerView.adapter = adapter
+                } else {
+                    // 오류 처리
                 }
             }
 
-            override fun onFailure(call: Call, e: IOException) {
-                e.printStackTrace()
+            override fun onFailure(call: Call<List<JobPosting>>, t: Throwable) {
+                // 네트워크 오류 처리
             }
         })
     }
-
-    private fun parseJobPosts(json: String?): List<JobPost> {
-        val jobPosts = mutableListOf<JobPost>()
-        try {
-            val jsonArray = JSONArray(json)
-            for (i in 0 until jsonArray.length()) {
-                val jsonObject = jsonArray.getJSONObject(i)
-                val title = jsonObject.getString("recruitTitle")
-                val startDate = jsonObject.getString("recruitStart")
-                val endDate = jsonObject.getString("recruitEnd")
-                jobPosts.add(JobPost(title, startDate, endDate))
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        return jobPosts
-    }
-}
-
-data class JobPost(val title: String, val startDate: String, val endDate: String)
-
-class JobPostAdapter : RecyclerView.Adapter<JobPostAdapter.ViewHolder>() {
-    private val jobPosts = mutableListOf<JobPost>()
-
-    fun setJobPosts(posts: List<JobPost>) {
-        jobPosts.clear()
-        jobPosts.addAll(posts)
-        notifyDataSetChanged()
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.jobmanagement_item, parent, false)
-        return ViewHolder(view)
-    }
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val jobPost = jobPosts[position]
-        holder.itemView.apply {
-            findViewById<TextView>(R.id.tvJobManagementTitle).text = jobPost.title
-            findViewById<TextView>(R.id.tvJobManagentStartDate).text = jobPost.startDate
-            findViewById<TextView>(R.id.tvJobManagementEndDate).text = jobPost.endDate
-            // Set click listeners and other UI updates as needed
-        }
-    }
-
-    override fun getItemCount(): Int {
-        return jobPosts.size
-    }
-
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 }

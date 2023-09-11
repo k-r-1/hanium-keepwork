@@ -68,6 +68,7 @@ class C_loginFragment : Fragment() {
                                         Toast.makeText(requireContext(), "로그인 성공", Toast.LENGTH_SHORT).show()
                                         val intent = Intent(requireActivity(), CorporateHomeActivity::class.java)
                                         intent.putExtra("userCompanyName", data.company_name)
+                                        intent.putExtra("userCompanyId", data.company_id)
                                         startActivity(intent)
                                     }
                                 }

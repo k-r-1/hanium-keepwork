@@ -28,6 +28,7 @@ class JobPostingDetailActivity : AppCompatActivity() {
         // companyName을 사용하여 필요한 작업을 수행
 
         // XML 레이아웃의 TextView 등을 찾아서 데이터 표시
+        val company = findViewById<TextView>(R.id.company)
         val jobTitleTextView = findViewById<TextView>(R.id.tvJobTitle)
         val experienceRequiredTextView = findViewById<TextView>(R.id.job_experience_required)
         val educationRequiredTextView = findViewById<TextView>(R.id.job_education_required)
@@ -43,6 +44,7 @@ class JobPostingDetailActivity : AppCompatActivity() {
         val deadlineTextView = findViewById<TextView>(R.id.job_deadline)
 
         // 가져온 데이터를 레이아웃에 표시
+        company.text = companyName
         jobTitleTextView.text = jobPosting?.job_title
         experienceRequiredTextView.text = jobPosting?.job_experience_required
         educationRequiredTextView.text = jobPosting?.job_education_required

@@ -20,10 +20,8 @@ interface RetrofitInterface {
     @GET("keepwork/member_company/")
     fun getCorporateData(@Query("company_id") id: String): Call<List<C_MemberModel>> // 추가: C_MemberModel 사용
 
-    //
     @GET("keepwork/job/")
     fun getJobPostingData(@Query("company_id") id: String): Call<List<JobPosting>>
-
 
     @GET("keepwork/notice/")
     fun getNoticeData(
@@ -32,4 +30,18 @@ interface RetrofitInterface {
         @Query("notice_content") noticeContent: Int?,
         @Query("notice_date") noticeDate : String?
     ): Call<List<NoticeModel>>
+
+    @GET("keepwork/resume/")
+    fun getResumeData(
+        @Query("personal_id_id") personalId2: String?,
+        @Query("resume_listnum") resumeListnum: Int?,
+        @Query("resume_title") resumeTitle: String?,
+        @Query("resume_academic") resumeAcademic: String?,
+        @Query("resume_career") resumeCareer: String?,
+        @Query("resume_introduction") resumeIntroduction: String?,
+        @Query("resume_certificate") resumeCertificate: String?,
+        @Query("resume_learning") resumeLearning: String?,
+        @Query("resume_desire") resumeDesire: String?,
+        @Query("resume_complete") resumeComplete: String?
+    ): Call<List<ResumeModel>>
 }

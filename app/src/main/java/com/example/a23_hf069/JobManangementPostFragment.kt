@@ -22,12 +22,12 @@ class JobManagementPostFragment : Fragment() {
     private lateinit var userCompanyId: String
 
     companion object {
-        private const val ARG_USER_COMPANY_NAME = "userCompanyId"
+        private const val ARG_USER_COMPANY_ID = "userCompanyId"
 
         fun newInstance(userCompanyId: String): JobManagementPostFragment {
             val fragment = JobManagementPostFragment()
             val args = Bundle()
-            args.putString(ARG_USER_COMPANY_NAME, userCompanyId)
+            args.putString(ARG_USER_COMPANY_ID, userCompanyId)
             fragment.arguments = args
             return fragment
         }
@@ -42,7 +42,7 @@ class JobManagementPostFragment : Fragment() {
 
         // Arguments에서 userCompanyId 값을 읽어와서 변수에 할당합니다.
         arguments?.let {
-            userCompanyId = it.getString(ARG_USER_COMPANY_NAME, "")
+            userCompanyId = it.getString(ARG_USER_COMPANY_ID, "")
         }
     }
 

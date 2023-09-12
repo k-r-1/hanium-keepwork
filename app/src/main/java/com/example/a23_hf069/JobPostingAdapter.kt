@@ -22,8 +22,8 @@ class JobPostingAdapter(private val jobPostingList: List<JobPosting>) :
 
         // jobmanagement_item.xml 뷰에 데이터를 바인딩합니다.
         holder.jobTitleTextView.text = jobPosting.job_title
-        holder.startDateTextView.text = jobPosting.job_deadline // 날짜 형식을 맞추어야 할 수 있습니다.
-        holder.endDateTextView.text = "마감일: ${jobPosting.job_deadline}"
+        holder.startDateTextView.text = "${jobPosting.job_deadline} 등록" // 날짜 형식을 맞추어야 할 수 있습니다.
+        holder.endDateTextView.text = "${jobPosting.job_deadline} 마감"
 
         // 버튼 클릭 이벤트를 처리합니다.
         holder.modifyButton.setOnClickListener {

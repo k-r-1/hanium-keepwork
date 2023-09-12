@@ -20,6 +20,10 @@ interface RetrofitInterface {
     @GET("keepwork/member_company/")
     fun getCorporateData(@Query("company_id") id: String): Call<List<C_MemberModel>> // 추가: C_MemberModel 사용
 
+    @GET("keepwork/member_company/")
+    fun getCompanyData(@Query("company_id") companyId: String): Call<List<C_MemberModel>>
+
+
     @GET("keepwork/job/")
     fun getJobPostingData(@Query("company_id") id: String): Call<List<JobPosting>>
 

@@ -8,8 +8,10 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class JobPostingAdapter(private val jobPostingList: List<JobPosting>) :
-    RecyclerView.Adapter<JobPostingAdapter.JobPostingViewHolder>() {
+class JobPostingAdapter(
+    private val jobPostingList: List<JobPosting>,
+    private val companyData: List<C_MemberModel> = emptyList() // 기본 값 설정
+) : RecyclerView.Adapter<JobPostingAdapter.JobPostingViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JobPostingViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -22,8 +24,17 @@ class JobPostingAdapter(private val jobPostingList: List<JobPosting>) :
 
         // jobmanagement_item.xml 뷰에 데이터를 바인딩합니다.
         holder.jobTitleTextView.text = jobPosting.job_title
-        holder.startDateTextView.text = "${jobPosting.job_deadline} 등록" // 날짜 형식을 맞추어야 할 수 있습니다.
-        holder.endDateTextView.text = "${jobPosting.job_deadline} 마감"
+        holder.endDateTextView.text = "~${jobPosting.job_deadline}"
+        holder.tvJobExperienceRequirede.text = jobPosting.job_experience_required
+        holder.tvJobEducationRequirede.text = jobPosting.job_education_required
+
+        // C_MemberModel에서 필요한 데이터를 가져와서 사용합니다.
+        val companyInfo = companyData.find { it.company_id == jobPosting.company_id }
+        if (companyInfo != null) {
+            holder.tvJobCompanyName.text = companyInfo.company_name
+            holder.tvJobAdress.text = companyInfo.company_address
+
+        }
 
         // 버튼 클릭 이벤트를 처리합니다.
         holder.modifyButton.setOnClickListener {
@@ -44,8 +55,12 @@ class JobPostingAdapter(private val jobPostingList: List<JobPosting>) :
     }
 
     inner class JobPostingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val tvJobCompanyName: TextView = itemView.findViewById(R.id.tvJobCompanyName)
+        val tvJobExperienceRequirede: TextView = itemView.findViewById(R.id.tvJobExperienceRequirede)
+        val tvJobEducationRequirede: TextView = itemView.findViewById(R.id.tvJobEducationRequirede)
+        val tvJobAdress: TextView = itemView.findViewById(R.id.tvJobAdress)
+
         val jobTitleTextView: TextView = itemView.findViewById(R.id.tvJobManagementTitle)
-        val startDateTextView: TextView = itemView.findViewById(R.id.tvJobManagentStartDate)
         val endDateTextView: TextView = itemView.findViewById(R.id.tvJobManagementEndDate)
         val modifyButton: Button = itemView.findViewById(R.id.btnJobManagement_modify)
         val repostButton: Button = itemView.findViewById(R.id.btnJobManagement_repost)

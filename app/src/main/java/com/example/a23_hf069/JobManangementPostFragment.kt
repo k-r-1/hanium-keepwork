@@ -73,22 +73,45 @@ class JobManagementPostFragment : Fragment() {
 
         val service = retrofit.create(RetrofitInterface::class.java)
 
-        val call = service.getJobPostingData(userCompanyId)
-        call.enqueue(object : Callback<List<JobPosting>> {
+        // userCompanyId를 사용하여 C_MemberModel을 가져옵니다.
+        val companyCall = service.getCompanyData(userCompanyId)
+        companyCall.enqueue(object : Callback<List<C_MemberModel>> {
             override fun onResponse(
-                call: Call<List<JobPosting>>,
-                response: Response<List<JobPosting>>
+                call: Call<List<C_MemberModel>>,
+                response: Response<List<C_MemberModel>>
             ) {
                 if (response.isSuccessful) {
-                    val jobPostings = response.body() ?: emptyList()
-                    adapter = JobPostingAdapter(jobPostings)
-                    recyclerView.adapter = adapter
+                    val companyData = response.body() ?: emptyList()
+                    // C_MemberModel 데이터를 가져왔습니다.
+
+                    // 이제 작업 게시 데이터를 가져옵니다.
+                    val jobPostingCall = service.getJobPostingData(userCompanyId)
+                    jobPostingCall.enqueue(object : Callback<List<JobPosting>> {
+                        override fun onResponse(
+                            call: Call<List<JobPosting>>,
+                            response: Response<List<JobPosting>>
+                        ) {
+                            if (response.isSuccessful) {
+                                val jobPostings = response.body() ?: emptyList()
+
+                                // C_MemberModel 데이터와 작업 게시 데이터를 adapter에 넘겨줍니다.
+                                adapter = JobPostingAdapter(jobPostings, companyData)
+                                recyclerView.adapter = adapter
+                            } else {
+                                // 오류 처리
+                            }
+                        }
+
+                        override fun onFailure(call: Call<List<JobPosting>>, t: Throwable) {
+                            // 네트워크 오류 처리
+                        }
+                    })
                 } else {
                     // 오류 처리
                 }
             }
 
-            override fun onFailure(call: Call<List<JobPosting>>, t: Throwable) {
+            override fun onFailure(call: Call<List<C_MemberModel>>, t: Throwable) {
                 // 네트워크 오류 처리
             }
         })

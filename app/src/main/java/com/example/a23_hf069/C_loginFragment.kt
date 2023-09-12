@@ -62,16 +62,24 @@ class C_loginFragment : Fragment() {
                     override fun onResponse(call: Call<List<C_MemberModel>>, response: Response<List<C_MemberModel>>) {
                         if (response.isSuccessful) {
                             val result = response.body()
+                            var isLoginSuccessful = false // 로그인 성공 여부를 체크하기 위한 변수
+
                             if (result != null && result.isNotEmpty()) {
                                 for (data in result) {
-                                    if (data.company_id == id) {
-                                        Toast.makeText(requireContext(), "로그인 성공", Toast.LENGTH_SHORT).show()
+                                    if (data.company_id == id && data.company_password == password) {
+                                        isLoginSuccessful = true // 아이디와 비밀번호가 일치할 때 플래그를 true로 설정
                                         val intent = Intent(requireActivity(), CorporateHomeActivity::class.java)
                                         intent.putExtra("userCompanyName", data.company_name)
                                         intent.putExtra("userCompanyId", data.company_id)
                                         startActivity(intent)
+                                        break // 로그인 성공 시 루프를 종료합니다.
                                     }
                                 }
+                            }
+
+                            if (!isLoginSuccessful) {
+                                // 로그인 성공 여부에 따라 메시지를 표시
+                                Toast.makeText(requireContext(), "아이디 또는 비밀번호를 잘못 입력했습니다.", Toast.LENGTH_SHORT).show()
                             }
                         }
                     }
@@ -84,6 +92,7 @@ class C_loginFragment : Fragment() {
                         ).show()
                     }
                 })
+
             }
         }
 

@@ -1,6 +1,7 @@
 package com.example.a23_hf069
 
 import JobPosting
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -47,6 +48,20 @@ class JobPostingAdapter(
 
         holder.endButton.setOnClickListener {
             // 마감 처리를 여기에 추가하세요.
+        }
+
+        // 리스트 아이템 클릭 이벤트 처리
+        holder.itemView.setOnClickListener {
+            // JobPostingDetailActivity로 이동하고 선택한 항목의 정보를 전달합니다.
+            val context = holder.itemView.context
+            val intent = Intent(context, JobPostingDetailActivity::class.java)
+
+            // 선택한 항목의 정보를 인텐트에 추가합니다.
+            intent.putExtra("jobPosting", jobPosting)
+            intent.putExtra("companyName", companyInfo?.company_name) // 회사 이름을 추가
+
+            // Activity를 시작합니다.
+            context.startActivity(intent)
         }
     }
 

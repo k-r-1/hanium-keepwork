@@ -5,6 +5,9 @@ import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.TextView
 import android.widget.Toast
+import okhttp3.OkHttpClient
+import org.json.JSONException
+import org.json.JSONObject
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.Call
@@ -101,7 +104,7 @@ class ResumeClickActivity : AppCompatActivity() {
     private fun handleResumeItemData(resumeData: List<ResumeModel>?) {
         resumeData?.let { dataList ->
             val targetResume =
-                dataList.find { it.resume_listnum == this.resumeListNum.toString() }
+                dataList.find { it.resume_listnum == this.resumeListNum }
 
             if (targetResume != null) {
                     editResumeTitle.text = targetResume.resume_title

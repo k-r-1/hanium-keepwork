@@ -3,6 +3,8 @@ package com.example.a23_hf069
 import JobPosting
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.Field
+import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.Query
 import retrofit2.http.POST
@@ -48,4 +50,10 @@ interface RetrofitInterface {
         @Query("resume_desire") resumeDesire: String?,
         @Query("resume_complete") resumeComplete: String?
     ): Call<List<ResumeModel>>
+
+    @POST("keepwork/resume/")
+    fun deleteResumeFromServer(
+        @Field("personal_id") userId: String,
+        @Field("resume_listnum") resumeListNum: Int
+    ): Call<String>
 }

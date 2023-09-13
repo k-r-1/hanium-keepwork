@@ -10,7 +10,7 @@ data class C_MemberModel (
     val company_name: String,
     val company_representative: String,
     val company_address: String,
-    val company_establishment: Int,
-    val company_employees: Int,
+    val company_establishment: String,
+    val company_employees: String,
     val company_type: String
 )

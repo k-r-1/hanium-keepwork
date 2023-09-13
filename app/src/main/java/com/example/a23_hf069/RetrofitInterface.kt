@@ -25,6 +25,8 @@ interface RetrofitInterface {
     @GET("keepwork/member_company/")
     fun getCompanyData(@Query("company_id") companyId: String): Call<List<C_MemberModel>>
 
+    @POST("keepwork/member_company/")
+    fun postCorporateData(@Body data: C_MemberModel): Call<C_MemberModel>
 
     @GET("keepwork/job/")
     fun getJobPostingData(@Query("company_id") id: String): Call<List<JobPosting>>

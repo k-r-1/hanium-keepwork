@@ -145,41 +145,6 @@
                     android:textAppearance="@style/TextLabel" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!--이메일-->
-            <TextView
-                android:id="@+id/email_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="40dp"
-                android:layout_marginTop="20dp"
-                android:text="이메일"
-                android:textColor="@color/black"
-                android:textSize="15sp"
-                android:textStyle="bold" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/email_textview_input_layout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="40dp"
-                android:layout_marginTop="10dp">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/email_textview_input_edit_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="예) keepwork@naver.com"
-                    android:textAppearance="@style/TextLabel" />
-
-                <Button
-                    android:id="@+id/btnEmailCertify"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:layout_marginTop="5dp"
-                    android:text="이메일 인증" />
-            </com.google.android.material.textfield.TextInputLayout>
 
             <!--이름-->
             <TextView
@@ -207,6 +172,43 @@
                     android:layout_height="wrap_content"
                     android:hint="예) 홍길동"
                     android:textAppearance="@style/TextLabel" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <!--이메일-->
+            <TextView
+                android:id="@+id/email_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="20dp"
+                android:text="이메일"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/email_textview_input_layout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="40dp"
+                android:layout_marginTop="10dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/email_textview_input_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="예) keepwork@naver.com"
+                    android:textAppearance="@style/TextLabel" />
+
+                <!--                <Button-->
+                <!--                    android:id="@+id/btnEmailCertify"-->
+                <!--                    android:layout_width="wrap_content"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:layout_gravity="end"-->
+                <!--                    android:layout_marginTop="5dp"-->
+                <!--                    android:text="이메일 인증" />-->
             </com.google.android.material.textfield.TextInputLayout>
 
             <!--전화번호-->
@@ -302,7 +304,7 @@
                 android:layout_marginTop="10dp">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/restrationNum_textview_input_edit_text"
+                    android:id="@+id/registrationNum_textview_input_edit_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="예) xxx-xx-xxxxx"
@@ -325,11 +327,10 @@
                 android:textSize="15sp"
                 android:textStyle="bold" />
             <TextView
-                android:id="@+id/_textview"
+                android:id="@+id/ceoName_textview"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="40dp"
                 android:layout_marginTop="20dp"
                 android:text="대표명"
                 android:textColor="@color/black"
@@ -362,7 +363,7 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/_textview_input_layout"
+                    android:id="@+id/ceoName_textview_input_layout"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -372,13 +373,41 @@
                     android:layout_marginEnd="40dp">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/_textview_input_edit_text"
+                        android:id="@+id/ceoName_textview_input_edit_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint=" "
                         android:textAppearance="@style/TextLabel" />
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
+
+            <!--회사주소-->
+            <TextView
+                android:id="@+id/companyAddress_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="20dp"
+                android:text="회사 주소"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/companyAddress_textview_input_layout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="40dp"
+                android:layout_marginTop="10dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/companyAddress_textview_input_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="예) 서울특별시 노원구 화랑로 621 (공릉동)"
+                    android:textAppearance="@style/TextLabel" />
+            </com.google.android.material.textfield.TextInputLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -400,7 +429,6 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="40dp"
                     android:layout_marginTop="20dp"
                     android:text="직원수"
                     android:textColor="@color/black"
@@ -408,6 +436,8 @@
                     android:textStyle="bold"
                     />
             </LinearLayout>
+
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -451,34 +481,6 @@
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
-            <!--회사주소-->
-            <TextView
-                android:id="@+id/companyAddress_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="40dp"
-                android:layout_marginTop="20dp"
-                android:text="회사 주소"
-                android:textColor="@color/black"
-                android:textSize="15sp"
-                android:textStyle="bold" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/companyAddress_textview_input_layout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="40dp"
-                android:layout_marginTop="10dp">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/companyAddress_textview_input_edit_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="예) 서울특별시 노원구 화랑로 621 (공릉동)"
-                    android:textAppearance="@style/TextLabel" />
-            </com.google.android.material.textfield.TextInputLayout>
-
             <TextView
                 android:id="@+id/companyClassification_textview"
                 android:layout_width="wrap_content"
@@ -495,8 +497,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="40dp"
+                android:layout_marginStart="40dp"
                 android:spinnerMode="dropdown"/>
 
             <!--회원가입 버튼-->

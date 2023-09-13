@@ -59,145 +59,145 @@
             android:orientation="vertical"
             android:layout_margin="20dp">
 
-        <TextView
-            android:id="@+id/titleLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="공고 제목"
-            android:textColor="@android:color/black"
-            android:textSize="20sp"
-            android:layout_gravity="left"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="10dp" />
+            <TextView
+                android:id="@+id/titleLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="공고 제목"
+                android:textColor="@android:color/black"
+                android:textSize="20sp"
+                android:layout_gravity="left"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="10dp" />
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center">
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/titleEditText_layout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/titleEditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:hint="예) 홍길동"
-                    android:textAppearance="@style/TextLabel" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-        </FrameLayout>
-
-        <TextView
-            android:id="@+id/supportConditionLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="지원 조건"
-            android:textColor="@android:color/black"
-            android:textSize="20sp"
-            android:layout_gravity="left"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="10dp" />
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/rounded_border"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:layout_gravity="center">
-
-            <LinearLayout
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_gravity="center">
 
-                <!-- 상단 영역의 텍스트뷰 -->
-                <TextView
-                    android:id="@+id/careerLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="경력"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginStart="20dp"
-                    android:textColor="@android:color/black"
-                    android:textSize="16sp" />
-
-
-                <!-- Spinner를 포함한 LinearLayout -->
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginBottom="10dp"
-                    android:background="@drawable/rounded_border"
-                    android:orientation="horizontal">
-
-                    <!-- Spinner -->
-                    <Spinner
-                        android:id="@+id/careerSpinner"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="10dp" />
-                </LinearLayout>
-
-                <View
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/titleEditText_layout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="#35B891"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginStart="0dp"
-                    android:layout_marginEnd="0dp"/>
+                    android:layout_height="wrap_content">
 
-                <!-- 하단 영역의 텍스트뷰 -->
-                <TextView
-                    android:id="@+id/educationLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:text="학력"
-                    android:textColor="@android:color/black"
-                    android:textSize="16sp" />
-
-                <!-- Spinner를 포함한 LinearLayout -->
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginBottom="10dp"
-                    android:background="@drawable/rounded_border"
-                    android:orientation="horizontal">
-
-                    <!-- Spinner -->
-                    <Spinner
-                        android:id="@+id/educationSpinner"
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/titleEditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="10dp" />
-                </LinearLayout>
-            </LinearLayout>
+                        android:textSize="16sp"
+                        android:hint="예) 홍길동"
+                        android:textAppearance="@style/TextLabel" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-        </FrameLayout>
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/supportConditionLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="지원 조건"
+                android:textColor="@android:color/black"
+                android:textSize="20sp"
+                android:layout_gravity="left"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="10dp" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_border"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:layout_gravity="center">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <!-- 상단 영역의 텍스트뷰 -->
+                    <TextView
+                        android:id="@+id/careerLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="경력"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginStart="20dp"
+                        android:textColor="@android:color/black"
+                        android:textSize="16sp" />
+
+
+                    <!-- Spinner를 포함한 LinearLayout -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginBottom="10dp"
+                        android:background="@drawable/rounded_border"
+                        android:orientation="horizontal">
+
+                        <!-- Spinner -->
+                        <Spinner
+                            android:id="@+id/careerSpinner"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#35B891"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginStart="0dp"
+                        android:layout_marginEnd="0dp"/>
+
+                    <!-- 하단 영역의 텍스트뷰 -->
+                    <TextView
+                        android:id="@+id/educationLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:text="학력"
+                        android:textColor="@android:color/black"
+                        android:textSize="16sp" />
+
+                    <!-- Spinner를 포함한 LinearLayout -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginBottom="10dp"
+                        android:background="@drawable/rounded_border"
+                        android:orientation="horizontal">
+
+                        <!-- Spinner -->
+                        <Spinner
+                            android:id="@+id/educationSpinner"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+            </FrameLayout>
 
 
             <TextView
-            android:id="@+id/workingConditionLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="근무 조건"
-            android:textColor="@android:color/black"
-            android:textSize="20sp"
-            android:layout_gravity="left"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="10dp" />
+                android:id="@+id/workingConditionLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="근무 조건"
+                android:textColor="@android:color/black"
+                android:textSize="20sp"
+                android:layout_gravity="left"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="10dp" />
 
             <FrameLayout
                 android:layout_width="match_parent"
@@ -228,25 +228,25 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center">
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/periodEditText_layout"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginRight="20dp"
-                        android:layout_marginBottom="20dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/periodEditText"
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/periodEditText_layout"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="20dp"
+                            android:layout_marginBottom="20dp"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textSize="16sp"
-                            android:hint="ex. 1년 or 협의"
-                            android:textAppearance="@style/TextLabel" />
-                    </com.google.android.material.textfield.TextInputLayout>
+                            android:layout_height="wrap_content">
 
-                </FrameLayout>
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/periodEditText"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textSize="16sp"
+                                android:hint="ex. 1년 or 협의"
+                                android:textAppearance="@style/TextLabel" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                    </FrameLayout>
 
                     <TextView
                         android:id="@+id/dayLabel"
@@ -430,21 +430,21 @@
 
 
                     <!-- Spinner를 포함한 LinearLayout -->
-                   <!-- <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginBottom="10dp"
-                        android:background="@drawable/rounded_border"
-                        android:orientation="vertical">
+                    <!-- <LinearLayout
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:layout_marginStart="20dp"
+                         android:layout_marginBottom="10dp"
+                         android:background="@drawable/rounded_border"
+                         android:orientation="vertical">
 
-                        &lt;!&ndash; Spinner &ndash;&gt;
-                        <Spinner
-                            android:id="@+id/occupationSpinner"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="10dp" />
-                    </LinearLayout>-->
+                         &lt;!&ndash; Spinner &ndash;&gt;
+                         <Spinner
+                             android:id="@+id/occupationSpinner"
+                             android:layout_width="match_parent"
+                             android:layout_height="wrap_content"
+                             android:layout_margin="10dp" />
+                     </LinearLayout>-->
 
                     <TextView
                         android:id="@+id/detailedLabel"
@@ -499,130 +499,130 @@
                 android:background="@drawable/rounded_border"
                 android:layout_gravity="center">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/contactLabel"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:text="연락처"
-                    android:textColor="@android:color/black"
-                    android:textSize="16sp" />
+                    android:orientation="vertical">
 
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center">
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/contactEditText_layout"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginRight="20dp"
-                        android:layout_marginBottom="20dp"
+                    <TextView
+                        android:id="@+id/contactLabel"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:text="연락처"
+                        android:textColor="@android:color/black"
+                        android:textSize="16sp" />
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/contactEditText"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textSize="16sp"
-                            android:hint="ex. 010-1234-1234"
-                            android:textAppearance="@style/TextLabel" />
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                </FrameLayout>
-
-                <TextView
-                    android:id="@+id/emailLabel"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:text="이메일"
-                    android:textColor="@android:color/black"
-                    android:textSize="16sp" />
-
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center">
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/emailEditText_layout"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginRight="20dp"
-                        android:layout_marginBottom="20dp"
+                    <FrameLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center">
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/emailEditText"
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/contactEditText_layout"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="20dp"
+                            android:layout_marginBottom="20dp"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textSize="16sp"
-                            android:hint="ex.abc@naver.com"
-                            android:textAppearance="@style/TextLabel" />
-                    </com.google.android.material.textfield.TextInputLayout>
+                            android:layout_height="wrap_content">
 
-                </FrameLayout>
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/contactEditText"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textSize="16sp"
+                                android:hint="ex. 010-1234-1234"
+                                android:textAppearance="@style/TextLabel" />
+                        </com.google.android.material.textfield.TextInputLayout>
 
-               </LinearLayout>
+                    </FrameLayout>
+
+                    <TextView
+                        android:id="@+id/emailLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:text="이메일"
+                        android:textColor="@android:color/black"
+                        android:textSize="16sp" />
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center">
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/emailEditText_layout"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="20dp"
+                            android:layout_marginBottom="20dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/emailEditText"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textSize="16sp"
+                                android:hint="ex.abc@naver.com"
+                                android:textAppearance="@style/TextLabel" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                    </FrameLayout>
+
+                </LinearLayout>
             </FrameLayout>
 
-        <!--<TextView
-            android:id="@+id/companyInfoLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="회사 정보 확인"
-            android:textColor="@android:color/black"
-            android:textSize="20sp"
-            android:layout_gravity="left"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="10dp" />
+            <!--<TextView
+                android:id="@+id/companyInfoLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="회사 정보 확인"
+                android:textColor="@android:color/black"
+                android:textSize="20sp"
+                android:layout_gravity="left"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="10dp" />
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:background="@drawable/rounded_border"
-            android:layout_gravity="center">
-
-            <LinearLayout
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:background="@drawable/rounded_border"
+                android:layout_gravity="center">
 
-                <ImageButton
-                    android:id="@+id/companyImage"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="20dp"
-                    android:background="@android:color/transparent"
-                    android:src="@drawable/baseline_circle_24" />
+                    android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/companyNameLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="회사명"
-                    android:layout_gravity="center"
-                    android:drawableRight="@drawable/baseline_navigate_next_24"
-                    android:textColor="@android:color/black"
-                    android:textSize="20sp"
-                    android:layout_margin="20dp"/>
-            </LinearLayout>
-             </FrameLayout>-->
+                    <ImageButton
+                        android:id="@+id/companyImage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="20dp"
+                        android:background="@android:color/transparent"
+                        android:src="@drawable/baseline_circle_24" />
+
+                    <TextView
+                        android:id="@+id/companyNameLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="회사명"
+                        android:layout_gravity="center"
+                        android:drawableRight="@drawable/baseline_navigate_next_24"
+                        android:textColor="@android:color/black"
+                        android:textSize="20sp"
+                        android:layout_margin="20dp"/>
+                </LinearLayout>
+                 </FrameLayout>-->
 
             <TextView
                 android:id="@+id/deadlineInfoLabel"
@@ -675,7 +675,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="월" />
-                
+
                 <EditText
                     android:id="@+id/edt_posting_day"
                     android:layout_width="40dp"

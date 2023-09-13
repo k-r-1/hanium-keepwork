@@ -1,6 +1,7 @@
 package com.example.a23_hf069
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -60,16 +61,10 @@ class JobManagementFragment : Fragment() {
             userCompanyId = arguments?.getString("userCompanyName", "") ?: ""
         }
 
-        // floatbtnJobPost 버튼에 클릭 리스너 추가
         val floatbtnJobPost: FloatingActionButton = view.findViewById(R.id.floatbtnJobPost)
         floatbtnJobPost.setOnClickListener {
-            // 백 스택에 추가하지 않고 JobPostingFragment로 이동
-            FragmentManagerHelper.replaceFragment(
-                requireActivity().supportFragmentManager,
-                R.id.fl_container,
-                JobPostingFragment(),
-                addToBackStack = false
-            )
+            val intent = Intent(requireContext(), JobPostingActivity::class.java)
+            startActivity(intent)
         }
     }
 

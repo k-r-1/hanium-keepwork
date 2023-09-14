@@ -34,6 +34,7 @@ class CorporateHomeActivity : AppCompatActivity() {
 
                     // 사용자 아이디를 Bundle에 추가해서 전달
                     val bundle = Bundle()
+                    bundle.putString("userCompanyId", userCompanyId)
                     bundle.putString("userCompanyName", userCompanyName)
                     CorporateHomeFragment.arguments = bundle
 

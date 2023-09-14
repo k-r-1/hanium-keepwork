@@ -7,11 +7,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 
 class CorporateHomeFragment : Fragment() {
 
+    // 사용자 ID를 저장할 변수
+    private lateinit var userCompanyId: String
+
     private lateinit var notificationButton: ImageView
+
+    private lateinit var postingTitleTextView: TextView
+    private lateinit var deadlineTextView: TextView
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -35,6 +42,13 @@ class CorporateHomeFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_corporate_home, container, false)
+
+        // Argument로부터 전달받은 사용자 ID를 변수에 저장
+        if (arguments != null) {
+            userCompanyId = arguments?.getString("userCompanyId", "") ?: ""
+        }
+
+
     }
 
 

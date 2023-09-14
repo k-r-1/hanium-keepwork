@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.example.a23_hf069.FragmentManagerHelper
-import com.example.a23_hf069.JobPostingFragment
 import com.example.a23_hf069.R
 import com.example.a23_hf069.ResumeChangeActivity
 import com.example.a23_hf069.ResumeClickActivity

@@ -235,7 +235,7 @@
                     android:id="@+id/phoneNumber_textview_input_edit_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="예) 021234567"
+                    android:hint="예) 02-123-4567"
                     android:textAppearance="@style/TextLabel" />
 
 <!--                                <Button-->
@@ -307,7 +307,7 @@
                     android:id="@+id/registrationNum_textview_input_edit_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="예) xxx-xx-xxxxx"
+                    android:hint="예) 123-45-67890"
                     android:textAppearance="@style/TextLabel" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -405,7 +405,7 @@
                     android:id="@+id/companyAddress_textview_input_edit_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="예) 서울특별시 노원구 화랑로 621 (공릉동)"
+                    android:hint="예) 서울특별시 강남구 테헤란로 222, 도원빌딩 3층"
                     android:textAppearance="@style/TextLabel" />
             </com.google.android.material.textfield.TextInputLayout>
 

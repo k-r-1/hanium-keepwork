@@ -93,7 +93,7 @@
                         android:includeFontPadding="false"
                         android:text="회사명"
                         android:textColor="@color/black"
-                        android:textSize="20sp"
+                        android:textSize="16sp"
                         android:textStyle="bold"
                         />
                     <TextView

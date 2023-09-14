@@ -192,12 +192,15 @@
                 android:orientation="horizontal"
                 android:layout_gravity="center">
 
-                <Button
+                <ImageButton
                     android:id="@+id/btn_calendar"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginRight="20dp"
-                    android:text="달력" />
+                    android:backgroundTint="@color/main"
+                    android:scaleType="fitCenter"
+                    android:text="달력"
+                    android:src="@drawable/calendar" />
 
                 <EditText
                     android:id="@+id/edt_birthyear"
@@ -300,7 +303,7 @@
                     android:id="@+id/phoneNumber_textview_input_edit_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="예) 01012345678"
+                    android:hint="예) 010-1234-5678"
                     android:textAppearance="@style/TextLabel" />
 
 <!--                <Button-->
@@ -336,7 +339,7 @@
                     android:id="@+id/address_textview_input_edit_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="예) 서울시 노원구 화랑로"
+                    android:hint="예) 서울특별시 강남구 테헤란로 222, 도원빌딩 4층"
                     android:textAppearance="@style/TextLabel" />
             </com.google.android.material.textfield.TextInputLayout>
             <!--전화번호 인증번호-->

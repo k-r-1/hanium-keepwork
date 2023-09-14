@@ -36,7 +36,7 @@ class FAQCorporateFragment : Fragment() {
         faqMenuMap = linkedMapOf(
             "공고관리" to listOf(
                 FAQItem("공고는 어떻게 등록하나요?", "우측 하단에 플로팅버튼을 누르시면 됩니다."),
-                FAQItem("등록된 공고는 어디에서 볼 수 있나요? 2", "'게재'탭에서 확인하실 수 있습니다."),
+                FAQItem("등록된 공고는 어디에서 볼 수 있나요?", "'게재'탭에서 확인하실 수 있습니다."),
                 // 이력서에 해당하는 나머지 FAQ 아이템들 추가
             ),
             "인재관리" to listOf(

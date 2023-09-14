@@ -493,12 +493,11 @@
                 android:textStyle="bold" />
 
             <Spinner
-                android:id="@+id/companyClassification"
+                android:id="@+id/company_spinner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:layout_marginStart="40dp"
-                android:spinnerMode="dropdown"/>
+                android:layout_marginStart="40dp" />
 
             <!--회원가입 버튼-->
             <Button

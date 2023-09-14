@@ -12,9 +12,11 @@ import android.os.AsyncTask
 import android.text.method.ScrollingMovementMethod
 import android.util.Log
 import android.view.View
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import okhttp3.FormBody
@@ -35,6 +37,8 @@ import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceClient
 import com.amazonaws.services.simpleemail.model.*
 import java.util.UUID
 import androidx.lifecycle.ViewModel
+import com.example.a23_hf069.databinding.ActivityCorporateSignUpBinding
+import com.example.a23_hf069.databinding.ActivityResumeEducationBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -62,6 +66,9 @@ class CorporateSignUpActivity : AppCompatActivity() {
     private lateinit var worker_textview_input_edit_text: EditText
     private lateinit var companyAddress_textview_input_edit_text: EditText
     private lateinit var signUp_button: Button // sign up button
+    lateinit var companySpinner: Spinner
+    lateinit var binding : ActivityCorporateSignUpBinding
+    lateinit var company_type: String
 
     // TextView 요소인 mTextViewResult 선언
     private lateinit var mTextViewResult: TextView
@@ -75,7 +82,36 @@ class CorporateSignUpActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_corporate_sign_up)
+
+        binding = ActivityCorporateSignUpBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        companySpinner = findViewById(R.id.company_spinner)
+
+        val companyList = listOf(
+            "대기업",
+            "중견기업",
+            "중소기업",
+            "스타트업",
+            "공기업",
+            "개인사업자",
+        )
+
+        val adapter1 = ArrayAdapter(this, android.R.layout.simple_spinner_item, companyList)
+        adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.companySpinner.adapter = adapter1
+
+        binding.companySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                // 이곳에 선택된 아이템을 처리하는 코드를 추가하세요.
+                company_type = binding.companySpinner.selectedItem.toString()
+                // 선택된 아이템에 대한 처리를 여기에 추가하세요.
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                // 아무것도 선택되지 않았을 때 처리할 코드를 추가하세요.
+            }
+        }
 
         // 기본 툴바 숨기기
         val actionBar: ActionBar? = supportActionBar
@@ -163,10 +199,8 @@ class CorporateSignUpActivity : AppCompatActivity() {
             val company_address = companyAddress_textview_input_edit_text.text.toString().trim()
             val establishment = year_textview_input_edit_text.text.toString().trim()
             val employees = worker_textview_input_edit_text.text.toString().trim()
-            val company_type = "중소기업"
 
-
-            if (id.isEmpty() || password.isEmpty() || password_recheck.isEmpty() || name.isEmpty() || email.isEmpty() || phonenum.isEmpty() || registnum.isEmpty() || company_name.isEmpty() || ceo_name.isEmpty() || company_address.isEmpty() || establishment.isEmpty() || employees.isEmpty() || company_type.isEmpty()) {
+            if (id.isEmpty() || password.isEmpty() || password_recheck.isEmpty() || name.isEmpty() || email.isEmpty() || phonenum.isEmpty() || registnum.isEmpty() || company_name.isEmpty() || ceo_name.isEmpty() || company_address.isEmpty() || establishment.isEmpty() || employees.isEmpty()) {
                 Toast.makeText(this@CorporateSignUpActivity, "정보를 입력해주세요.", Toast.LENGTH_SHORT).show()
             } else {
                 if (password == password_recheck) {

@@ -7,19 +7,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
+import com.example.a23_hf069.FragmentManagerHelper
+import com.example.a23_hf069.JobPostingFragment
 import com.example.a23_hf069.R
 import com.example.a23_hf069.ResumeChangeActivity
 import com.example.a23_hf069.ResumeClickActivity
 import com.example.a23_hf069.ResumeCompleteFragment
 import com.example.a23_hf069.ResumeModel
 import com.example.a23_hf069.ResumeTemporaryFragment
-import com.example.a23_hf069.ResumeWriteActivity
+import com.example.a23_hf069.ResumeWriteFragment
 import com.example.a23_hf069.RetrofitInterface
 import com.example.a23_hf069.TabPagerAdapter
 import com.google.android.material.tabs.TabLayout
@@ -33,9 +36,6 @@ import retrofit2.Response
 import java.io.IOException
 
 class ResumeFragment : Fragment() {
-    // 서버의 IP 주소를 저장할 변수
-    private var IP_ADDRESS = "54.180.186.168"
-
     // 사용자 ID를 저장할 변수
     private lateinit var userId: String
 
@@ -46,7 +46,7 @@ class ResumeFragment : Fragment() {
     private lateinit var tvResume_complete_count: TextView
 
     // 이력서 추가 버튼을 나타낼 Button 변수
-    private lateinit var buttonAddResume: Button
+    private lateinit var buttonAddResume: FloatingActionButton
 
     // 이력서 목록을 표시할 RecyclerView 변수
     private lateinit var recyclerView: RecyclerView
@@ -134,11 +134,19 @@ class ResumeFragment : Fragment() {
         fetchDataFromServer()
 
         // 이력서 추가 버튼 클릭 리스너 설정
-        buttonAddResume = view.findViewById<Button>(R.id.btnAddResume)
+        buttonAddResume = view.findViewById(R.id.btnAddResume)
         buttonAddResume.setOnClickListener {
-            val intent = Intent(requireContext(), ResumeWriteActivity::class.java)
-            intent.putExtra("userId", userId)
-            startActivity(intent)
+            // 백 스택에 추가하지 않고 ResumeWriteFragment로 이동
+            FragmentManagerHelper.replaceFragment(
+                requireActivity().supportFragmentManager,
+                R.id.fl_container,
+                ResumeWriteFragment().apply {
+                    arguments = Bundle().apply {
+                        putString("userId", userId)
+                    }
+                },
+                addToBackStack = false
+            )
         }
 
         val tabLayout: TabLayout = view.findViewById(R.id.tabLayout_resume) // TabLayout ID
@@ -208,6 +216,9 @@ class ResumeFragment : Fragment() {
 
                             // resume_complete 값을 가진 이력서의 개수 구하기
                             val cnt1 = dataList.count { it.resume_complete == "작성중"}
+                            //지금(23.09.13, 23:55) 그냥 DB에 "작성완료"인 데이터가 없는데 빨리 목록 출력해보려고 작성중이라고 써놓음.
+                            //cnt1은 작성완료 탭이니까 나중에 바꾸기
+                            
                             // resume_complete 값을 가지지 않은 이력서의 개수 구하기
                             val cnt2 = dataList.size - cnt1
 

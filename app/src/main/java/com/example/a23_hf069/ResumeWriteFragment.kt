@@ -1,18 +1,22 @@
 package com.example.a23_hf069
 
+import android.annotation.SuppressLint
 import android.content.Intent
-import android.media.Image
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
-import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.ContextCompat.startActivity
+import androidx.databinding.DataBindingUtil.setContentView
+import androidx.fragment.app.Fragment
 import okhttp3.*
-import java.io.IOException
 
-class ResumeWriteActivity : AppCompatActivity() {
+class ResumeWriteFragment : Fragment() {
     private var IP_ADDRESS = "54.180.186.168" // Replace with your IP address.
     private var userId: String = "" // User ID
     private lateinit var backButton: ImageButton
@@ -28,11 +32,13 @@ class ResumeWriteActivity : AppCompatActivity() {
     private lateinit var educationPlus: ImageButton
     private lateinit var careerPlus: ImageButton
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        supportActionBar?.hide()
-        setContentView(R.layout.activity_resume_click2)
-
+    @SuppressLint("MissingInflatedId")
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val view = inflater.inflate(R.layout.activity_resume_write, container, false)
 // Get user ID
 //        userId = intent.getStringExtra("userId") ?: ""
 
@@ -41,32 +47,36 @@ class ResumeWriteActivity : AppCompatActivity() {
 //
 //        backButton = findViewById(R.id.backButton)
 //        editTextAcademic = findViewById(R.id.edtWrite_academic)
-//        editResumeTitle = findViewById(R.id.edtWrite_title)
-//        editTextCareer = findViewById(R.id.edtWrite_career)
-//        editTextIntroduction = findViewById(R.id.edtWrite_introduction)
-//        editTextCertificate = findViewById(R.id.edtWrite_certificate)
-//        editTextEducation = findViewById(R.id.edtWrite_education)
-//        editTextDesire = findViewById(R.id.edtWrite_desire)
-//        buttonSubmit_temporary = findViewById(R.id.buttonSubmit_temporary_edit) // 임시 저장 버튼
-//        buttonSubmit_complete = findViewById(R.id.buttonSubmit_complete_edit) // 작성 완료 버튼
-        educationPlus = findViewById(R.id.education_plus)
-        careerPlus = findViewById(R.id.career_plus)
+        editResumeTitle = view.findViewById(R.id.edtWrite_title)
+        editTextAcademic = view.findViewById(R.id.edtWrite_academic)
+        editTextCareer = view.findViewById(R.id.edtWrite_career)
+        editTextIntroduction = view.findViewById(R.id.edtWrite_introduction)
+        editTextCertificate = view.findViewById(R.id.edtWrite_certificate)
+        editTextEducation = view.findViewById(R.id.edtWrite_education)
+        editTextDesire = view.findViewById(R.id.edtWrite_desire)
+        buttonSubmit_temporary = view.findViewById(R.id.buttonSubmit_temporary_edit) // 임시 저장 버튼
+        buttonSubmit_complete = view.findViewById(R.id.buttonSubmit_complete_edit) // 작성 완료 버튼
+//        educationPlus = findViewById(R.id.education_plus)
+//        careerPlus = findViewById(R.id.career_plus)
 
-        educationPlus.setOnClickListener {
-            val intent = Intent(this@ResumeWriteActivity, ResumeEducationActivity::class.java)
-            startActivity(intent)
-        }
-
-        careerPlus.setOnClickListener {
-            val intent = Intent(this@ResumeWriteActivity, ResumeCareerActivity::class.java)
-            startActivity(intent)
-        }
+//        educationPlus = view.findViewById(R.id.education_plus)
+//        careerPlus = view.findViewById(R.id.career_plus)
+//
+//        educationPlus.setOnClickListener {
+//            val intent = Intent(requireContext(), ResumeEducationActivity::class.java)
+//            startActivity(intent)
+//        }
+//
+//        careerPlus.setOnClickListener {
+//            val intent = Intent(requireContext(), ResumeCareerActivity::class.java)
+//            startActivity(intent)
+//        }
 
 //        backButton.setOnClickListener {
 //            onBackPressed()
 //        }
-//
-//        buttonSubmit_temporary.setOnClickListener { // 임시 저장
+
+        buttonSubmit_temporary.setOnClickListener { // 임시 저장
 //            val personal_id = userId
 //            val resume_title = editResumeTitle.text.toString()
 //            val resume_academic = editTextAcademic.text.toString()
@@ -90,11 +100,11 @@ class ResumeWriteActivity : AppCompatActivity() {
 //            )
 //
 //            Toast.makeText(this, "이력서가 임시저장되었습니다", Toast.LENGTH_SHORT).show()
-//
+
 //            onBackPressed()
-//        }
+        }
 //
-//        buttonSubmit_complete.setOnClickListener { // 작성완료
+        buttonSubmit_complete.setOnClickListener { // 작성완료
 //            val personal_id = userId
 //            val resume_title = editResumeTitle.text.toString()
 //            val resume_academic = editTextAcademic.text.toString()
@@ -120,7 +130,8 @@ class ResumeWriteActivity : AppCompatActivity() {
 //            Toast.makeText(this, "이력서가 작성완료되었습니다", Toast.LENGTH_SHORT).show()
 //
 //            onBackPressed()
-//        }
+        }
+        return view
     }
 //
 //    override fun onBackPressed() {

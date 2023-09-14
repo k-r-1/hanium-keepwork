@@ -1,55 +1,99 @@
 package com.example.a23_hf069
 
+import JobPosting
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.Fragment
+import com.example.a23_hf069.R
+import com.example.a23_hf069.RetrofitInterface
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class CorporateHomeFragment : Fragment() {
 
-    // 사용자 ID를 저장할 변수
     private lateinit var userCompanyId: String
-
-    private lateinit var notificationButton: ImageView
-
     private lateinit var postingTitleTextView: TextView
     private lateinit var deadlineTextView: TextView
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        // 툴바에서 notificationButton을 찾아 클릭 리스너를 설정
-        notificationButton = view.findViewById(R.id.notifications)
-        notificationButton.setOnClickListener {
-            // notificationButton을 클릭하면 알림 화면 CorporateHomeNotificationFragment로 전환
-            val CorporateHomeNotificationFragment = CorporateHomeNotificationFragment()
-            FragmentManagerHelper.replaceFragment(
-                requireActivity().supportFragmentManager,
-                R.id.fl_container,
-                CorporateHomeNotificationFragment
-            )
-        }
-    }
+    private lateinit var retrofit: Retrofit
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_corporate_home, container, false)
-
-        // Argument로부터 전달받은 사용자 ID를 변수에 저장
-        if (arguments != null) {
-            userCompanyId = arguments?.getString("userCompanyId", "") ?: ""
-        }
-
-
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
+        userCompanyId = arguments?.getString("userCompanyId", "") ?: ""
+        postingTitleTextView = view.findViewById(R.id.postingTitleTextView)
+        deadlineTextView = view.findViewById(R.id.deadlineTextView)
+
+        retrofit = Retrofit.Builder()
+            .baseUrl(RetrofitInterface.API_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        fetchJobPostings()
+    }
+
+    private fun fetchJobPostings() {
+        val retrofitInterface = retrofit.create(RetrofitInterface::class.java)
+
+        // userCompanyId와 company_id가 같을 때만 해당 공고를 불러오도록 요청
+        val call = retrofitInterface.getJobPostingData(userCompanyId)
+
+        call.enqueue(object : Callback<List<JobPosting>> {
+            override fun onResponse(
+                call: Call<List<JobPosting>>,
+                response: Response<List<JobPosting>>
+            ) {
+                if (response.isSuccessful) {
+                    val jobPostings = response.body()
+
+                    // userCompanyId와 company_id가 같을 때의 공고만 필터링
+                    val matchingJobPostings = jobPostings?.filter {
+                        it.company_id == userCompanyId
+                    }
+
+                    val latestJobPosting = findLatestJobPosting(matchingJobPostings)
+
+                    if (latestJobPosting != null) {
+                        postingTitleTextView.text = latestJobPosting.job_title
+                        deadlineTextView.text = latestJobPosting.job_deadline
+                    }
+                } else {
+                    // 서버로부터 데이터를 가져오지 못한 경우 처리
+                }
+            }
+
+            override fun onFailure(call: Call<List<JobPosting>>, t: Throwable) {
+                // 네트워크 오류 처리
+            }
+        })
+    }
+
+    private fun findLatestJobPosting(jobPostings: List<JobPosting>?): JobPosting? {
+        if (jobPostings.isNullOrEmpty()) {
+            return null
+        }
+
+        // 가장 마지막에 등록된 공고를 찾는 로직
+        var latestJobPosting: JobPosting? = null
+        for (jobPosting in jobPostings) {
+            if (latestJobPosting == null || jobPosting.job_listnum > latestJobPosting.job_listnum) {
+                latestJobPosting = jobPosting
+            }
+        }
+
+        return latestJobPosting
+    }
 }

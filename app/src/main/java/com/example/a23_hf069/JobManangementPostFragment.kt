@@ -74,7 +74,7 @@ class JobManagementPostFragment : Fragment() {
         val service = retrofit.create(RetrofitInterface::class.java)
 
         // userCompanyId를 사용하여 C_MemberModel을 가져옵니다.
-        val companyCall = service.getCompanyData(userCompanyId)
+        val companyCall = service.getCorporateData(userCompanyId)
         companyCall.enqueue(object : Callback<List<C_MemberModel>> {
             override fun onResponse(
                 call: Call<List<C_MemberModel>>,

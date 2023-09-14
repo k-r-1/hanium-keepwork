@@ -1,5 +1,6 @@
 package com.example.a23_hf069
 
+import JobPosting
 import android.os.Bundle
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
@@ -15,7 +16,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class ResumeClickActivity : AppCompatActivity() {
-    private var userId: String = "" // User ID
+    private var userId: String = "ddd" // User ID
     private var resumeListNum: Int = -1
     private lateinit var editResumeTitle: TextView
     private lateinit var editTextAcademic: TextView
@@ -34,7 +35,8 @@ class ResumeClickActivity : AppCompatActivity() {
 
         // Get user ID
         resumeListNum = intent.getIntExtra("resumeListNum", -1)
-        userId = intent.getStringExtra("userId") ?: ""
+//        userId = intent.getStringExtra("userId") ?: ""
+
 
         val textID = findViewById<TextView>(R.id.tvClick_ID)
         textID.text = userId
@@ -107,6 +109,7 @@ class ResumeClickActivity : AppCompatActivity() {
                 dataList.find { it.resume_listnum == this.resumeListNum }
 
             if (targetResume != null) {
+                    userId = targetResume.personal_id_id
                     editResumeTitle.text = targetResume.resume_title
                     editTextAcademic.text = targetResume.resume_academic
                     editTextCareer.text = targetResume.resume_career

@@ -161,8 +161,8 @@ class ResumeFragment : Fragment() {
 
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             when (position) {
-                0 -> tab.text = "작성완료 (0)"
-                1 -> tab.text = "작성중 (0)"
+                0 -> tab.text = "작성중 (1)"
+                1 -> tab.text = "작성완료 (0)"
                 else -> tab.text = ""
             }
         }.attach()
@@ -316,8 +316,9 @@ class ResumeFragment : Fragment() {
     }
 
     // 이력서 목록을 표시하는 어댑터 클래스
-    class DataAdapter(private var dataList: List<ResumeModel>,
-                      private val userId: String
+    class DataAdapter(
+        var dataList: List<ResumeModel>,
+        private val userId: String
     ) : RecyclerView.Adapter<DataAdapter.ViewHolder>() {
 
         // 각각의 뷰를 보유하는 뷰홀더 클래스

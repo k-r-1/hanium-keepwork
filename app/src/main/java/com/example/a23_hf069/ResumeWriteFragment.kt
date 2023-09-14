@@ -1,5 +1,6 @@
 package com.example.a23_hf069
 
+import JobPosting
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
@@ -9,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat.startActivity
@@ -17,9 +19,9 @@ import androidx.fragment.app.Fragment
 import okhttp3.*
 
 class ResumeWriteFragment : Fragment() {
-    private var IP_ADDRESS = "54.180.186.168" // Replace with your IP address.
     private var userId: String = "" // User ID
     private lateinit var backButton: ImageButton
+    private lateinit var viewUserId : EditText
     private lateinit var editResumeTitle: EditText
     private lateinit var editTextAcademic: EditText
     private lateinit var editTextCareer: EditText
@@ -42,11 +44,9 @@ class ResumeWriteFragment : Fragment() {
 // Get user ID
 //        userId = intent.getStringExtra("userId") ?: ""
 
-//        val textID = findViewById<TextView>(R.id.tvWrite_ID)
-//        textID.text = userId
-//
 //        backButton = findViewById(R.id.backButton)
 //        editTextAcademic = findViewById(R.id.edtWrite_academic)
+
         editResumeTitle = view.findViewById(R.id.edtWrite_title)
         editTextAcademic = view.findViewById(R.id.edtWrite_academic)
         editTextCareer = view.findViewById(R.id.edtWrite_career)

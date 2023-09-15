@@ -1,0 +1,51 @@
+Index: app/src/main/java/com/example/a23_hf069/HomeFragment.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import android.os.Bundle\r\nimport android.view.LayoutInflater\r\nimport android.view.View\r\nimport android.view.ViewGroup\r\nimport android.view.inputmethod.InputMethodManager\r\nimport android.widget.EditText\r\nimport android.widget.ImageButton\r\nimport android.widget.TextView\r\nimport androidx.appcompat.widget.Toolbar\r\nimport androidx.fragment.app.Fragment\r\nimport androidx.recyclerview.widget.GridLayoutManager\r\nimport androidx.recyclerview.widget.RecyclerView\r\nimport com.example.a23_hf069.FragmentManagerHelper\r\nimport com.example.a23_hf069.HomeNotificationFragment\r\nimport com.example.a23_hf069.HomeSearchFragment\r\nimport com.example.a23_hf069.ListAdapterGrid\r\nimport com.example.a23_hf069.R\r\nimport com.example.a23_hf069.WantedFilteringFragment\r\n\r\nclass HomeFragment : Fragment() {\r\n\r\n    private lateinit var notificationButton: ImageButton\r\n    private lateinit var userId: String // 사용자 아이디\r\n\r\n    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {\r\n        super.onViewCreated(view, savedInstanceState)\r\n\r\n        // 툴바에서 notificationButton을 찾아 클릭 리스너를 설정\r\n        val toolbar = view.findViewById<Toolbar>(R.id.toolbar)\r\n        notificationButton = toolbar.findViewById(R.id.notificationButton)\r\n        notificationButton.setOnClickListener {\r\n            // notificationButton을 클릭하면 알림 화면 HomeNotificationFragment로 전환\r\n            val HomeNotificationFragment = HomeNotificationFragment()\r\n            FragmentManagerHelper.replaceFragment(\r\n                requireActivity().supportFragmentManager,\r\n                R.id.fl_container,\r\n                HomeNotificationFragment\r\n            )\r\n        }\r\n    }\r\n\r\n    override fun onCreateView(\r\n        inflater: LayoutInflater, container: ViewGroup?,\r\n        savedInstanceState: Bundle?\r\n    ): View? {\r\n        val rootView = inflater.inflate(R.layout.fragment_home, container, false)\r\n\r\n        // 사용자 아이디 받아오기\r\n        if (arguments != null) {\r\n            userId = arguments?.getString(\"userId\", \"\") ?: \"\"\r\n        }\r\n\r\n        val textViewUserName = rootView.findViewById<TextView>(R.id.textViewUserName)\r\n        textViewUserName.text = userId\r\n        val textViewUserName2 = rootView.findViewById<TextView>(R.id.textViewUserName2)\r\n        textViewUserName2.text = userId\r\n\r\n        // RecyclerView 관련 코드 추가\r\n\r\n        // RecyclerView에 표시할 아이템의 데이터 목록 / 임시 데이터로 8개 생성함.\r\n        val list = arrayListOf(\"Title 1\", \"Title 2\", \"Title 3\", \"Title 4\", \"Title 5\", \"Title 6\", \"Title 7\", \"Title 8\")\r\n\r\n        // GridLayoutManager를 생성하여 RecyclerView의 레이아웃 매니저로 설정\r\n        val listManager = GridLayoutManager(requireContext(), 2) // 2열 그리트 형태로 아이템 표시\r\n        // ListAdapterGrid 객체를 생성하여 RecyclerView의 어댑터로 설정\r\n        val listAdapter = ListAdapterGrid(list)\r\n\r\n        val recyclerList = rootView.findViewById<RecyclerView>(R.id.recyclerGridView)\r\n        recyclerList.apply {\r\n            setHasFixedSize(true) // 아이템 크기 고정\r\n            isNestedScrollingEnabled = false // 스크롤 비활성화\r\n            layoutManager = listManager // RecyclerView의 레이아웃 매니저 설정\r\n            adapter = listAdapter // RecyclerView의 어댑터 설정\r\n        }\r\n\r\n        // EditText을 클릭하면 검색 화면 searchFragment로 전환\r\n        val searchContent = rootView.findViewById<EditText>(R.id.searchContent) // EditText를 rootView에서 찾아옴\r\n        searchContent.setOnFocusChangeListener { _, hasFocus -> // EditText의 포커스 변화를 감지하는 리스너를 설정\r\n            if (hasFocus) {\r\n                val HomeSearchFragment = HomeSearchFragment()\r\n                FragmentManagerHelper.replaceFragment(\r\n                    requireActivity().supportFragmentManager,\r\n                    R.id.fl_container,\r\n                    HomeSearchFragment\r\n                )\r\n                hideKeyboard() // 키보드 숨김 처리\r\n            }\r\n        }\r\n\r\n        return rootView\r\n    }\r\n\r\n    private fun hideKeyboard() {\r\n        // 키보드 숨김 처리를 수행\r\n        val imm =\r\n            requireContext().getSystemService(android.content.Context.INPUT_METHOD_SERVICE) as InputMethodManager\r\n        imm.hideSoftInputFromWindow(view?.windowToken, 0)\r\n        view?.clearFocus()\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/a23_hf069/HomeFragment.kt b/app/src/main/java/com/example/a23_hf069/HomeFragment.kt
+--- a/app/src/main/java/com/example/a23_hf069/HomeFragment.kt	(revision cf7eab7ee37f7baba7fd818efc6683eea9318b99)
++++ b/app/src/main/java/com/example/a23_hf069/HomeFragment.kt	(date 1694709210693)
+@@ -58,7 +58,7 @@
+         // RecyclerView 관련 코드 추가
+ 
+         // RecyclerView에 표시할 아이템의 데이터 목록 / 임시 데이터로 8개 생성함.
+-        val list = arrayListOf("Title 1", "Title 2", "Title 3", "Title 4", "Title 5", "Title 6", "Title 7", "Title 8")
++        val list = arrayListOf("한이음 컴퍼니 개발자 채용", "한이음 컴퍼니 기획자 채용", "(주)ICT멘토링 신입 채용", "(주)ICT멘토링 경력 채용", "Keepwork 기획자 채용", "Keepwork 백엔드 개발자 채용", "Title 7", "Title 8")
+ 
+         // GridLayoutManager를 생성하여 RecyclerView의 레이아웃 매니저로 설정
+         val listManager = GridLayoutManager(requireContext(), 2) // 2열 그리트 형태로 아이템 표시
+Index: app/src/main/res/layout/list_grid_item.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<LinearLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    android:layout_width=\"wrap_content\"\r\n    android:layout_height=\"wrap_content\"\r\n    android:id=\"@+id/layoutListItem\"\r\n    android:orientation=\"vertical\"\r\n    android:layout_margin=\"20dp\"\r\n    android:gravity=\"center\">\r\n\r\n    <ImageView\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:src=\"@drawable/ic_launcher_foreground\"\r\n        android:background=\"@drawable/ic_launcher_background\"\r\n        android:layout_margin=\"10dp\"/>\r\n\r\n    <TextView\r\n        android:id=\"@+id/textListTitle\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:text=\"Title 1\"\r\n        android:textStyle=\"bold\"\r\n        android:textSize=\"18sp\"\r\n        android:gravity=\"center\"\r\n        android:layout_marginBottom=\"5dp\"/>\r\n\r\n</LinearLayout>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/list_grid_item.xml b/app/src/main/res/layout/list_grid_item.xml
+--- a/app/src/main/res/layout/list_grid_item.xml	(revision cf7eab7ee37f7baba7fd818efc6683eea9318b99)
++++ b/app/src/main/res/layout/list_grid_item.xml	(date 1694708984626)
+@@ -8,17 +8,16 @@
+     android:gravity="center">
+ 
+     <ImageView
+-        android:layout_width="wrap_content"
+-        android:layout_height="wrap_content"
+-        android:src="@drawable/ic_launcher_foreground"
+-        android:background="@drawable/ic_launcher_background"
++        android:layout_width="200dp"
++        android:layout_height="200dp"
++        android:background="@drawable/company_photo"
+         android:layout_margin="10dp"/>
+ 
+     <TextView
+         android:id="@+id/textListTitle"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+-        android:text="Title 1"
++        android:text="한이음 컴퍼니 공고 1"
+         android:textStyle="bold"
+         android:textSize="18sp"
+         android:gravity="center"

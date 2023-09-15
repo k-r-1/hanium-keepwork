@@ -58,7 +58,7 @@ class HomeFragment : Fragment() {
         // RecyclerView 관련 코드 추가
 
         // RecyclerView에 표시할 아이템의 데이터 목록 / 임시 데이터로 8개 생성함.
-        val list = arrayListOf("Title 1", "Title 2", "Title 3", "Title 4", "Title 5", "Title 6", "Title 7", "Title 8")
+        val list = arrayListOf("한이음 컴퍼니 개발자 채용", "한이음 컴퍼니 기획자 채용", "(주)ICT멘토링 신입 채용", "(주)ICT멘토링 경력 채용", "Keepwork 기획자 채용", "Keepwork 백엔드 개발자 채용", "Title 7", "Title 8")
 
         // GridLayoutManager를 생성하여 RecyclerView의 레이아웃 매니저로 설정
         val listManager = GridLayoutManager(requireContext(), 2) // 2열 그리트 형태로 아이템 표시

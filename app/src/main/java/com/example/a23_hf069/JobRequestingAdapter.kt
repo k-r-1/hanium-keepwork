@@ -10,33 +10,27 @@ import androidx.recyclerview.widget.RecyclerView
 class JobRequestingAdapter : RecyclerView.Adapter<JobRequestingAdapter.JobViewHolder>() {
     private var jobPostings: List<JobPosting> = emptyList()
 
-    inner class JobViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val titleTextView: TextView = itemView.findViewById(R.id.titleTextView)
-        // 다른 필드들을 추가하세요
-
-        fun bind(jobPosting: JobPosting) {
-            titleTextView.text = jobPosting.job_title
-            // 다른 필드들을 설정하세요
-        }
+    fun setData(data: List<JobPosting>) {
+        jobPostings = data
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JobViewHolder {
-        val itemView = LayoutInflater.from(parent.context)
+        val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.job_requesting_item, parent, false)
-        return JobViewHolder(itemView)
+        return JobViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: JobViewHolder, position: Int) {
-        val jobPosting = jobPostings[position]
-        holder.bind(jobPosting)
+        val job = jobPostings[position]
+        // ViewHolder의 뷰에 데이터를 바인딩하는 코드를 추가하세요.
     }
 
     override fun getItemCount(): Int {
         return jobPostings.size
     }
 
-    fun setJobPostings(jobPostings: List<JobPosting>) {
-        this.jobPostings = jobPostings
-        notifyDataSetChanged()
+    inner class JobViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        // ViewHolder의 뷰 요소를 초기화하는 코드를 추가하세요.
     }
 }

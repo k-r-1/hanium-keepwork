@@ -92,10 +92,13 @@ class JobManagementPostFragment : Fragment() {
                             response: Response<List<JobPosting>>
                         ) {
                             if (response.isSuccessful) {
-                                val jobPostings = response.body() ?: emptyList()
+                                val allJobPostings = response.body() ?: emptyList()
+
+                                // Filter job postings based on the condition
+                                val filteredJobPostings = allJobPostings.filter { it.company_name == userCompanyName }
 
                                 // C_MemberModel 데이터와 작업 게시 데이터를 adapter에 넘겨줍니다.
-                                adapter = JobPostingAdapter(jobPostings, companyData)
+                                adapter = JobPostingAdapter(filteredJobPostings, companyData)
                                 recyclerView.adapter = adapter
                             } else {
                                 // 오류 처리

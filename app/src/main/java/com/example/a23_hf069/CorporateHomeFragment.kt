@@ -48,7 +48,7 @@ class CorporateHomeFragment : Fragment() {
     private fun fetchJobPostings() {
         val retrofitInterface = retrofit.create(RetrofitInterface::class.java)
 
-        // userCompanyName userCompanyName가 같을 때만 해당 공고를 불러오도록 요청
+        // userCompanyName과 userCompanyName이 같을 때만 해당 공고를 불러오도록 요청
         val call = retrofitInterface.getJobPostingData(userCompanyName)
 
         call.enqueue(object : Callback<List<JobPosting>> {
@@ -59,7 +59,7 @@ class CorporateHomeFragment : Fragment() {
                 if (response.isSuccessful) {
                     val jobPostings = response.body()
 
-                    // userCompanyId와 company_id가 같을 때의 공고만 필터링
+                    // userCompanyName과 company_name이 같을 때의 공고만 필터링
                     val matchingJobPostings = jobPostings?.filter {
                         it.company_name == userCompanyName
                     }

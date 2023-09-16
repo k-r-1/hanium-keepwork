@@ -21,7 +21,7 @@ class WantedRequestingFragment : Fragment() {
     ): View? {
         val rootView= inflater.inflate(R.layout.fragment_wanted_requesting, container, false)
 
-        //아래 코드는 중간평가 주작을 위해 작성한 코드임
+        //임시코드
 //        val mainLayout = rootView.findViewById<LinearLayout>(R.id.myLinearLayout)
 //        mainLayout.setOnClickListener {
 //            // '채용공고 상세정보' 페이지로 이동

@@ -12,7 +12,7 @@
 
 <!--</FrameLayout>-->
 
-<!--아래 코드는 중간평가 주작을 위해 작성한 코드임. 진짜 코드는 위에 주석처리해놓은 코드-->
+<!--임시코드-->
 <!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
 <!--    android:id="@+id/myLinearLayout"-->
 <!--    android:layout_width="match_parent"-->

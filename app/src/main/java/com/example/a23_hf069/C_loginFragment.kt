@@ -70,7 +70,7 @@ class C_loginFragment : Fragment() {
                                         isLoginSuccessful = true // 아이디와 비밀번호가 일치할 때 플래그를 true로 설정
                                         val intent = Intent(requireActivity(), CorporateHomeActivity::class.java)
                                         intent.putExtra("userCompanyName", data.company_name)
-                                        intent.putExtra("userCompanyId", data.company_id)
+                                        /*intent.putExtra("userCompanyId", data.company_id)*/
                                         startActivity(intent)
                                         break // 로그인 성공 시 루프를 종료합니다.
                                     }

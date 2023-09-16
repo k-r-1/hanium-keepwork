@@ -15,7 +15,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 class JobManagementFragment : Fragment() {
 
     // 사용자 ID를 저장할 변수
-    private lateinit var userCompanyId: String
+    private lateinit var userCompanyName: String
 
     @SuppressLint("MissingInflatedId")
     override fun onCreateView(
@@ -29,11 +29,11 @@ class JobManagementFragment : Fragment() {
 
         // Argument로부터 전달받은 사용자 ID를 변수에 저장
         if (arguments != null) {
-            userCompanyId = arguments?.getString("userCompanyId", "") ?: ""
+            userCompanyName = arguments?.getString("userCompanyName", "") ?: ""
         }
 
         val fragmentList = listOf(
-            JobManagementPostFragment.newInstance(userCompanyId),
+            JobManagementPostFragment.newInstance(userCompanyName),
             JobManagementSaveFragment(),
             JobManagementEndFragment()
         )
@@ -58,7 +58,7 @@ class JobManagementFragment : Fragment() {
 
         // Argument로부터 전달받은 사용자 ID를 변수에 저장
         if (arguments != null) {
-            userCompanyId = arguments?.getString("userCompanyName", "") ?: ""
+            userCompanyName = arguments?.getString("userCompanyName", "") ?: ""
         }
 
         val floatbtnJobPost: FloatingActionButton = view.findViewById(R.id.floatbtnJobPost)

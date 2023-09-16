@@ -19,15 +19,15 @@ import retrofit2.Response
 class JobManagementPostFragment : Fragment() {
 
     // 사용자 ID를 저장할 변수
-    private lateinit var userCompanyId: String
+    private lateinit var userCompanyName: String
 
     companion object {
-        private const val ARG_USER_COMPANY_ID = "userCompanyId"
+        private const val ARG_USER_COMPANY_NAME = "userCompanyName"
 
-        fun newInstance(userCompanyId: String): JobManagementPostFragment {
+        fun newInstance(userCompanyName: String): JobManagementPostFragment {
             val fragment = JobManagementPostFragment()
             val args = Bundle()
-            args.putString(ARG_USER_COMPANY_ID, userCompanyId)
+            args.putString(ARG_USER_COMPANY_NAME, userCompanyName)
             fragment.arguments = args
             return fragment
         }
@@ -42,7 +42,7 @@ class JobManagementPostFragment : Fragment() {
 
         // Arguments에서 userCompanyId 값을 읽어와서 변수에 할당합니다.
         arguments?.let {
-            userCompanyId = it.getString(ARG_USER_COMPANY_ID, "")
+            userCompanyName = it.getString(ARG_USER_COMPANY_NAME, "")
         }
     }
 
@@ -73,8 +73,8 @@ class JobManagementPostFragment : Fragment() {
 
         val service = retrofit.create(RetrofitInterface::class.java)
 
-        // userCompanyId를 사용하여 C_MemberModel을 가져옵니다.
-        val companyCall = service.getCorporateData(userCompanyId)
+        // userCompanyName를 사용하여 C_MemberModel을 가져옵니다.
+        val companyCall = service.getCorporateData(userCompanyName)
         companyCall.enqueue(object : Callback<List<C_MemberModel>> {
             override fun onResponse(
                 call: Call<List<C_MemberModel>>,
@@ -85,7 +85,7 @@ class JobManagementPostFragment : Fragment() {
                     // C_MemberModel 데이터를 가져왔습니다.
 
                     // 이제 작업 게시 데이터를 가져옵니다.
-                    val jobPostingCall = service.getJobPostingData(userCompanyId)
+                    val jobPostingCall = service.getJobPostingData(userCompanyName)
                     jobPostingCall.enqueue(object : Callback<List<JobPosting>> {
                         override fun onResponse(
                             call: Call<List<JobPosting>>,

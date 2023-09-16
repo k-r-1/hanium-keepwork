@@ -3,7 +3,7 @@ import android.os.Parcelable
 
 data class JobPosting(
     val job_listnum: Int,
-    val company_id: String,
+    val company_name: String,
     val job_title: String,
     val job_experience_required: String,
     val job_education_required: String,
@@ -22,7 +22,7 @@ data class JobPosting(
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         // 필드를 parcel에 쓰는 코드 추가
         parcel.writeInt(job_listnum)
-        parcel.writeString(company_id)
+        parcel.writeString(company_name)  // 변경된 필드명으로 수정
         parcel.writeString(job_title)
         parcel.writeString(job_experience_required)
         parcel.writeString(job_education_required)

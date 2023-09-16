@@ -30,7 +30,7 @@ class JobPostingAdapter(
         holder.tvJobEducationRequirede.text = jobPosting.job_education_required
 
         // C_MemberModel에서 필요한 데이터를 가져와서 사용합니다.
-        val companyInfo = companyData.find { it.company_id == jobPosting.company_id }
+        val companyInfo = companyData.find { it.company_name == jobPosting.company_name }
         if (companyInfo != null) {
             holder.tvJobCompanyName.text = companyInfo.company_name
             holder.tvJobAdress.text = companyInfo.company_address

@@ -18,7 +18,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class CorporateHomeFragment : Fragment() {
 
-    private lateinit var userCompanyId: String
+    private lateinit var userCompanyName: String
     private lateinit var postingTitleTextView: TextView
     private lateinit var deadlineTextView: TextView
     private lateinit var retrofit: Retrofit
@@ -33,7 +33,7 @@ class CorporateHomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        userCompanyId = arguments?.getString("userCompanyId", "") ?: ""
+        userCompanyName = arguments?.getString("userCompanyName", "") ?: ""
         postingTitleTextView = view.findViewById(R.id.postingTitleTextView)
         deadlineTextView = view.findViewById(R.id.deadlineTextView)
 
@@ -48,8 +48,8 @@ class CorporateHomeFragment : Fragment() {
     private fun fetchJobPostings() {
         val retrofitInterface = retrofit.create(RetrofitInterface::class.java)
 
-        // userCompanyId와 company_id가 같을 때만 해당 공고를 불러오도록 요청
-        val call = retrofitInterface.getJobPostingData(userCompanyId)
+        // userCompanyName userCompanyName가 같을 때만 해당 공고를 불러오도록 요청
+        val call = retrofitInterface.getJobPostingData(userCompanyName)
 
         call.enqueue(object : Callback<List<JobPosting>> {
             override fun onResponse(
@@ -61,7 +61,7 @@ class CorporateHomeFragment : Fragment() {
 
                     // userCompanyId와 company_id가 같을 때의 공고만 필터링
                     val matchingJobPostings = jobPostings?.filter {
-                        it.company_id == userCompanyId
+                        it.company_name == userCompanyName
                     }
 
                     val latestJobPosting = findLatestJobPosting(matchingJobPostings)

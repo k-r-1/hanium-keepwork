@@ -50,7 +50,7 @@
             android:backgroundTint="#35B891"
             android:drawableRight="@drawable/ic_baseline_search2_24"
             android:ems="10"
-            android:hint="커뮤니티 검색"
+            android:hint="교육과정 검색"
             android:inputType="text"
             android:minHeight="48dp"
             android:textColor="@android:color/white"
@@ -76,15 +76,15 @@
         app:tabTextColor="@color/black"
         tools:ignore="SpeakableTextPresentCheck">
 
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="커뮤니티" />
+<!--        <com.google.android.material.tabs.TabItem-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="커뮤니티" />-->
 
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="홍보 게시판" />
+<!--        <com.google.android.material.tabs.TabItem-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="홍보 게시판" />-->
 
     </com.google.android.material.tabs.TabLayout>
 
@@ -95,6 +95,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tablayout01" />
+        app:layout_constraintTop_toBottomOf="@id/searchContentLayout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

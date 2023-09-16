@@ -129,10 +129,21 @@
 
                     <ImageView
                         android:id="@+id/dynamicImageView"
+                        android:layout_width="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_height="200dp"
+                        android:scaleType="center"
+                        android:src="@drawable/worknet0" />
+
+                    <TextView
+                        android:background="@color/selectedMenuColor"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/main_image_1" />
+                        android:layout_height="60dp"
+                        android:gravity="center"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        android:text="김포 더편한요양원 사무국장(사회복지사) 구인"
+                        android:textSize="18sp" />
 
                     <LinearLayout
                         android:layout_width="match_parent"

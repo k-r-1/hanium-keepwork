@@ -24,8 +24,8 @@ class WantedListFragment : Fragment(), TabLayout.OnTabSelectedListener {
         val view = inflater.inflate(R.layout.fragment_wanted_list, container, false)
 
         val adapter = PagerAdapter(childFragmentManager)
-        adapter.addFragment(WantedWorkNetFragment(), "워크넷 채용공고")
         adapter.addFragment(WantedRequestingFragment(), "즉시지원")
+        adapter.addFragment(WantedWorkNetFragment(), "워크넷 채용공고")
 
         viewPager = view.findViewById<ViewPager>(R.id.viewpager01)
         viewPager.adapter = adapter

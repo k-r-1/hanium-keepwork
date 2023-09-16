@@ -28,6 +28,9 @@ interface RetrofitInterface {
     @GET("keepwork/job/")
     fun getJobPostingData(@Query("company_id") id: String): Call<List<JobPosting>>
 
+    @GET("keepwork/job/")
+    fun getJobPostings(): Call<List<JobPosting>>
+
     @GET("keepwork/notice/")
     fun getNoticeData(
         @Query("notice_listnum") noticeListNum: Int?,

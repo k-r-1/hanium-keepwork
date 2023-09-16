@@ -1,0 +1,37 @@
+Index: app/src/main/java/com/example/a23_hf069/RetrofitInterface.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.a23_hf069\r\n\r\nimport JobPosting\r\nimport retrofit2.Call\r\nimport retrofit2.http.Body\r\nimport retrofit2.http.Field\r\nimport retrofit2.http.FormUrlEncoded\r\nimport retrofit2.http.GET\r\nimport retrofit2.http.Query\r\nimport retrofit2.http.POST\r\n\r\ninterface RetrofitInterface {\r\n    companion object {\r\n        const val API_URL = \"http://13.125.126.74:8000/\"\r\n    }\r\n    @GET(\"keepwork/member_personal/\")\r\n    fun getData(@Query(\"personal_id\") id: String): Call<List<P_MemberModel>>\r\n\r\n    @POST(\"keepwork/member_personal/\")\r\n    fun postData(@Body data: P_MemberModel): Call<P_MemberModel>\r\n\r\n    @GET(\"keepwork/member_company/\")\r\n    fun getCorporateData(@Query(\"company_id\") id: String): Call<List<C_MemberModel>> // 추가: C_MemberModel 사용\r\n\r\n    @POST(\"keepwork/member_company/\")\r\n    fun postCorporateData(@Body data: C_MemberModel): Call<C_MemberModel>\r\n\r\n    @GET(\"keepwork/job/\")\r\n    fun getJobPostingData(@Query(\"company_id\") id: String): Call<List<JobPosting>>\r\n\r\n    @GET(\"keepwork/notice/\")\r\n    fun getNoticeData(\r\n        @Query(\"notice_listnum\") noticeListNum: Int?,\r\n        @Query(\"notice_title\") noticeTitle: String?,\r\n        @Query(\"notice_content\") noticeContent: Int?,\r\n        @Query(\"notice_date\") noticeDate : String?\r\n    ): Call<List<NoticeModel>>\r\n\r\n    @GET(\"keepwork/resume/\")\r\n    fun getResumeData(\r\n        @Query(\"personal_id_id\") personalId2: String?,\r\n        @Query(\"resume_listnum\") resumeListnum: Int?,\r\n        @Query(\"resume_title\") resumeTitle: String?,\r\n        @Query(\"resume_academic\") resumeAcademic: String?,\r\n        @Query(\"resume_career\") resumeCareer: String?,\r\n        @Query(\"resume_introduction\") resumeIntroduction: String?,\r\n        @Query(\"resume_certificate\") resumeCertificate: String?,\r\n        @Query(\"resume_learning\") resumeLearning: String?,\r\n        @Query(\"resume_desire\") resumeDesire: String?,\r\n        @Query(\"resume_complete\") resumeComplete: String?\r\n    ): Call<List<ResumeModel>>\r\n\r\n    @POST(\"keepwork/resume/\")\r\n    fun deleteResumeFromServer(\r\n        @Field(\"personal_id\") userId: String,\r\n        @Field(\"resume_listnum\") resumeListNum: Int\r\n    ): Call<String>\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/a23_hf069/RetrofitInterface.kt b/app/src/main/java/com/example/a23_hf069/RetrofitInterface.kt
+--- a/app/src/main/java/com/example/a23_hf069/RetrofitInterface.kt	(revision 3407cc496ec3568aa45c5f49dc4ef7e970b0b851)
++++ b/app/src/main/java/com/example/a23_hf069/RetrofitInterface.kt	(date 1694873284017)
+@@ -38,7 +38,7 @@
+ 
+     @GET("keepwork/resume/")
+     fun getResumeData(
+-        @Query("personal_id_id") personalId2: String?,
++        @Query("personal_id") personalId2: String?,
+         @Query("resume_listnum") resumeListnum: Int?,
+         @Query("resume_title") resumeTitle: String?,
+         @Query("resume_academic") resumeAcademic: String?,
+Index: app/src/main/java/com/example/a23_hf069/WantedRequestingFragment.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.a23_hf069\r\n\r\nimport android.content.Intent\r\nimport android.os.Bundle\r\nimport androidx.fragment.app.Fragment\r\nimport android.view.LayoutInflater\r\nimport android.view.View\r\nimport android.view.ViewGroup\r\nimport android.widget.LinearLayout\r\nimport androidx.recyclerview.widget.LinearLayoutManager\r\nimport androidx.recyclerview.widget.RecyclerView\r\n\r\nclass WantedRequestingFragment : Fragment() {\r\n\r\n    private lateinit var recyclerView: RecyclerView\r\n    private lateinit var adapter: ImmediateJobAdapter\r\n\r\n    override fun onCreateView(\r\n        inflater: LayoutInflater, container: ViewGroup?,\r\n        savedInstanceState: Bundle?\r\n    ): View? {\r\n        val rootView= inflater.inflate(R.layout.fragment_wanted_requesting, container, false)\r\n\r\n        //아래 코드는 중간평가 주작을 위해 작성한 코드임\r\n//        val mainLayout = rootView.findViewById<LinearLayout>(R.id.myLinearLayout)\r\n//        mainLayout.setOnClickListener {\r\n//            // '채용공고 상세정보' 페이지로 이동\r\n//            val intent = Intent(activity, JobDetailActivity::class.java)\r\n//            startActivity(intent)\r\n//        }\r\n\r\n        val jobs = listOf(\r\n            ImmediateJob(\"한결소래빌리지 사회복지사 모집 공고\", \"한결 소래빌리지\", \"인천광역시 남동구\"),\r\n            ImmediateJob(\"안성시지체장애인협회 직원 모집\", \"한국지체장애인협회안성시지회\", \"경기도 안성시\")\r\n        )\r\n\r\n        recyclerView = rootView.findViewById(R.id.recyclerView)\r\n        recyclerView.layoutManager = LinearLayoutManager(context)\r\n        adapter = ImmediateJobAdapter(jobs)\r\n        recyclerView.adapter = adapter\r\n\r\n        return rootView\r\n    }\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/a23_hf069/WantedRequestingFragment.kt b/app/src/main/java/com/example/a23_hf069/WantedRequestingFragment.kt
+--- a/app/src/main/java/com/example/a23_hf069/WantedRequestingFragment.kt	(revision 3407cc496ec3568aa45c5f49dc4ef7e970b0b851)
++++ b/app/src/main/java/com/example/a23_hf069/WantedRequestingFragment.kt	(date 1694871933209)
+@@ -21,7 +21,6 @@
+     ): View? {
+         val rootView= inflater.inflate(R.layout.fragment_wanted_requesting, container, false)
+ 
+-        //아래 코드는 중간평가 주작을 위해 작성한 코드임
+ //        val mainLayout = rootView.findViewById<LinearLayout>(R.id.myLinearLayout)
+ //        mainLayout.setOnClickListener {
+ //            // '채용공고 상세정보' 페이지로 이동

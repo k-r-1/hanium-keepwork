@@ -65,13 +65,13 @@ class HomeFragment : Fragment() {
         // ListAdapterGrid 객체를 생성하여 RecyclerView의 어댑터로 설정
         val listAdapter = ListAdapterGrid(list)
 
-        val recyclerList = rootView.findViewById<RecyclerView>(R.id.recyclerGridView)
-        recyclerList.apply {
-            setHasFixedSize(true) // 아이템 크기 고정
-            isNestedScrollingEnabled = false // 스크롤 비활성화
-            layoutManager = listManager // RecyclerView의 레이아웃 매니저 설정
-            adapter = listAdapter // RecyclerView의 어댑터 설정
-        }
+//        val recyclerList = rootView.findViewById<RecyclerView>(R.id.recyclerGridView)
+//        recyclerList.apply {
+//            setHasFixedSize(true) // 아이템 크기 고정
+//            isNestedScrollingEnabled = false // 스크롤 비활성화
+//            layoutManager = listManager // RecyclerView의 레이아웃 매니저 설정
+//            adapter = listAdapter // RecyclerView의 어댑터 설정
+//        }
 
         // EditText을 클릭하면 검색 화면 searchFragment로 전환
         val searchContent = rootView.findViewById<EditText>(R.id.searchContent) // EditText를 rootView에서 찾아옴

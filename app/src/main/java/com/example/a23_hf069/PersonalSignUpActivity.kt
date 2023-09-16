@@ -49,7 +49,7 @@ class PersonalSignUpActivity : AppCompatActivity() {
     private var birthYear = calendar.get(Calendar.YEAR)
     private var birthMonth = calendar.get(Calendar.MONTH)
     private var birthDay = calendar.get(Calendar.DAY_OF_MONTH)
-    lateinit var btnCalendar : Button
+    lateinit var btnCalendar : ImageButton
     lateinit var edtBirthYear : EditText
     lateinit var edtBirthMonth : EditText
     lateinit var edtBirthDay : EditText
@@ -191,8 +191,6 @@ class PersonalSignUpActivity : AppCompatActivity() {
                         Toast.makeText(this@PersonalSignUpActivity, "비밀번호를 6자리 이상 입력해주세요.", Toast.LENGTH_SHORT).show()
                     } else if (!email.contains("@")) {
                         Toast.makeText(this@PersonalSignUpActivity, "이메일에 @를 포함시키세요.", Toast.LENGTH_SHORT).show()
-                    } else if (phonenum.contains("-") || !(phonenum[1] == '1')) {
-                        Toast.makeText(this@PersonalSignUpActivity, "올바른 전화번호 형식으로 입력해주세요.", Toast.LENGTH_SHORT).show()
                     } else if (checkID == false) {
                         Toast.makeText(this@PersonalSignUpActivity, "아이디를 중복확인을 진행하세요.", Toast.LENGTH_SHORT).show()
                     } else {

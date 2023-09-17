@@ -23,29 +23,31 @@ class ResumeSelectionAdapter : RecyclerView.Adapter<ResumeSelectionAdapter.ViewH
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = items[position]
+        val item = items[holder.adapterPosition] // holder.getAdapterPosition()을 사용하여 위치 가져옴
 
         // 데이터 설정
         holder.itemText.text = item
 
         // 체크박스 상태 설정
-        holder.checkBox.isChecked = (position == selectedItemPosition)
+        holder.checkBox.isChecked = (holder.adapterPosition == selectedItemPosition)
 
         // 체크박스 리스너 설정
         holder.checkBox.setOnCheckedChangeListener { _, isChecked ->
+            val adapterPosition = holder.adapterPosition // holder.getAdapterPosition()을 사용하여 위치 가져옴
             if (isChecked) {
                 // 새 항목 선택 시 이전 선택 항목의 체크 해제
-                if (selectedItemPosition != position) {
+                if (selectedItemPosition != adapterPosition) {
                     val prevSelectedItemPosition = selectedItemPosition
-                    selectedItemPosition = position
+                    selectedItemPosition = adapterPosition
                     notifyItemChanged(prevSelectedItemPosition)
                 }
-            } else if (position == selectedItemPosition) {
+            } else if (adapterPosition == selectedItemPosition) {
                 // 항목 선택 해제 시
                 selectedItemPosition = -1
             }
         }
     }
+
 
     override fun getItemCount(): Int {
         return items.size

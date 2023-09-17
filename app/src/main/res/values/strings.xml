@@ -14,6 +14,7 @@
     <string name="title_activity_find_id">FindIdActivity</string>
     <string name="title_activity_main2">MainActivity2</string>
     <string name="title_activity_resume_career">ResumeCareerActivity</string>
+    <string name="title_activity_talent_view">TalentViewActivity</string>
 
     <!-- 검색 필터링 조건 = 직종, 지역, 학력, 경력 -->
     <!-- 다중검색 가능 요청 parameter = region(지역), occupation(직종) -->

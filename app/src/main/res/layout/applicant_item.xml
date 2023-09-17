@@ -3,11 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/applicant"
     android:layout_width="match_parent"
-    android:layout_height="150dp"
+    android:layout_height="wrap_content"
     android:layout_margin="20dp"
     android:background="#FFFFFF"
-    android:padding="2dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="2dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,71 +20,73 @@
             android:layout_height="87dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
+            android:visibility="gone"
             tools:srcCompat="@tools:sample/avatars" />
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_marginStart="10dp"
+            android:layout_weight="1"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/resumeTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
                 android:layout_marginTop="16dp"
-                android:text="이력서제목"
+                android:layout_marginEnd="10dp"
+                android:text="성실한 인재 ㅁㅁㅁ"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="4dp">
+                android:layout_marginTop="4dp"
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/nameTxt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="김00"
+                    android:layout_marginEnd="8dp"
+                    android:text="김슈니"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
                 <TextView
                     android:id="@+id/ageTxt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="(나이)"
-                    android:layout_marginEnd="8dp"/>
+                    android:layout_marginEnd="8dp"
+                    android:text="만 22세" />
 
                 <TextView
                     android:id="@+id/phoneNum"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="010-0000-0000"
-                    android:layout_marginEnd="8dp"/>
+                    android:layout_marginEnd="8dp"
+                    android:text="010-1234-5678" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="4dp">
+                android:layout_marginTop="4dp"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/eduTxt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="학력"
-                    android:layout_marginEnd="16dp"/>
+                    android:layout_marginEnd="16dp"
+                    android:text="한이음대학교 졸업" />
 
                 <TextView
                     android:id="@+id/careerTxt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="경력"
-                    android:layout_marginEnd="16dp"/>
+                    android:layout_marginEnd="16dp"
+                    android:text="ㅇㅇ기업 인턴 1년" />
 
             </LinearLayout>
         </LinearLayout>
@@ -100,8 +102,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="end">
+        android:gravity="end"
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/onHoldBtn"

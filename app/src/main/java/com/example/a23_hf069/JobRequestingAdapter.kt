@@ -33,19 +33,18 @@ class JobRequestingAdapter : RecyclerView.Adapter<JobRequestingAdapter.JobViewHo
         holder.tvJobCompanyName.text = job.company_name
 
 
-      /*  // 리스트 아이템 클릭 이벤트 처리
+        // 리스트 아이템 클릭 이벤트 처리
         holder.itemView.setOnClickListener {
             // JobPostingDetailActivity로 이동하고 선택한 항목의 정보를 전달합니다.
             val context = holder.itemView.context
-            val intent = Intent(context, JobPostingDetailActivity::class.java)
+            val intent = Intent(context, JobRequestingDetailActivity::class.java)
 
             // 선택한 항목의 정보를 인텐트에 추가합니다.
             intent.putExtra("jobPosting", job)
-            intent.putExtra("companyName", companyInfo?.company_name) // 회사 이름을 추가
 
             // Activity를 시작합니다.
             context.startActivity(intent)
-        }*/
+        }
 
     }
 

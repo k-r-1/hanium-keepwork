@@ -567,11 +567,11 @@
 
             <!--회원가입 버튼-->
             <Button
-                android:id="@+id/signUp_button"
+                android:id="@+id/next_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:text="즉시지원"
+                android:text="다음"
                 android:textSize="17sp"
                 android:textStyle="bold" />
 

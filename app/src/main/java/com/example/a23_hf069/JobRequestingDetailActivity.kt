@@ -1,8 +1,10 @@
 package com.example.a23_hf069
 
 import JobPosting
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 
@@ -42,6 +44,7 @@ class JobRequestingDetailActivity : AppCompatActivity() {
         val emailTextView = findViewById<TextView>(R.id.job_email)
         val deadlineTextView = findViewById<TextView>(R.id.job_deadline)
         val companyNameLabel = findViewById<TextView>(R.id.companyNameLabel)
+        val next_button = findViewById<Button>(R.id.next_button)
 
         // 가져온 데이터를 레이아웃에 표시
         company.text = "swu"
@@ -59,6 +62,13 @@ class JobRequestingDetailActivity : AppCompatActivity() {
         emailTextView.text = "keepwork@email.com"
         deadlineTextView.text = "20231013"
         companyNameLabel.text = "swu"
+
+        next_button.setOnClickListener {
+            // ResumeSelectionActivity로 이동하는 Intent 생성
+            val intent = Intent(this, ResumeSelectionActivity::class.java)
+            startActivity(intent)
+        }
+
 
     }
 }

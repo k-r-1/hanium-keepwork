@@ -31,6 +31,9 @@ interface RetrofitInterface {
     @GET("keepwork/job/")
     fun getJobPostings(): Call<List<JobPosting>>
 
+    @GET("keepwork/resume/")
+    fun getResumeData(@Query("personal_id") personalId: String): Call<List<ResumeModel>>
+
     @GET("keepwork/notice/")
     fun getNoticeData(
         @Query("notice_listnum") noticeListNum: Int?,

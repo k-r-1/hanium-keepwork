@@ -1,5 +1,6 @@
 package com.example.a23_hf069
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -65,6 +67,11 @@ class P_loginFragment : Fragment() { //개인로그인
                                     if (data.personal_id == id) {
                                         // 로그인 성공
                                         Toast.makeText(requireContext(), "로그인 성공", Toast.LENGTH_SHORT).show()
+
+                                        // 뷰 모델에 저장
+                                        val userViewModel = ViewModelProvider(requireActivity()).get(UserViewModel::class.java)
+                                        userViewModel.setUserId(id) // userId 설정
+
                                         // 로그인 성공 시 homeactivity로 전환
                                         val intent = Intent(requireActivity(), HomeActivity::class.java)
                                         intent.putExtra("userId", id)

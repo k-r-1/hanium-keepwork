@@ -36,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="10dp"
-                android:text="성실한 인재 ㅁㅁㅁ"
+                android:text="언제나 최선을 다하겠습니다"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
             <LinearLayout
@@ -50,7 +50,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
-                    android:text="김슈니"
+                    android:text="김회원"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
                 <TextView
@@ -58,7 +58,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
-                    android:text="만 22세" />
+                    android:text="만 25세" />
 
                 <TextView
                     android:id="@+id/phoneNum"
@@ -79,14 +79,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="10dp"
                     android:text="한이음대학교 졸업" />
 
-                <TextView
-                    android:id="@+id/careerTxt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:text="ㅇㅇ기업 인턴 1년" />
 
             </LinearLayout>
         </LinearLayout>
@@ -95,7 +90,7 @@
             android:id="@+id/isRead"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="열람" />
+            android:text="미열람" />
 
     </LinearLayout>
 

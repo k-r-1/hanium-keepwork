@@ -66,7 +66,7 @@
                         android:id="@+id/tvTalentView_ID"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="ddd"
+                        android:text="member"
                         android:textColor="@color/black"
                         android:textSize="24dp"
                         android:textStyle="bold" />
@@ -112,7 +112,7 @@
                         android:layout_width="359dp"
                         android:layout_height="match_parent"
                         android:background="@null"
-                        android:hint="성실한 인재 ㅁㅁㅁ"
+                        android:hint="언제나 최선을 다하겠습니다"
                         android:textAlignment="center"
                         android:textColor="@color/black"
                         android:textSize="20dp" />
@@ -210,7 +210,7 @@
                         android:padding="5dp"
                         android:textColor="#342F2F"
                         android:textSize="16dp"
-                        android:text="ㅇㅇ기업 인턴 1년" />
+                        android:text="한이음 기업 2년 근무" />
 
                 </LinearLayout>
 
@@ -252,7 +252,7 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/rounded_rectangle_border"
                         android:padding="5dp"
-                        android:text="안녕하세요, 성실한 인재 ㅁㅁㅁ입니다."
+                        android:text="안녕하세요, 언제나 최선을 다하는 인재 ㅁㅁㅁ입니다."
                         android:textColor="#342F2F"
                         android:textSize="16dp" />
 
@@ -339,7 +339,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/rounded_rectangle_border"
                     android:padding="5dp"
-                    android:text="ㅁㅁ 개발교육 600시간"
+                    android:text="삼성SW아카데미 10기"
                     android:textColor="#342F2F"
                     android:textSize="16dp" />
 
@@ -382,7 +382,7 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/rounded_rectangle_border"
                         android:padding="5dp"
-                        android:text="없음"
+                        android:text="개발 직군"
                         android:textColor="#342F2F"
                         android:textSize="16dp" />
 

@@ -58,31 +58,27 @@ class P_loginFragment : Fragment() { //개인로그인
                 // RetrofitInterface 인터페이스 구현
                 val apiService = retrofit.create(RetrofitInterface::class.java)
 
-                apiService.getData(id).enqueue(object : Callback<List<P_MemberModel>> {
-                    override fun onResponse(call: Call<List<P_MemberModel>>, response: Response<List<P_MemberModel>>) {
+                apiService.getData(id).enqueue(object : Callback<P_MemberModel> {
+                    override fun onResponse(call: Call<P_MemberModel>, response: Response<P_MemberModel>) {
                         if (response.isSuccessful) {
-                            val result = response.body()
-                            if (result != null && result.isNotEmpty()) {
-                                for (data in result) {
-                                    if (data.personal_id == id) {
-                                        // 로그인 성공
-                                        Toast.makeText(requireContext(), "로그인 성공", Toast.LENGTH_SHORT).show()
+                            val data = response.body()
+                            if (data != null) {
+                                // 로그인 성공
+                                Toast.makeText(requireContext(), "로그인 성공", Toast.LENGTH_SHORT).show()
 
-                                        // 뷰 모델에 저장
-                                        val userViewModel = ViewModelProvider(requireActivity()).get(UserViewModel::class.java)
-                                        userViewModel.setUserId(id) // userId 설정
+                                // 뷰 모델에 저장
+                                val userViewModel = ViewModelProvider(requireActivity()).get(UserViewModel::class.java)
+                                userViewModel.setUserId(id) // userId 설정
 
-                                        // 로그인 성공 시 homeactivity로 전환
-                                        val intent = Intent(requireActivity(), HomeActivity::class.java)
-                                        intent.putExtra("userId", id)
-                                        startActivity(intent)
-                                    }
-                                }
+                                // 로그인 성공 시 homeactivity로 전환
+                                val intent = Intent(requireActivity(), HomeActivity::class.java)
+                                intent.putExtra("userId", id)
+                                startActivity(intent)
                             }
                         }
                     }
 
-                    override fun onFailure(call: Call<List<P_MemberModel>>, t: Throwable) {
+                    override fun onFailure(call: Call<P_MemberModel>, t: Throwable) {
                         // 통신 실패 처리
                         Toast.makeText(
                             requireContext(),
@@ -96,8 +92,8 @@ class P_loginFragment : Fragment() { //개인로그인
 
         btnSignUp.setOnClickListener() {
             // 회원 가입 버튼을 눌렀을 때 회원 가입 화면으로 이동
-            val intent = Intent(getActivity(), PersonalSignUpActivity::class.java)
-            startActivity(intent)
+//            val intent = Intent(getActivity(), PersonalSignUpActivity::class.java)
+//            startActivity(intent)
         }
 
         btnFindId.setOnClickListener {

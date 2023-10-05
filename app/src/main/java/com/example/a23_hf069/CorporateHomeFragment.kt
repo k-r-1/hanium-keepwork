@@ -1,6 +1,7 @@
 package com.example.a23_hf069
 
 import JobPosting
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -33,7 +34,9 @@ class CorporateHomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        userCompanyName = arguments?.getString("userCompanyName", "") ?: ""
+        // 사용자 이름 가져오기 (이 부분은 SharedPreferences를 통해 사용자 이름을 얻는 방식으로 진행)
+        val sharedPreferences = requireContext().getSharedPreferences("MyPreferences", Context.MODE_PRIVATE)
+        userCompanyName = sharedPreferences.getString("userName", null) ?: ""
         postingTitleTextView = view.findViewById(R.id.postingTitleTextView)
         deadlineTextView = view.findViewById(R.id.deadlineTextView)
 
@@ -57,14 +60,14 @@ class CorporateHomeFragment : Fragment() {
                 response: Response<List<JobPosting>>
             ) {
                 if (response.isSuccessful) {
-                    val jobPostings = response.body()
+                    val jobPostingList = response.body() ?: emptyList()
 
-                    // userCompanyName과 company_name이 같을 때의 공고만 필터링
-                    val matchingJobPostings = jobPostings?.filter {
-                        it.company_name == userCompanyName
+                    val filteredJobPostingList = jobPostingList.filter { jobPosting ->
+                        // 여기에서 userName과 jobPosting의 company_name 비교
+                        jobPosting.company_name == userCompanyName
                     }
 
-                    val latestJobPosting = findLatestJobPosting(matchingJobPostings)
+                    val latestJobPosting = findLatestJobPosting(filteredJobPostingList)
 
                     if (latestJobPosting != null) {
                         postingTitleTextView.text = latestJobPosting.job_title

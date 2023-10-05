@@ -1,12 +1,14 @@
 package com.example.a23_hf069
 
 import JobPosting
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import retrofit2.Retrofit
@@ -17,22 +19,6 @@ import retrofit2.Response
 
 
 class JobManagementPostFragment : Fragment() {
-
-    // 사용자 ID를 저장할 변수
-    private lateinit var userCompanyName: String
-
-    companion object {
-        private const val ARG_USER_COMPANY_NAME = "userCompanyName"
-
-        fun newInstance(userCompanyName: String): JobManagementPostFragment {
-            val fragment = JobManagementPostFragment()
-            val args = Bundle()
-            args.putString(ARG_USER_COMPANY_NAME, userCompanyName)
-            fragment.arguments = args
-            return fragment
-        }
-    }
-
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: JobPostingAdapter
 
@@ -40,10 +26,6 @@ class JobManagementPostFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Arguments에서 userCompanyId 값을 읽어와서 변수에 할당합니다.
-        arguments?.let {
-            userCompanyName = it.getString(ARG_USER_COMPANY_NAME, "")
-        }
     }
 
     override fun onCreateView(
@@ -66,6 +48,10 @@ class JobManagementPostFragment : Fragment() {
     }
 
     private fun fetchDataFromServer() {
+        // 사용자 이름 가져오기 (이 부분은 SharedPreferences를 통해 사용자 이름을 얻는 방식으로 진행)
+        val sharedPreferences = requireContext().getSharedPreferences("MyPreferences", Context.MODE_PRIVATE)
+        val userName = sharedPreferences.getString("userName", null) ?: ""
+
         val retrofit = Retrofit.Builder()
             .baseUrl(RetrofitInterface.API_URL)
             .addConverterFactory(GsonConverterFactory.create())
@@ -73,49 +59,31 @@ class JobManagementPostFragment : Fragment() {
 
         val service = retrofit.create(RetrofitInterface::class.java)
 
-        // userCompanyName를 사용하여 C_MemberModel을 가져옵니다.
-        val companyCall = service.getCorporateData(userCompanyName)
-        companyCall.enqueue(object : Callback<List<C_MemberModel>> {
-            override fun onResponse(
-                call: Call<List<C_MemberModel>>,
-                response: Response<List<C_MemberModel>>
-            ) {
+        // Retrofit 요청을 수정하여 userName을 사용하여 해당 사용자의 공고만 가져오도록 합니다.
+        val call = service.getJobPostingData(userName)
+
+        call.enqueue(object : Callback<List<JobPosting>> {
+            override fun onResponse(call: Call<List<JobPosting>>, response: Response<List<JobPosting>>) {
                 if (response.isSuccessful) {
-                    val companyData = response.body() ?: emptyList()
-                    // C_MemberModel 데이터를 가져왔습니다.
+                    val jobPostingList = response.body() ?: emptyList()
 
-                    // 이제 작업 게시 데이터를 가져옵니다.
-                    val jobPostingCall = service.getJobPostingData(userCompanyName)
-                    jobPostingCall.enqueue(object : Callback<List<JobPosting>> {
-                        override fun onResponse(
-                            call: Call<List<JobPosting>>,
-                            response: Response<List<JobPosting>>
-                        ) {
-                            if (response.isSuccessful) {
-                                val allJobPostings = response.body() ?: emptyList()
+                    val filteredJobPostingList = jobPostingList.filter { jobPosting ->
+                        // 여기에서 userName과 jobPosting의 company_name 비교
+                        jobPosting.company_name == userName
+                    }
 
-                                // Filter job postings based on the condition
-                                val filteredJobPostings = allJobPostings.filter { it.company_name == userCompanyName }
-
-                                // C_MemberModel 데이터와 작업 게시 데이터를 adapter에 넘겨줍니다.
-                                adapter = JobPostingAdapter(filteredJobPostings, companyData)
-                                recyclerView.adapter = adapter
-                            } else {
-                                // 오류 처리
-                            }
-                        }
-
-                        override fun onFailure(call: Call<List<JobPosting>>, t: Throwable) {
-                            // 네트워크 오류 처리
-                        }
-                    })
+                    // 가져온 공고 데이터를 RecyclerView에 설정하여 화면에 표시
+                    adapter = JobPostingAdapter(filteredJobPostingList)
+                    recyclerView.adapter = adapter
                 } else {
-                    // 오류 처리
+                    // 처리 중 오류 발생
+                    // 오류 처리 로직 추가
                 }
             }
 
-            override fun onFailure(call: Call<List<C_MemberModel>>, t: Throwable) {
-                // 네트워크 오류 처리
+            override fun onFailure(call: Call<List<JobPosting>>, t: Throwable) {
+                // 네트워크 오류 등으로 요청 실패
+                // 오류 처리 로직 추가
             }
         })
     }

@@ -1,3 +1,4 @@
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,12 +8,14 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.example.a23_hf069.C_MemberModel
 import com.example.a23_hf069.CorporateHomeActivity
 import com.example.a23_hf069.CorporateSignUpActivity
 import com.example.a23_hf069.FindCorporateIdActivity
 import com.example.a23_hf069.R
 import com.example.a23_hf069.RetrofitInterface
+import com.example.a23_hf069.UserViewModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -20,6 +23,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class C_loginFragment : Fragment() {
+    private lateinit var userViewModel: UserViewModel
     lateinit var login: Button
     lateinit var signUp: Button
     lateinit var btnFindId: Button
@@ -36,6 +40,10 @@ class C_loginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // UserViewModel 초기화
+        userViewModel = ViewModelProvider(requireActivity()).get(UserViewModel::class.java)
+
 
         login = view.findViewById<Button>(R.id.login_btn)
         signUp = view.findViewById<Button>(R.id.signUp_btn)
@@ -58,7 +66,7 @@ class C_loginFragment : Fragment() {
 
                 val apiService = retrofit.create(RetrofitInterface::class.java)
 
-                apiService.getCorporateData(id).enqueue(object : Callback<List<C_MemberModel>> {
+                apiService.getCorporateData(id, password).enqueue(object : Callback<List<C_MemberModel>> {
                     override fun onResponse(call: Call<List<C_MemberModel>>, response: Response<List<C_MemberModel>>) {
                         if (response.isSuccessful) {
                             val result = response.body()
@@ -68,8 +76,13 @@ class C_loginFragment : Fragment() {
                                 for (data in result) {
                                     if (data.company_id == id && data.company_password == password) {
                                         isLoginSuccessful = true // 아이디와 비밀번호가 일치할 때 플래그를 true로 설정
+                                        // 데이터 저장
+                                        val sharedPreferences = requireContext().getSharedPreferences("MyPreferences", Context.MODE_PRIVATE)
+                                        val editor = sharedPreferences.edit()
+                                        editor.putString("userName", data.company_name)
+                                        editor.apply()
                                         val intent = Intent(requireActivity(), CorporateHomeActivity::class.java)
-                                        intent.putExtra("userCompanyName", data.company_name)
+                                        /*intent.putExtra("userCompanyName", data.company_name)*/
                                         /*intent.putExtra("userCompanyId", data.company_id)*/
                                         startActivity(intent)
                                         break // 로그인 성공 시 루프를 종료합니다.

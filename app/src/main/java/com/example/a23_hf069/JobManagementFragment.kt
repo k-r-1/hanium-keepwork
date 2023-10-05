@@ -33,7 +33,7 @@ class JobManagementFragment : Fragment() {
         }
 
         val fragmentList = listOf(
-            JobManagementPostFragment.newInstance(userCompanyName),
+            JobManagementPostFragment(),
             JobManagementSaveFragment(),
             JobManagementEndFragment()
         )

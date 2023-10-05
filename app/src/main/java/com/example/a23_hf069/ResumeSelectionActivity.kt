@@ -1,7 +1,9 @@
 package com.example.a23_hf069
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Button
 import android.widget.ImageButton
 import androidx.appcompat.app.ActionBar
 import androidx.lifecycle.ViewModelProvider
@@ -15,6 +17,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class ResumeSelectionActivity : AppCompatActivity() {
     private lateinit var userViewModel: UserViewModel
+    private lateinit var requestingButton: Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_resume_selection)
@@ -23,6 +26,12 @@ class ResumeSelectionActivity : AppCompatActivity() {
         val actionBar: ActionBar? = supportActionBar
         if (actionBar != null) {
             actionBar.hide()
+        }
+
+        requestingButton = findViewById(R.id.requesting_button)
+        requestingButton.setOnClickListener {
+            val intent = Intent(this@ResumeSelectionActivity, HomeActivity::class.java)
+            startActivity(intent)
         }
 
         val closeButton = findViewById<ImageButton>(R.id.backButton)

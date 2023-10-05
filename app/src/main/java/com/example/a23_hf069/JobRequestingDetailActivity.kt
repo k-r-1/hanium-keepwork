@@ -47,7 +47,7 @@ class JobRequestingDetailActivity : AppCompatActivity() {
         val next_button = findViewById<Button>(R.id.next_button)
 
         // 가져온 데이터를 레이아웃에 표시
-        company.text = "swu"
+        company.text = ""
         jobTitleTextView.text = "프론트엔드 (Front-end) 개발자 채용"
         experienceRequiredTextView.text = "경력"
         educationRequiredTextView.text = "학사 이상"
@@ -58,10 +58,10 @@ class JobRequestingDetailActivity : AppCompatActivity() {
         positionTextView.text = "대리급"
         categoryTextView.text = "개발 직무"
         requirementsTextView.text = "정보처리기사 우대"
-        contactNumberTextView.text = "010-4444-5555"
-        emailTextView.text = "keepwork@email.com"
+        contactNumberTextView.text = "010-1234-5678"
+        emailTextView.text = "hanium@email.com"
         deadlineTextView.text = "20231013"
-        companyNameLabel.text = "swu"
+        companyNameLabel.text = "company"
 
         next_button.setOnClickListener {
             // ResumeSelectionActivity로 이동하는 Intent 생성

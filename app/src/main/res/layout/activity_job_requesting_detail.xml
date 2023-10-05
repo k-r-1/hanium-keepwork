@@ -480,7 +480,7 @@
                       android:layout_gravity="center"
                       android:drawableRight="@drawable/baseline_navigate_next_24"
                       android:textColor="@android:color/black"
-                      android:textSize="20sp"
+                      android:textSize="24sp"
                       android:layout_margin="20dp"/>
               </LinearLayout>
                </FrameLayout>
@@ -571,7 +571,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:text="다음"
+                android:text="지원하기"
                 android:textSize="17sp"
                 android:textStyle="bold" />
 

@@ -32,8 +32,8 @@ class JobPostingAdapter(
         // C_MemberModel에서 필요한 데이터를 가져와서 사용합니다.
         val companyInfo = companyData.find { it.company_name == jobPosting.company_name }
         if (companyInfo != null) {
-            holder.tvJobCompanyName.text = companyInfo.company_name
-            holder.tvJobAdress.text = companyInfo.company_address
+          //  holder.tvJobCompanyName.text = companyInfo.company_name
+          //  holder.tvJobAdress.text = companyInfo.company_address
 
         }
 
@@ -70,10 +70,10 @@ class JobPostingAdapter(
     }
 
     inner class JobPostingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val tvJobCompanyName: TextView = itemView.findViewById(R.id.tvJobCompanyName)
+        // val tvJobCompanyName: TextView = itemView.findViewById(R.id.tvJobCompanyName)
         val tvJobExperienceRequirede: TextView = itemView.findViewById(R.id.tvJobExperienceRequirede)
         val tvJobEducationRequirede: TextView = itemView.findViewById(R.id.tvJobEducationRequirede)
-        val tvJobAdress: TextView = itemView.findViewById(R.id.tvJobAdress)
+       // val tvJobAdress: TextView = itemView.findViewById(R.id.tvJobAdress)
 
         val jobTitleTextView: TextView = itemView.findViewById(R.id.tvJobManagementTitle)
         val endDateTextView: TextView = itemView.findViewById(R.id.tvJobManagementEndDate)

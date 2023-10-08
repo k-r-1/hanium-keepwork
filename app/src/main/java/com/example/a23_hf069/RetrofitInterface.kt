@@ -41,6 +41,10 @@ interface RetrofitInterface {
     @GET("keepwork/job/")
     fun getJobPostingData(@Query("userName") userName: String): Call<List<JobPosting>>
 
+    @POST("keepwork/job/")
+    fun postJob(@Body job: JobPosting): Call<JobPosting>
+
+
 
     @GET("keepwork/job/")
     fun getJobPostings(): Call<List<JobPosting>>

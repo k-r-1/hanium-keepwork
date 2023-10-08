@@ -6,8 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class JobPostingAdapter(
     private val jobPostingList: List<JobPosting>,
@@ -49,6 +55,11 @@ class JobPostingAdapter(
         holder.endButton.setOnClickListener {
             // 마감 처리를 여기에 추가하세요.
         }
+        holder.deleteButton.setOnClickListener {
+            val jobPostingToDelete = jobPostingList[position]
+            deleteJobPostingFromServer(jobPostingToDelete, position)
+        }
+
 
         // 리스트 아이템 클릭 이벤트 처리
         holder.itemView.setOnClickListener {
@@ -65,6 +76,33 @@ class JobPostingAdapter(
         }
     }
 
+    private fun deleteJobPostingFromServer(jobPosting: JobPosting, position: Int) {
+        val retrofit = Retrofit.Builder()
+            .baseUrl(RetrofitInterface.API_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        val service = retrofit.create(RetrofitInterface::class.java)
+
+        val call = service.deleteJobPosting(jobPosting.job_listnum)
+        call.enqueue(object : Callback<Void> {
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                if (response.isSuccessful) {
+                    // 로컬 리스트에서 항목 삭제
+                    jobPostingList.toMutableList().removeAt(position)
+                    notifyItemRemoved(position)
+                } else {
+                    // 서버 에러 처리
+                }
+            }
+
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                // 네트워크 오류 처리
+            }
+        })
+    }
+
+
     override fun getItemCount(): Int {
         return jobPostingList.size
     }
@@ -80,5 +118,6 @@ class JobPostingAdapter(
         val modifyButton: Button = itemView.findViewById(R.id.btnJobManagement_modify)
         val repostButton: Button = itemView.findViewById(R.id.btnJobManagement_repost)
         val endButton: Button = itemView.findViewById(R.id.btnJobManagement_end)
+        val deleteButton: ImageButton = itemView.findViewById(R.id.deleteButton)
     }
 }

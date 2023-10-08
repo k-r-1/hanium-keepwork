@@ -3,6 +3,7 @@ package com.example.a23_hf069
 import JobPosting
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
@@ -43,6 +44,11 @@ interface RetrofitInterface {
 
     @GET("keepwork/job/")
     fun getJobPostings(): Call<List<JobPosting>>
+
+    @DELETE("keepwork/job/{listnum}/")
+    fun deleteJobPosting(@Path("listnum") listnum: Int): Call<Void>
+
+
 
     @GET("keepwork/resume/")
     fun getResumeData(@Query("personal_id") personalId: String): Call<List<ResumeModel>>

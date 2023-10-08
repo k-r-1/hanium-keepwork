@@ -62,12 +62,7 @@ class CorporateHomeFragment : Fragment() {
                 if (response.isSuccessful) {
                     val jobPostingList = response.body() ?: emptyList()
 
-                    val filteredJobPostingList = jobPostingList.filter { jobPosting ->
-                        // 여기에서 userName과 jobPosting의 company_name 비교
-                        jobPosting.company_name == userCompanyName
-                    }
-
-                    val latestJobPosting = findLatestJobPosting(filteredJobPostingList)
+                    val latestJobPosting = findLatestJobPosting(jobPostingList)
 
                     if (latestJobPosting != null) {
                         postingTitleTextView.text = latestJobPosting.job_title

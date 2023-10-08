@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.a23_hf069.C_MemberModel
 import com.example.a23_hf069.CorporateHomeActivity
-import com.example.a23_hf069.CorporateSignUpActivity
+//import com.example.a23_hf069.CorporateSignUpActivity
 import com.example.a23_hf069.FindCorporateIdActivity
 import com.example.a23_hf069.R
 import com.example.a23_hf069.RetrofitInterface
@@ -66,28 +66,23 @@ class C_loginFragment : Fragment() {
 
                 val apiService = retrofit.create(RetrofitInterface::class.java)
 
-                apiService.getCorporateData(id, password).enqueue(object : Callback<List<C_MemberModel>> {
-                    override fun onResponse(call: Call<List<C_MemberModel>>, response: Response<List<C_MemberModel>>) {
+                apiService.getCorporateData(id).enqueue(object : Callback<C_MemberModel> {
+                    override fun onResponse(call: Call<C_MemberModel>, response: Response<C_MemberModel>) {
                         if (response.isSuccessful) {
                             val result = response.body()
                             var isLoginSuccessful = false // 로그인 성공 여부를 체크하기 위한 변수
 
-                            if (result != null && result.isNotEmpty()) {
-                                for (data in result) {
-                                    if (data.company_id == id && data.company_password == password) {
-                                        isLoginSuccessful = true // 아이디와 비밀번호가 일치할 때 플래그를 true로 설정
-                                        // 데이터 저장
-                                        val sharedPreferences = requireContext().getSharedPreferences("MyPreferences", Context.MODE_PRIVATE)
-                                        val editor = sharedPreferences.edit()
-                                        editor.putString("userName", data.company_name)
-                                        editor.apply()
-                                        val intent = Intent(requireActivity(), CorporateHomeActivity::class.java)
-                                        /*intent.putExtra("userCompanyName", data.company_name)*/
-                                        /*intent.putExtra("userCompanyId", data.company_id)*/
-                                        startActivity(intent)
-                                        break // 로그인 성공 시 루프를 종료합니다.
-                                    }
-                                }
+                            if (result != null) {
+                                isLoginSuccessful = true // 아이디와 비밀번호가 일치할 때 플래그를 true로 설정
+                                // 데이터 저장
+                                val sharedPreferences = requireContext().getSharedPreferences("MyPreferences", Context.MODE_PRIVATE)
+                                val editor = sharedPreferences.edit()
+                                editor.putString("userName", result.company_name)
+                                editor.apply()
+                                val intent = Intent(requireActivity(), CorporateHomeActivity::class.java)
+                                /*intent.putExtra("userCompanyName", data.company_name)*/
+                                /*intent.putExtra("userCompanyId", data.company_id)*/
+                                startActivity(intent)
                             }
 
                             if (!isLoginSuccessful) {
@@ -97,7 +92,7 @@ class C_loginFragment : Fragment() {
                         }
                     }
 
-                    override fun onFailure(call: Call<List<C_MemberModel>>, t: Throwable) {
+                    override fun onFailure(call: Call<C_MemberModel>, t: Throwable) {
                         Toast.makeText(
                             requireContext(),
                             "통신 오류: " + t.message,
@@ -110,8 +105,8 @@ class C_loginFragment : Fragment() {
         }
 
         signUp.setOnClickListener() {
-            val intent = Intent(getActivity(), CorporateSignUpActivity::class.java)
-            startActivity(intent)
+//            val intent = Intent(getActivity(), CorporateSignUpActivity::class.java)
+//            startActivity(intent)
         }
 
         btnFindId.setOnClickListener {

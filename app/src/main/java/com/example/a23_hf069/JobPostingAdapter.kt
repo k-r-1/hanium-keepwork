@@ -1,6 +1,7 @@
 package com.example.a23_hf069
 
 import JobPosting
+import android.app.AlertDialog
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
@@ -55,11 +56,25 @@ class JobPostingAdapter(
         holder.endButton.setOnClickListener {
             // 마감 처리를 여기에 추가하세요.
         }
-        holder.deleteButton.setOnClickListener {
-            val jobPostingToDelete = jobPostingList[position]
-            deleteJobPostingFromServer(jobPostingToDelete, position)
-        }
 
+        holder.deleteButton.setOnClickListener {
+            val dialogBuilder = AlertDialog.Builder(holder.itemView.context)
+            dialogBuilder.setMessage("정말 삭제하시겠습니까?")
+                .setCancelable(false)
+                .setPositiveButton("예") { dialog, id ->
+                    // 예 버튼을 클릭한 경우
+                    dialog.dismiss() // 다이얼로그를 닫습니다.
+                    // 서버에 삭제 요청을 보내고 항목을 삭제합니다.
+                    val jobPostingToDelete = jobPostingList[position]
+                    deleteJobPostingFromServer(jobPostingToDelete, position)
+                }
+                .setNegativeButton("아니요") { dialog, id ->
+                    // 아니요 버튼을 클릭한 경우
+                    dialog.dismiss() // 다이얼로그를 닫습니다.
+                }
+            val alertDialog = dialogBuilder.create()
+            alertDialog.show()
+        }
 
         // 리스트 아이템 클릭 이벤트 처리
         holder.itemView.setOnClickListener {

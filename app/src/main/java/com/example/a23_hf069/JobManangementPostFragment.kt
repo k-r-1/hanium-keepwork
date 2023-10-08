@@ -67,17 +67,12 @@ class JobManagementPostFragment : Fragment() {
                 if (response.isSuccessful) {
                     val jobPostingList = response.body() ?: emptyList()
 
-                    val filteredJobPostingList = jobPostingList.filter { jobPosting ->
-                        // 여기에서 userName과 jobPosting의 company_name 비교
-                        jobPosting.company_name == userName
-                    }
-
                     // 가져온 공고 데이터를 RecyclerView에 설정하여 화면에 표시
-                    adapter = JobPostingAdapter(filteredJobPostingList)
+                    adapter = JobPostingAdapter(jobPostingList)
                     recyclerView.adapter = adapter
                 } else {
                     // 처리 중 오류 발생
-                    // 오류 처리 로직 추가
+                    // 오류 처리 로직을 추가하세요.
                 }
             }
 

@@ -52,8 +52,6 @@ interface RetrofitInterface {
     @DELETE("keepwork/job/{listnum}/")
     fun deleteJobPosting(@Path("listnum") listnum: Int): Call<Void>
 
-
-
     @GET("keepwork/resume/")
     fun getResumeData(@Query("personal_id") personalId: String): Call<List<ResumeModel>>
 
@@ -67,7 +65,7 @@ interface RetrofitInterface {
 
     @GET("keepwork/resume/")
     fun getResumeData(
-        @Query("personal_id") personalId2: String?,
+        @Query("personal_id") personalId: String?,
         @Query("resume_listnum") resumeListnum: Int?,
         @Query("resume_title") resumeTitle: String?,
         @Query("resume_academic") resumeAcademic: String?,
@@ -76,7 +74,7 @@ interface RetrofitInterface {
         @Query("resume_certificate") resumeCertificate: String?,
         @Query("resume_learning") resumeLearning: String?,
         @Query("resume_desire") resumeDesire: String?,
-        @Query("resume_complete") resumeComplete: String?
+        @Query("resume_complete") resumeComplete: String?,
     ): Call<List<ResumeModel>>
 
     @POST("keepwork/resume/")

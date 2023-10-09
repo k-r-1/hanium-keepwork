@@ -16,7 +16,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class ResumeClickActivity : AppCompatActivity() {
-    private var userId: String = "ddd" // User ID
+    private var userId: String = "" // User ID
     private var resumeListNum: Int = -1
     private lateinit var editResumeTitle: TextView
     private lateinit var editTextAcademic: TextView
@@ -36,7 +36,6 @@ class ResumeClickActivity : AppCompatActivity() {
         // Get user ID
         resumeListNum = intent.getIntExtra("resumeListNum", -1)
 //        userId = intent.getStringExtra("userId") ?: ""
-
 
         val textID = findViewById<TextView>(R.id.tvClick_ID)
         textID.text = userId
@@ -88,6 +87,8 @@ class ResumeClickActivity : AppCompatActivity() {
                     if (response.isSuccessful) {
                         val resumeData = response.body()
                         handleResumeItemData(resumeData)
+                        userId = resumeData?.getOrNull(0)?.personal_id_id ?: ""
+                        // personal_id를 userId에 설정합니다.
                     }
                 }
 

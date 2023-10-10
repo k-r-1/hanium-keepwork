@@ -33,9 +33,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
+            android:layout_marginEnd="10dp"
             android:background="@android:color/transparent"
-            android:src="@drawable/ic_baseline_notifications_none_24"
-            android:layout_marginEnd="10dp" />
+            android:src="@drawable/ic_baseline_notifications_none_24" />
 
     </androidx.appcompat.widget.Toolbar>
 
@@ -83,13 +83,13 @@
                             android:backgroundTint="@android:color/white"
                             android:drawableRight="@drawable/ic_baseline_search_24"
                             android:ems="10"
+                            android:focusable="true"
                             android:hint="어떤 일자리를 찾으세요?"
                             android:inputType="text"
                             android:minHeight="48dp"
                             android:textColor="@android:color/white"
                             android:textColorHint="@android:color/white"
-                            android:textSize="15sp"
-                            android:focusable="true"/>
+                            android:textSize="15sp" />
 
                         <LinearLayout
                             android:layout_width="wrap_content"
@@ -130,20 +130,20 @@
                     <ImageView
                         android:id="@+id/dynamicImageView"
                         android:layout_width="wrap_content"
-                        android:layout_gravity="center"
                         android:layout_height="200dp"
+                        android:layout_gravity="center"
                         android:scaleType="center"
                         android:src="@drawable/worknet0" />
 
                     <TextView
-                        android:background="@color/selectedMenuColor"
                         android:layout_width="match_parent"
                         android:layout_height="60dp"
+                        android:background="@color/selectedMenuColor"
                         android:gravity="center"
-                        android:textColor="@color/white"
-                        android:textStyle="bold"
                         android:text="김포 더편한요양원 사무국장(사회복지사) 구인"
-                        android:textSize="18sp" />
+                        android:textColor="@color/white"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -182,18 +182,26 @@
                             android:textColor="@android:color/black"
                             android:textSize="16sp" />
 
+                        <TextView
+                            android:id="@+id/tvRecommendList"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginTop="10dp"
+                            android:text="추천 공고 목록" />
+
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent">
 
-<!--                            <androidx.recyclerview.widget.RecyclerView-->
-<!--                                android:id="@+id/recyclerGridView"-->
-<!--                                android:layout_width="wrap_content"-->
-<!--                                android:layout_height="wrap_content"-->
-<!--                                app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                                app:layout_constraintStart_toStartOf="parent"-->
-<!--                                app:layout_constraintTop_toTopOf="parent" />-->
+                            <!--                            <androidx.recyclerview.widget.RecyclerView-->
+                            <!--                                android:id="@+id/recyclerGridView"-->
+                            <!--                                android:layout_width="wrap_content"-->
+                            <!--                                android:layout_height="wrap_content"-->
+                            <!--                                app:layout_constraintBottom_toBottomOf="parent"-->
+                            <!--                                app:layout_constraintEnd_toEndOf="parent"-->
+                            <!--                                app:layout_constraintStart_toStartOf="parent"-->
+                            <!--                                app:layout_constraintTop_toTopOf="parent" />-->
 
                             <FrameLayout
                                 android:layout_width="match_parent"
@@ -212,10 +220,10 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="20dp"
                                     android:layout_marginTop="180dp"
-                                    android:textColor="@color/black"
-                                    android:textStyle="bold"
                                     android:text="한결소래빌리지 사회복지사 모집 공고"
-                                    android:textSize="16sp" />
+                                    android:textColor="@color/black"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold" />
 
                                 <ImageView
                                     android:layout_width="180dp"
@@ -228,18 +236,18 @@
                                     android:layout_width="180dp"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="end"
-                                    android:layout_marginRight="20dp"
                                     android:layout_marginTop="180dp"
-                                    android:textColor="@color/black"
-                                    android:textStyle="bold"
+                                    android:layout_marginRight="20dp"
                                     android:text="안성시지체장애인협회 직원 모집"
-                                    android:textSize="16sp" />
+                                    android:textColor="@color/black"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold" />
 
                                 <ImageView
                                     android:layout_width="180dp"
                                     android:layout_height="180dp"
-                                    android:layout_marginTop="250dp"
                                     android:layout_marginLeft="20dp"
+                                    android:layout_marginTop="250dp"
                                     android:src="@drawable/worknet4" />
 
                                 <TextView
@@ -247,10 +255,10 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="20dp"
                                     android:layout_marginTop="430dp"
-                                    android:textColor="@color/black"
-                                    android:textStyle="bold"
                                     android:text="발달장애 학생 방과후 서비스 제공인력 구인"
-                                    android:textSize="16sp" />
+                                    android:textColor="@color/black"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold" />
 
                                 <ImageView
                                     android:layout_width="180dp"
@@ -264,18 +272,18 @@
                                     android:layout_width="180dp"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="end"
-                                    android:layout_marginRight="20dp"
                                     android:layout_marginTop="430dp"
-                                    android:textColor="@color/black"
-                                    android:textStyle="bold"
+                                    android:layout_marginRight="20dp"
                                     android:text="[서천노인요양원]사회복지사 채용"
-                                    android:textSize="16sp" />
+                                    android:textColor="@color/black"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold" />
 
                                 <ImageView
                                     android:layout_width="180dp"
                                     android:layout_height="180dp"
-                                    android:layout_marginTop="500dp"
                                     android:layout_marginLeft="20dp"
+                                    android:layout_marginTop="500dp"
                                     android:src="@drawable/worknet6" />
 
                                 <TextView
@@ -283,10 +291,10 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="20dp"
                                     android:layout_marginTop="680dp"
-                                    android:textColor="@color/black"
-                                    android:textStyle="bold"
                                     android:text="돌보인 용인점 사회복지사 모집합니다"
-                                    android:textSize="16sp" />
+                                    android:textColor="@color/black"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold" />
 
 
                                 <ImageView
@@ -301,12 +309,12 @@
                                     android:layout_width="180dp"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="end"
-                                    android:layout_marginRight="20dp"
                                     android:layout_marginTop="680dp"
-                                    android:textColor="@color/black"
-                                    android:textStyle="bold"
+                                    android:layout_marginRight="20dp"
                                     android:text="발달장애인 주간활동 제공인력 모집"
-                                    android:textSize="16sp" />
+                                    android:textColor="@color/black"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold" />
 
                             </FrameLayout>
 

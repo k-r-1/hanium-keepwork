@@ -53,7 +53,7 @@ interface RetrofitInterface {
     fun deleteJobPosting(@Path("listnum") listnum: Int): Call<Void>
 
     @GET("keepwork/resume/")
-    fun getResumeData(@Query("personal_id") personalId: String): Call<List<ResumeModel>>
+    fun getResumeData(@Path("personal_id") personalId: String): Call<List<ResumeModel>>
 
     @GET("keepwork/notice/")
     fun getNoticeData(
@@ -65,16 +65,16 @@ interface RetrofitInterface {
 
     @GET("keepwork/resume/")
     fun getResumeData(
-        @Query("personal_id") personalId: String?,
-        @Query("resume_listnum") resumeListnum: Int?,
-        @Query("resume_title") resumeTitle: String?,
-        @Query("resume_academic") resumeAcademic: String?,
-        @Query("resume_career") resumeCareer: String?,
-        @Query("resume_introduction") resumeIntroduction: String?,
-        @Query("resume_certificate") resumeCertificate: String?,
-        @Query("resume_learning") resumeLearning: String?,
-        @Query("resume_desire") resumeDesire: String?,
-        @Query("resume_complete") resumeComplete: String?,
+        @Path("personal_id") personalId: String?,
+        @Path("resume_listnum") resumeListnum: Int?,
+        @Path("resume_title") resumeTitle: String?,
+        @Path("resume_academic") resumeAcademic: String?,
+        @Path("resume_career") resumeCareer: String?,
+        @Path("resume_introduction") resumeIntroduction: String?,
+        @Path("resume_certificate") resumeCertificate: String?,
+        @Path("resume_learning") resumeLearning: String?,
+        @Path("resume_desire") resumeDesire: String?,
+        @Path("resume_complete") resumeComplete: String?,
     ): Call<List<ResumeModel>>
 
     @POST("keepwork/resume/")

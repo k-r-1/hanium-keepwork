@@ -36,7 +36,7 @@ import java.io.IOException
 
 class ResumeFragment : Fragment() {
     // 사용자 ID를 저장할 변수
-    private lateinit var userId: String
+    private lateinit var personal_id: String
 
     // 사용자의 작성중 이력서 개수를 표시할 TextView 변수
     private lateinit var tvResume_temporary_count: TextView
@@ -110,19 +110,19 @@ class ResumeFragment : Fragment() {
 
         // Argument로부터 전달받은 사용자 ID를 변수에 저장
         if (arguments != null) {
-            userId = arguments?.getString("userId", "") ?: ""
+            personal_id = arguments?.getString("userId", "") ?: ""
         }
 
         // 사용자 ID를 표시할 TextView 초기화
         val textID = view.findViewById<TextView>(R.id.tvID1)
-        textID.text = userId
+        textID.text = personal_id
 
         // RecyclerView 초기화 후 빈 어댑터 설정
         recyclerView = view.findViewById(R.id.recyclerviewResume)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         // 빈 어댑터 생성 및 RecyclerView에 설정
-        dataAdapter = DataAdapter(emptyList(), userId)
+        dataAdapter = DataAdapter(emptyList(), personal_id)
         recyclerView.adapter = dataAdapter
 
         // 작성중 이력서 개수와 작성완료 이력서 개수를 표시할 TextView 초기화
@@ -141,7 +141,7 @@ class ResumeFragment : Fragment() {
                 R.id.fl_container,
                 ResumeWriteFragment().apply {
                     arguments = Bundle().apply {
-                        putString("userId", userId)
+                        putString("userId", personal_id)
                     }
                 },
                 addToBackStack = false
@@ -203,7 +203,7 @@ class ResumeFragment : Fragment() {
             .build()
 
         val apiService = retrofit.create(RetrofitInterface::class.java)
-        apiService.getResumeData(userId, null, null, null, null, null, null, null, null, null)
+        apiService.getResumeData(personal_id, null, null, null, null, null, null, null, null, null)
             .enqueue(object : Callback<List<ResumeModel>> { // 사용하는 Response 클래스 타입으로 변경
             override fun onResponse(call: Call<List<ResumeModel>>, response: Response<List<ResumeModel>>) {
                 if (response.isSuccessful) {
@@ -279,7 +279,7 @@ class ResumeFragment : Fragment() {
 
             val apiService = retrofit.create(RetrofitInterface::class.java)
 
-            apiService.deleteResumeFromServer(userId, resumeListNum)
+            apiService.deleteResumeFromServer(personal_id, resumeListNum)
                 .enqueue(object: Callback<String> {
                 override fun onResponse(call: Call<String>, response: Response<String>) {
                     if (response.isSuccessful && response.body()?.contains("Record deleted successfully") == true) {

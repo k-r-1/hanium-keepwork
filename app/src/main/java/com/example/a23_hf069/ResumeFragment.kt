@@ -208,7 +208,7 @@ class ResumeFragment : Fragment() {
             override fun onResponse(call: Call<List<ResumeModel>>, response: Response<List<ResumeModel>>) {
                 if (response.isSuccessful) {
                     val dataList = response.body()
-                    // 응답 내용을 로그로 출력
+                    // 응답 내용을 로그로 출력(테스트용)
                     Log.d("FetchDataFromServer", "Response: $dataList")
 
                     requireActivity().runOnUiThread {
@@ -320,7 +320,7 @@ class ResumeFragment : Fragment() {
     // 이력서 목록을 표시하는 어댑터 클래스
     class DataAdapter(
         var dataList: List<ResumeModel>,
-        private val userId: String
+        private val personal_id: String
     ) : RecyclerView.Adapter<DataAdapter.ViewHolder>() {
 
         // 각각의 뷰를 보유하는 뷰홀더 클래스
@@ -377,7 +377,7 @@ class ResumeFragment : Fragment() {
             holder.buttonChange.setOnClickListener {
                 val intent = Intent(holder.itemView.context, ResumeChangeActivity::class.java)
                 intent.putExtra("resumeListNum", data.resume_listnum)
-                intent.putExtra("userId", userId)
+                intent.putExtra("userId", personal_id)
                 holder.itemView.context.startActivity(intent)
             }
 
@@ -385,7 +385,7 @@ class ResumeFragment : Fragment() {
             holder.textViewTitle.setOnClickListener {
                 val intent = Intent(holder.itemView.context, ResumeClickActivity::class.java)
                 intent.putExtra("resumeListNum", data.resume_listnum)
-                intent.putExtra("userId", userId)
+                intent.putExtra("userId", personal_id)
                 holder.itemView.context.startActivity(intent)
             }
         }

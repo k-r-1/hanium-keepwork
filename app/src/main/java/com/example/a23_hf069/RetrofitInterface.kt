@@ -65,7 +65,7 @@ interface RetrofitInterface {
 
     @GET("keepwork/resume/")
     fun getResumeData(
-        @Query("personal_id") personalId: String?,
+        @Query("personal_id") userId: String?,
         @Query("resume_listnum") resumeListnum: Int?,
         @Query("resume_title") resumeTitle: String?,
         @Query("resume_academic") resumeAcademic: String?,

@@ -31,7 +31,7 @@ class ResumeAdapter(private val resumeList: List<ResumeModel>) : RecyclerView.Ad
             val intent = Intent(context, ResumeClickActivity::class.java)
 
             // 선택한 항목의 정보를 인텐트에 추가합니다.
-            intent.putExtra("userName", resume.personal_id_id)
+            intent.putExtra("userName", resume.personal_id)
             intent.putExtra("resumeTitle", resume.resume_title) // 회사 이름을 추가
 
             // Activity를 시작합니다.

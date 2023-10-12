@@ -214,10 +214,10 @@ class ResumeFragment : Fragment() {
                     requireActivity().runOnUiThread {
                         if (dataList != null) {
                             dataAdapter.setData(dataList)
+                            // println("이력서갯수:"+dataList.size)
 
                             // resume_complete 값을 가진 이력서의 개수 구하기
                             val cnt1 = dataList.count { it.resume_complete == "작성중"}
-                            //지금(23.09.13, 23:55) 그냥 DB에 "작성완료"인 데이터가 없는데 빨리 목록 출력해보려고 작성중이라고 써놓음.
                             //cnt1은 작성완료 탭이니까 나중에 바꾸기
 
                             // resume_complete 값을 가지지 않은 이력서의 개수 구하기

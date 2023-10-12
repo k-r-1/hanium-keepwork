@@ -87,7 +87,7 @@ class ResumeClickActivity : AppCompatActivity() {
                     if (response.isSuccessful) {
                         val resumeData = response.body()
                         handleResumeItemData(resumeData)
-                        userId = resumeData?.getOrNull(0)?.personal_id_id ?: ""
+                        userId = resumeData?.getOrNull(0)?.personal_id ?: ""
                         // personal_id를 userId에 설정합니다.
                     }
                 }
@@ -110,7 +110,7 @@ class ResumeClickActivity : AppCompatActivity() {
                 dataList.find { it.resume_listnum == this.resumeListNum }
 
             if (targetResume != null) {
-                    userId = targetResume.personal_id_id
+                    userId = targetResume.personal_id
                     editResumeTitle.text = targetResume.resume_title
                     editTextAcademic.text = targetResume.resume_academic
                     editTextCareer.text = targetResume.resume_career

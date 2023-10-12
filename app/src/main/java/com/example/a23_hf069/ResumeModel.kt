@@ -1,7 +1,7 @@
 package com.example.a23_hf069
 
 data class ResumeModel(
-    val personal_id_id: String,
+    val personal_id: String,
     val resume_listnum: Int,
     val resume_title: String,
     val resume_academic: String,

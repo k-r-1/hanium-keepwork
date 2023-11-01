@@ -47,6 +47,16 @@ class JobPostingAdapter(
         // 버튼 클릭 이벤트를 처리합니다.
         holder.modifyButton.setOnClickListener {
             // 수정 처리를 여기에 추가하세요.
+            // JobPostingModifyActivity로 이동하고 선택한 항목의 정보를 전달합니다.
+            val context = holder.itemView.context
+            val intent = Intent(context, JobPostingModifyActivity::class.java)
+
+            // 선택한 항목의 정보를 인텐트에 추가합니다.
+            intent.putExtra("jobPosting", jobPosting)
+            intent.putExtra("companyName", companyInfo?.company_name) // 회사 이름을 추가
+
+            // Activity를 시작합니다.
+            context.startActivity(intent)
         }
 
         holder.repostButton.setOnClickListener {

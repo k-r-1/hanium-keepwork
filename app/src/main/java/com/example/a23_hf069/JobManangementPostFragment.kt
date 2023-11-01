@@ -28,6 +28,12 @@ class JobManagementPostFragment : Fragment() {
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        // 화면이 다시 활성화될 때마다 데이터를 새로고침합니다.
+        fetchDataFromServer()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

@@ -9,6 +9,7 @@ import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.Query
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 
 interface RetrofitInterface {
@@ -54,6 +55,10 @@ interface RetrofitInterface {
 
     @GET("keepwork/resume/")
     fun getResumeData(@Query("personal_id") personalId: String): Call<List<ResumeModel>>
+
+    @PUT("keepwork/job/{listnum}/") // 수정
+    fun updateJobPosting(@Path("listnum") listnum: Int, @Body jobPosting: JobPosting): Call<JobPosting>
+
 
     @GET("keepwork/notice/")
     fun getNoticeData(

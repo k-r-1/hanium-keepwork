@@ -23,6 +23,7 @@ class JobManagementPostFragment : Fragment() {
     private lateinit var adapter: JobPostingAdapter
 
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -46,7 +47,7 @@ class JobManagementPostFragment : Fragment() {
 
         recyclerView = view.findViewById(R.id.recylcerviewJobPost)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        adapter = JobPostingAdapter(emptyList()) // 빈 목록으로 초기화
+        adapter = JobPostingAdapter(mutableListOf()) // 빈 MutableList로 초기화
         recyclerView.adapter = adapter
 
         // 서버에서 작업 게시 데이터 가져오기
@@ -71,7 +72,13 @@ class JobManagementPostFragment : Fragment() {
         call.enqueue(object : Callback<List<JobPosting>> {
             override fun onResponse(call: Call<List<JobPosting>>, response: Response<List<JobPosting>>) {
                 if (response.isSuccessful) {
-                    val jobPostingList = response.body() ?: emptyList()
+                    val jobPostingList = response.body()?.toMutableList() ?: mutableListOf()
+
+                    // LinearLayoutManager를 생성하고 reverseLayout을 true로 설정
+                    val layoutManager = LinearLayoutManager(requireContext())
+                    layoutManager.reverseLayout = true
+                    layoutManager.stackFromEnd = true
+                    recyclerView.layoutManager = layoutManager
 
                     // 가져온 공고 데이터를 RecyclerView에 설정하여 화면에 표시
                     adapter = JobPostingAdapter(jobPostingList)

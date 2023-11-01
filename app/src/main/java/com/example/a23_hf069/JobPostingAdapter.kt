@@ -17,7 +17,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class JobPostingAdapter(
-    private val jobPostingList: List<JobPosting>,
+    private val jobPostingList: MutableList<JobPosting>,
     private val companyData: List<C_MemberModel> = emptyList() // 기본 값 설정
 ) : RecyclerView.Adapter<JobPostingAdapter.JobPostingViewHolder>() {
 
@@ -60,8 +60,25 @@ class JobPostingAdapter(
         }
 
         holder.repostButton.setOnClickListener {
-            // 재등록 처리를 여기에 추가하세요.
+            val dialogBuilder = AlertDialog.Builder(holder.itemView.context)
+            dialogBuilder.setMessage("정말 재등록하시겠습니까?")
+                .setCancelable(false)
+                .setPositiveButton("예") { dialog, id ->
+                    // 예 버튼을 클릭한 경우
+                    dialog.dismiss() // 다이얼로그를 닫습니다.
+
+                    // 현재 항목의 공고 정보를 가져와서 재등록합니다.
+                    val repostJobPosting = jobPostingList[position]
+                    repostJobToServer(repostJobPosting)
+                }
+                .setNegativeButton("아니요") { dialog, id ->
+                    // 아니요 버튼을 클릭한 경우
+                    dialog.dismiss() // 다이얼로그를 닫습니다.
+                }
+            val alertDialog = dialogBuilder.create()
+            alertDialog.show()
         }
+
 
         holder.endButton.setOnClickListener {
             // 마감 처리를 여기에 추가하세요.
@@ -113,8 +130,9 @@ class JobPostingAdapter(
         call.enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if (response.isSuccessful) {
-                    // 로컬 리스트에서 항목 삭제
-                    jobPostingList.toMutableList().removeAt(position)
+                    // 서버에서 삭제 성공한 경우
+                    // 로컬 리스트에서도 해당 항목을 제거
+                    jobPostingList.removeAt(position)
                     notifyItemRemoved(position)
                 } else {
                     // 서버 에러 처리
@@ -127,6 +145,32 @@ class JobPostingAdapter(
         })
     }
 
+    private fun repostJobToServer(jobPosting: JobPosting) {
+        val retrofit = Retrofit.Builder()
+            .baseUrl(RetrofitInterface.API_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        val service = retrofit.create(RetrofitInterface::class.java)
+
+        val call = service.postJob(jobPosting)
+        call.enqueue(object : Callback<JobPosting> {
+            override fun onResponse(call: Call<JobPosting>, response: Response<JobPosting>) {
+                if (response.isSuccessful) {
+                    // 서버에 재등록 성공한 경우
+                    // 로컬 리스트에 항목 추가
+                    jobPostingList.add(response.body()!!)
+                    notifyItemInserted(jobPostingList.size - 1)
+                } else {
+                    // 서버 에러 처리
+                }
+            }
+
+            override fun onFailure(call: Call<JobPosting>, t: Throwable) {
+                // 네트워크 오류 처리
+            }
+        })
+    }
 
     override fun getItemCount(): Int {
         return jobPostingList.size

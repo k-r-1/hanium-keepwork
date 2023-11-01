@@ -41,6 +41,7 @@ class JobRequestingAdapter : RecyclerView.Adapter<JobRequestingAdapter.JobViewHo
 
             // 선택한 항목의 정보를 인텐트에 추가합니다.
             intent.putExtra("jobPosting", job)
+            intent.putExtra("companyName", job.company_name)
 
             // Activity를 시작합니다.
             context.startActivity(intent)

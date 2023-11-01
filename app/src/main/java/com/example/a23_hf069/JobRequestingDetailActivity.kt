@@ -21,12 +21,12 @@ class JobRequestingDetailActivity : AppCompatActivity() {
             finish()
         }
 
-      /*  // JobPostingDetailActivity에서 데이터 추출
+        // JobPostingDetailActivity에서 데이터 추출
         val intent = intent
         val jobPosting = intent.getParcelableExtra<JobPosting>("jobPosting")
         val companyName = intent.getStringExtra("companyName")
 
-        // companyName을 사용하여 필요한 작업을 수행*/
+        // companyName을 사용하여 필요한 작업을 수행
 
         // XML 레이아웃의 TextView 등을 찾아서 데이터 표시
         val company = findViewById<TextView>(R.id.company)
@@ -47,21 +47,21 @@ class JobRequestingDetailActivity : AppCompatActivity() {
         val next_button = findViewById<Button>(R.id.next_button)
 
         // 가져온 데이터를 레이아웃에 표시
-        company.text = ""
-        jobTitleTextView.text = "프론트엔드 (Front-end) 개발자 채용"
-        experienceRequiredTextView.text = "경력"
-        educationRequiredTextView.text = "학사 이상"
-        periodTextView.text = "-"
-        daysOfWeekTextView.text = "주5일(월~금)"
-        workingHoursTextView.text = "09:00-18:00"
-        salaryTextView.text = "회사내규에 따름"
-        positionTextView.text = "대리급"
-        categoryTextView.text = "개발 직무"
-        requirementsTextView.text = "정보처리기사 우대"
-        contactNumberTextView.text = "010-1234-5678"
-        emailTextView.text = "hanium@email.com"
-        deadlineTextView.text = "20231013"
-        companyNameLabel.text = "company"
+        company.text = companyName
+        jobTitleTextView.text = jobPosting?.job_title
+        experienceRequiredTextView.text = jobPosting?.job_experience_required
+        educationRequiredTextView.text = jobPosting?.job_education_required
+        periodTextView.text = jobPosting?.job_period
+        daysOfWeekTextView.text = jobPosting?.job_days_of_week
+        workingHoursTextView.text = jobPosting?.job_working_hours
+        salaryTextView.text = jobPosting?.job_salary
+        positionTextView.text = jobPosting?.job_position
+        categoryTextView.text = jobPosting?.job_category
+        requirementsTextView.text = jobPosting?.job_requirements
+        contactNumberTextView.text = jobPosting?.job_contact_number
+        emailTextView.text = jobPosting?.job_email
+        deadlineTextView.text = jobPosting?.job_deadline
+        companyNameLabel.text = companyName
 
         next_button.setOnClickListener {
             // ResumeSelectionActivity로 이동하는 Intent 생성

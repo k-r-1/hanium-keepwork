@@ -45,7 +45,8 @@ interface RetrofitInterface {
     @POST("keepwork/job/")
     fun postJob(@Body job: JobPosting): Call<JobPosting>
 
-
+    @GET("keepwork/job/all/") // 수정
+    fun getAllJobPostings(): Call<List<JobPosting>>
 
     @GET("keepwork/job/")
     fun getJobPostings(): Call<List<JobPosting>>

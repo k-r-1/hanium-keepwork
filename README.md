@@ -1,24 +1,26 @@
-# 빅데이터 기반 경력단절 여성 일자리 매칭 플랫폼
+# 경력단절 여성 일자리 매칭 플랫폼
 > '2023. 5. 1 ~ 2023. 11. 30' 한이음 ICT멘토링 (한이음 공모전 입선)
 
 ## 프로젝트 소개
-- 다수의 웹사이트에 산재되어 있는 여성 취업 정보를 한 곳에 모은 All-in-One 앱 서비스
-
+- 다수의 웹사이트에 산재되어 있는 여성 취업 정보를 한 곳에 모은 All-in-One 앱 서비스<br><br>
 ![image](https://github.com/user-attachments/assets/710f3e3c-fa04-4788-8b25-ec34213efe21)
 
 ## 프로젝트 기능 
 🔗 [프로젝트 작동 동영상](https://www.youtube.com/watch?v=BvQLZvN0I_0)
+<br><br>
 
 ## 프로젝트 개발 환경
 ![image](https://github.com/user-attachments/assets/e0bacde1-6197-4efc-b35e-614fe61b4b67)
+<br><br>
 
 ## 프로젝트 추진 과정에서의 문제점 및 해결방안
 ![image](https://github.com/user-attachments/assets/55d32c2b-6048-487e-9f67-0ac5093edbf0)
+<br><br>
 
 ## 업무분장
 ![image](https://github.com/user-attachments/assets/b9eeb434-ad96-48c7-b8ce-5b9eca5e14c9)
 
-- 수행 업무 
+- <b>수행 업무</b>
   - 메인홈 화면, 회원가입 화면, 채용공고 화면, 공고등록 화면, 검색 화면 등 다양한 안드로이드 화면 구성 및 기능 구현
   - 워크넷 Open API 연동을 통해 워크넷 채용공고 리스트 불러오기 및 워크넷 채용공고 검색 기능, 채용공고 상세 페이지 기능, 조건검색 시 직종 대/중 분류 기능 등 구현
   - 서버에서 채용공고 리스트 불러오기 및 기업회원별 채용공고 등록/삭제/수정/재등록 기능 구현 등
